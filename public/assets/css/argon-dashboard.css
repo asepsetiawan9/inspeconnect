@@ -9453,6 +9453,21 @@ textarea.form-control-lg {
   --bs-text-opacity: 1;
 }
 
+.legend {
+    line-height: 18px;
+    color: #555;
+    background-color: white;
+    padding: 8px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.legend i {
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    margin-right: 5px;
+}
+
 .bg-primary {
   background-color: #40B8FB !important;
 }
@@ -9499,6 +9514,18 @@ textarea.form-control-lg {
 
 .bg-gray-100 {
   background-color: #f8f9fa !important;
+}
+
+.bg-desil-2 {
+  background-color: #B6531C !important;
+}
+
+.bg-desil-3 {
+  background-color: #C2741A !important;
+}
+
+.bg-desil-4 {
+  background-color: #C4A128 !important;
 }
 
 .bg-gray-200 {
