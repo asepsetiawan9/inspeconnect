@@ -4,17 +4,323 @@
 @include('layouts.navbars.auth.topnav', ['title' => 'Peta Sebaran'])
 <div class="container-fluid py-4">
     <div class="row">
-        <div class="col-xl-12 col-sm-12 card">
-            <article>
-
-                <h1>We&rsquo;ll be back soon!</h1>
-                <div>
-                    <p>Page Under Maintenance</p>
+        <div class="container position-relative ">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div for="filter1 " class="text-white text-sm pb-2 text-bold">Tampilkan Berdasarkan:</div>
+                        <select class="form-select" id="filter1">
+                            <option selected>Jumlah Penduduk</option>
+                            <option value="1">Jumlah KK</option>
+                        </select>
+                    </div>
                 </div>
-            </article>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div for="filter1 " class="text-white text-sm pb-2 text-bold">Variabel:</div>
+                        <select class="form-select" id="filter1">
+                            <option selected>SD/Sederajat</option>
+                            <option value="1">SMP/Sederajat</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div for="filter2 " class="text-white text-sm pb-2 text-bold">Kecamatan:</div>
+                        <select class="form-select" id="filter2">
+                            <option selected>Pilih Kecamatan</option>
+                            <option value="1">Garut Kota</option>
+                            <option value="1">Karangpawitan</option>
+                            <option value="1">Wanaraja</option>
+                            <option value="1">Tarogong Kaler</option>
+                            <option value="1">Tarogong Kidul</option>
+                            <option value="1">Banyuresmi</option>
+                            <option value="1">Samarang</option>
+                            <option value="1">Pasirwangi</option>
+                            <option value="1">Leles</option>
+                            <option value="1">Kadungora</option>
+                            <option value="1">Leuwigoong</option>
+                            <option value="1">Cibatu</option>
+                            <option value="1">Kersamanah</option>
+                            <option value="1">Malangbong</option>
+                            <option value="1">Sukawening</option>
+                            <option value="1">Karangtengah</option>
+                            <option value="1">Bayongbong</option>
+                            <option value="1">Cigedug</option>
+                            <option value="1">Cilawu</option>
+                            <option value="1">Cisurupan</option>
+                            <option value="1">Sukaresmi</option>
+                            <option value="1">Cikajang</option>
+                            <option value="1">Banjarwangi</option>
+                            <option value="1">Singajaya</option>
+                            <option value="1">Cihurip</option>
+                            <option value="1">Peundeuy</option>
+                            <option value="1">Pameungpeuk</option>
+                            <option value="1">Cisompet</option>
+                            <option value="1">Cibalong</option>
+                            <option value="1">Cikelet</option>
+                            <option value="1">Bungbulang</option>
+                            <option value="1">Mekarmukti</option>
+                            <option value="1">Pakenjeng</option>
+                            <option value="1">Pamulihan</option>
+                            <option value="1">Cisewu</option>
+                            <option value="1">Caringin</option>
+                            <option value="1">Talegong</option>
+                            <option value="1">Bl. Limbangan</option>
+                            <option value="1">Selaawi</option>
+                            <option value="1">Cibiuk</option>
+                            <option value="1">Pangatikan</option>
+                            <option value="1">Sucinaraja</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div for="filter3 " class="text-white text-sm pb-2 text-bold">Tahun:</div>
+                        <select class="form-select" id="filter3">
+                            <option selected>Jumlah Penduduk</option>
+                            <option value="1">2022</option>
+                            <option value="1">2021</option>
+                            <option value="1">2020</option>
+                            <option value="1">2019</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="pb-3 text-bold text-white">Dashboard Kemiskinan Berdasarkan Jumlah Penduduk Kabupaten Garut
+                Tahun 2022
+            </div>
         </div>
     </div>
-</div>
-@include('layouts.footers.auth.footer')
+    <div class="row mt-4">
+        <div class="col-lg-7 mb-lg-0 mb-4">
+
+            <div class="d-flex flex-row gap-3 w-100 mt-3 position-relative">
+                <div class="bg-danger rounded-3 p-3 w-100 text-white text-bold">Desil 1
+                    <div class="fs-4 text-bold">318.704</div>
+                </div>
+                <div class="bg-desil-2 rounded-3 p-3 w-100 text-white text-bold">Desil 2
+                    <div class="fs-4 text-bold">362.568</div>
+                </div>
+                <div class="bg-desil-3 rounded-3 p-3 w-100 text-white text-bold">Desil 3
+                    <div class="fs-4 text-bold">305.042</div>
+                </div>
+                <div class="bg-desil-4 rounded-3 p-3 w-100 text-white text-bold">Desil 4
+                    <div class="fs-4 text-bold">276.906</div>
+                </div>
+            </div>
+            <div class="card mt-3 p-3">
+                <h5>Peta Sebaran</h5>
+                <div id="map"></div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="card ">
+                <div class="chart">
+                    <canvas id="horizonChart" class="chart-canvas" height="600"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @include('layouts.footers.auth.footer')
 </div>
 @endsection
+
+@push('js')
+<script src="./assets/js/plugins/chartjs.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctx = document.getElementById('horizonChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ["Garut Kota",
+                    "Karangpawitan",
+                    "Wanaraja ",
+                    "Tarogong Kaler",
+                    "Tarogong Kidul ",
+                    "Banyuresmi ",
+                    "Samarang ",
+                    "Pasirwangi ",
+                    "Leles ",
+                    "Kadungora ",
+                    "Leuwigoong ",
+                    "Cibatu ",
+                    "Kersamanah ",
+                    "Malangbong",
+                    "Sukawening ",
+                    "Karangtengah ",
+                    "Bayongbong ",
+                    "Cigedug",
+                    "Cilawu ",
+                    "Cisurupan ",
+                    "Sukaresmi ",
+                    "Cikajang ",
+                    "Banjarwangi ",
+                    "Singajaya",
+                    "Cihurip ",
+                    "Peundeuy ",
+                    "Pameungpeuk ",
+                    "Cisompet ",
+                    "Cibalong ",
+                    "Cikelet ",
+                    "Bungbulang ",
+                    "Mekarmukti ",
+                    "Pakenjeng ",
+                    "Pamulihan ",
+                    "Cisewu ",
+                    "Caringin ",
+                    "Talegong ",
+                    "Bl. Limbangan ",
+                    "Selaawi ",
+                    "Cibiuk ",
+                    "Pangatikan ",
+                    "Sucinaraja",
+                ],
+                datasets: [{
+                    label: '#',
+                    data: [9, 8, 3, 5, 2, 9, 8, 3, 5, 2, 9, 8, 3, 5, 2, 9, 8, 3, 5, 2, 9, 8, 3,
+                        5, 2, 9, 8, 3, 5, 2, 9, 8, 3, 5, 2, 9, 8, 3, 5, 2, 6, 2
+                    ],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.8)',
+                        'rgba(54, 162, 235, 0.8)',
+                        'rgba(255, 206, 86, 0.8)',
+                        'rgba(75, 192, 192, 0.8)',
+                        'rgba(153, 102, 255, 0.8)',
+                        'rgba(255, 159, 64, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+            }
+        });
+    });
+
+</script>
+@endpush
+
+@push('js')
+<script>
+    // Inisialisasi peta
+    var map = L.map('map').setView([-7.2278, 107.9087], 10);
+    var colors = ['#ffd1d1', '#ffa3a3', '#fc5151', '#ff0000', '#a60202'];
+
+    // Tambahkan layer peta dari OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Tambahkan geojson Kabupaten Garut
+    fetch('/geojson/kecamatan.geojson')
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function (data) {
+        // Mendapatkan semua nilai dari setiap kecamatan
+        var allValues = data.features.map(function (feature) {
+            return feature.properties.nilai;
+        });
+
+        // Menghitung rentang nilai secara dinamis
+        var min = Math.min.apply(null, allValues);
+        var max = Math.max.apply(null, allValues);
+        var rangeSize = Math.ceil((max - min + 1) / 5); // Jumlah rentang diatur menjadi 5
+
+        // Definisikan rentangan nilai dan warna yang sesuai
+        var ranges = [];
+        for (var i = 0; i < 5; i++) {
+            var rangeMin = min + i * rangeSize;
+            var rangeMax = rangeMin + rangeSize - 1;
+            ranges.push({
+                min: rangeMin,
+                max: rangeMax,
+                color: colors[i % colors.length]
+            });
+        }
+
+        var geojsonLayer = L.geoJSON(data, {
+            style: function (feature) {
+                // Mendapatkan nilai dari setiap kecamatan
+                var nilai = feature.properties.nilai;
+
+                // Tentukan warna berdasarkan rentangan nilai
+                var color = 'gray'; // Warna default
+                for (var i = 0; i < ranges.length; i++) {
+                    if (nilai >= ranges[i].min && nilai <= ranges[i].max) {
+                        color = ranges[i].color;
+                        break;
+                    }
+                }
+
+                // Kembalikan style dengan warna yang sesuai
+                return {
+                    fillColor: color,
+                    color: '#000000',
+                    fillOpacity: 1,
+                    weight: 1
+                };
+            },
+            onEachFeature: function (feature, layer) {
+                // Mendapatkan properti dari setiap kecamatan
+                var properties = feature.properties;
+
+                // Menampilkan popup saat mouse memasuki area kecamatan
+                layer.on('mouseover', function (e) {
+                    layer.bindPopup(
+                        "<b>Kecamatan: </b>" + properties.kecamatan +
+                        "<br><b>Kabupaten: </b>" + properties.nmkab +
+                        "<br><b>Provinsi: </b>" + properties.nmprov +
+                        "<br><b>Keterangan: </b>" + properties.keterangan +
+                        "<br><b>Nilai: </b>" + properties.nilai
+                    ).openPopup();
+                });
+
+                // Menutup popup saat mouse meninggalkan area kecamatan
+                layer.on('mouseout', function (e) {
+                    layer.closePopup();
+                });
+            }
+        });
+
+        geojsonLayer.addTo(map);
+
+        // Membuat legenda secara dinamis
+        var legend = L.control({ position: 'bottomleft' });
+
+        legend.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'legend');
+            var labels = [];
+
+            // Menampilkan label untuk setiap rentangan nilai
+            for (var i = 0; i < ranges.length; i++) {
+                var range = ranges[i];
+                var color = range.color;
+
+                labels.push(
+                    '<i style="background:' + color + '"></i> ' +
+                    range.min + ' - ' + range.max
+                );
+            }
+
+            div.innerHTML = labels.join('<br>');
+            return div;
+        };
+
+        legend.addTo(map);
+    });
+
+</script>
+
+@endpush
