@@ -11,7 +11,7 @@
                         <div for="filter1 " class="text-white text-sm pb-2 text-bold">Tampilkan Berdasarkan:</div>
                         <select class="form-select" id="filter1">
                             <option selected>Jumlah Penduduk</option>
-                            <option value="1">One</option>
+                            <option value="1">Jumlah KK</option>
                         </select>
                     </div>
                 </div>
@@ -19,8 +19,49 @@
                     <div class="form-group">
                         <div for="filter2 " class="text-white text-sm pb-2 text-bold">Kecamatan:</div>
                         <select class="form-select" id="filter2">
-                            <option selected>Jumlah Penduduk</option>
-                            <option value="1">One</option>
+                            <option selected>Pilih Kecamatan</option>
+                            <option value="1">Garut Kota</option>
+                            <option value="1">Karangpawitan</option>
+                            <option value="1">Wanaraja</option>
+                            <option value="1">Tarogong Kaler</option>
+                            <option value="1">Tarogong Kidul</option>
+                            <option value="1">Banyuresmi</option>
+                            <option value="1">Samarang</option>
+                            <option value="1">Pasirwangi</option>
+                            <option value="1">Leles</option>
+                            <option value="1">Kadungora</option>
+                            <option value="1">Leuwigoong</option>
+                            <option value="1">Cibatu</option>
+                            <option value="1">Kersamanah</option>
+                            <option value="1">Malangbong</option>
+                            <option value="1">Sukawening</option>
+                            <option value="1">Karangtengah</option>
+                            <option value="1">Bayongbong</option>
+                            <option value="1">Cigedug</option>
+                            <option value="1">Cilawu</option>
+                            <option value="1">Cisurupan</option>
+                            <option value="1">Sukaresmi</option>
+                            <option value="1">Cikajang</option>
+                            <option value="1">Banjarwangi</option>
+                            <option value="1">Singajaya</option>
+                            <option value="1">Cihurip</option>
+                            <option value="1">Peundeuy</option>
+                            <option value="1">Pameungpeuk</option>
+                            <option value="1">Cisompet</option>
+                            <option value="1">Cibalong</option>
+                            <option value="1">Cikelet</option>
+                            <option value="1">Bungbulang</option>
+                            <option value="1">Mekarmukti</option>
+                            <option value="1">Pakenjeng</option>
+                            <option value="1">Pamulihan</option>
+                            <option value="1">Cisewu</option>
+                            <option value="1">Caringin</option>
+                            <option value="1">Talegong</option>
+                            <option value="1">Bl. Limbangan</option>
+                            <option value="1">Selaawi</option>
+                            <option value="1">Cibiuk</option>
+                            <option value="1">Pangatikan</option>
+                            <option value="1">Sucinaraja</option>
                         </select>
                     </div>
                 </div>
@@ -29,7 +70,10 @@
                         <div for="filter3 " class="text-white text-sm pb-2 text-bold">Tahun:</div>
                         <select class="form-select" id="filter3">
                             <option selected>Jumlah Penduduk</option>
-                            <option value="1">One</option>
+                            <option value="1">2022</option>
+                            <option value="1">2021</option>
+                            <option value="1">2020</option>
+                            <option value="1">2019</option>
                         </select>
                     </div>
                 </div>
