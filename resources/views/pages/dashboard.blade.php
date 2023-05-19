@@ -35,7 +35,8 @@
                 </div>
             </div>
             <div class="pb-3 text-bold text-white">Dashboard Kemiskinan Berdasarkan Jumlah Penduduk Kabupaten Garut
-                Tahun 2022 </div>
+                Tahun 2022
+            </div>
         </div>
 
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-2">
@@ -137,26 +138,44 @@
     </div>
     <div class="row mt-4">
         <div class="col-lg-7 mb-lg-0 mb-4">
-            <div class="card z-index-2 h-100">
+            <div class="card z-index-2">
                 <div class="card-header pb-0 pt-3 bg-transparent">
                     <h6 class="text-capitalize">Perkembangan Persentase Penduduk Miskin</h6>
+
                 </div>
                 <div class="card-body p-3">
-                    <div class="chart" style="height: 200px;">
-                        <canvas id="myChart" class="chart-canvas"></canvas>
+                    <div class="chart">
+                        <canvas id="myChart" class="chart-canvas" height="200"></canvas>
                     </div>
                 </div>
             </div>
+            <div class="d-flex flex-row gap-3 w-100 mt-3">
+                <div class="bg-danger rounded-3 p-3 w-100 text-white text-bold">Desil 1
+                    <div class="fs-4 text-bold">318.704</div>
+                </div>
+                <div class="bg-desil-2 rounded-3 p-3 w-100 text-white text-bold">Desil 2
+                    <div class="fs-4 text-bold">362.568</div>
+                </div>
+                <div class="bg-desil-3 rounded-3 p-3 w-100 text-white text-bold">Desil 3
+                    <div class="fs-4 text-bold">305.042</div>
+                </div>
+                <div class="bg-desil-4 rounded-3 p-3 w-100 text-white text-bold">Desil 4
+                    <div class="fs-4 text-bold">276.906</div>
+                </div>
+            </div>
+            <div class="card mt-3 p-3">
+                <h5>Peta Sebaran</h5>
+                <div id="map"></div>
+            </div>
         </div>
         <div class="col-lg-5">
-            <div class="card">
-                <div class="chart" style="height: 500px;">
-                    <canvas id="horizonChart" class="chart-canvas"></canvas>
+            <div class="card ">
+                <div class="chart">
+                    <canvas id="horizonChart" class="chart-canvas" height="500"></canvas>
                 </div>
             </div>
         </div>
     </div>
-
     <div class="row mt-4">
         <div class="col-lg-7 mb-lg-0 mb-4">
             <div class="card ">
@@ -506,4 +525,129 @@
     });
 
 </script>
+@endpush
+
+@push('js')
+<script>
+    // Inisialisasi peta
+    var map = L.map('map').setView([-7.2278, 107.9087], 10);
+    var colors = ['#ffd1d1', '#ffa3a3', '#fc5151', '#ff0000', '#a60202'];
+
+    // Tambahkan layer peta dari OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Tambahkan geojson Kabupaten Garut
+    fetch('/geojson/kecamatan.geojson')
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function (data) {
+        // Mendapatkan semua nilai dari setiap kecamatan
+        var allValues = data.features.map(function (feature) {
+            return feature.properties.nilai;
+        });
+
+        // Menghitung rentang nilai secara dinamis
+        var min = Math.min.apply(null, allValues);
+        var max = Math.max.apply(null, allValues);
+        var rangeSize = Math.ceil((max - min + 1) / 5); // Jumlah rentang diatur menjadi 5
+
+        // Definisikan rentangan nilai dan warna yang sesuai
+        var ranges = [];
+        for (var i = 0; i < 5; i++) {
+            var rangeMin = min + i * rangeSize;
+            var rangeMax = rangeMin + rangeSize - 1;
+            ranges.push({
+                min: rangeMin,
+                max: rangeMax,
+                color: colors[i % colors.length]
+            });
+        }
+
+        var geojsonLayer = L.geoJSON(data, {
+            style: function (feature) {
+                // Mendapatkan nilai dari setiap kecamatan
+                var nilai = feature.properties.nilai;
+
+                // Tentukan warna berdasarkan rentangan nilai
+                var color = 'gray'; // Warna default
+                for (var i = 0; i < ranges.length; i++) {
+                    if (nilai >= ranges[i].min && nilai <= ranges[i].max) {
+                        color = ranges[i].color;
+                        break;
+                    }
+                }
+
+                // Kembalikan style dengan warna yang sesuai
+                return {
+                    fillColor: color,
+                    color: '#000000',
+                    fillOpacity: 1,
+                    weight: 1
+                };
+            },
+            onEachFeature: function (feature, layer) {
+                // Mendapatkan properti dari setiap kecamatan
+                var properties = feature.properties;
+
+                // Menampilkan popup saat mouse memasuki area kecamatan
+                layer.on('mouseover', function (e) {
+                    layer.bindPopup(
+                        "<b>Kecamatan: </b>" + properties.kecamatan +
+                        "<br><b>Kabupaten: </b>" + properties.nmkab +
+                        "<br><b>Provinsi: </b>" + properties.nmprov +
+                        "<br><b>Keterangan: </b>" + properties.keterangan +
+                        "<br><b>Nilai: </b>" + properties.nilai
+                    ).openPopup();
+                });
+
+                // Menutup popup saat mouse meninggalkan area kecamatan
+                layer.on('mouseout', function (e) {
+                    layer.closePopup();
+                });
+            }
+        });
+
+        geojsonLayer.addTo(map);
+
+        // Membuat legenda secara dinamis
+        var legend = L.control({ position: 'bottomleft' });
+
+        legend.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'legend');
+            var labels = [];
+
+            // Menampilkan label untuk setiap rentangan nilai
+            for (var i = 0; i < ranges.length; i++) {
+                var range = ranges[i];
+                var color = range.color;
+
+                labels.push(
+                    '<i style="background:' + color + '"></i> ' +
+                    range.min + ' - ' + range.max
+                );
+            }
+
+            div.innerHTML = labels.join('<br>');
+            return div;
+        };
+
+        legend.addTo(map);
+    });
+
+
+    // Fungsi untuk mendapatkan warna acak
+    // function getRandomColor() {
+    //     var letters = '0123456789ABCDEF';
+    //     var color = '#';
+    //     for (var i = 0; i < 6; i++) {
+    //         color += letters[Math.floor(Math.random() * 16)];
+    //     }
+    //     return color;
+    // }
+
+</script>
+
 @endpush
