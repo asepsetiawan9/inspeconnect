@@ -27,6 +27,7 @@ use App\Http\Controllers\ChangePassword;
 use App\Http\Controllers\MapController;
 use App\Http\Controllers\PopulationDataController;
 use App\Http\Controllers\PovertyController;
+use App\Http\Controllers\UserManagementController;
 
 
 Route::get('/', function () {return redirect('/dashboard');})->middleware('auth');
@@ -43,6 +44,8 @@ Route::get('/', function () {return redirect('/dashboard');})->middleware('auth'
 Route::group(['middleware' => 'auth'], function () {
 	Route::get('/virtual-reality', [PageController::class, 'vr'])->name('virtual-reality');
 	Route::get('/map', [MapController::class, 'index'])->name('map');
+	Route::get('/user-management', [UserManagementController::class, 'index'])->name('user-management');
+    Route::post('/user-management/filter', [UserManagementController::class, 'filter'])->name('user-management.filter');
 	Route::get('/population-data', [PopulationDataController::class, 'index'])->name('population-data');
 	Route::get('/poverty', [PovertyController::class, 'index'])->name('poverty');
 	Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
