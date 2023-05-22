@@ -1,3 +1,8 @@
+@if ($users->isEmpty())
+<tr>
+    <td class="text-center" colspan="6">Data tidak ditemukan.</td>
+</tr>
+@else
 @foreach ($users as $user)
 <tr>
     <td class="align-middle text-sm ">
@@ -29,4 +34,6 @@
         </div>
     </td>
 </tr>
+
 @endforeach
+@endif

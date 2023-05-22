@@ -44,8 +44,12 @@ Route::get('/', function () {return redirect('/dashboard');})->middleware('auth'
 Route::group(['middleware' => 'auth'], function () {
 	Route::get('/virtual-reality', [PageController::class, 'vr'])->name('virtual-reality');
 	Route::get('/map', [MapController::class, 'index'])->name('map');
+    // user management
 	Route::get('/user-management', [UserManagementController::class, 'index'])->name('user-management');
+	Route::get('/user-management/create', [UserManagementController::class, 'create'])->name('user-management.create');
+	Route::post('/user-management/store', [UserManagementController::class, 'store'])->name('user-management.store');
     Route::post('/user-management/filter', [UserManagementController::class, 'filter'])->name('user-management.filter');
+    Route::post('/user-management/filterKec', [UserManagementController::class, 'filterKec'])->name('user-management.filterKec');
 	Route::get('/population-data', [PopulationDataController::class, 'index'])->name('population-data');
 	Route::get('/poverty', [PovertyController::class, 'index'])->name('poverty');
 	Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
