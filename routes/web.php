@@ -44,8 +44,29 @@ Route::get('/', function () {return redirect('/dashboard');})->middleware('auth'
 Route::group(['middleware' => 'auth'], function () {
 	Route::get('/virtual-reality', [PageController::class, 'vr'])->name('virtual-reality');
 	Route::get('/map', [MapController::class, 'index'])->name('map');
+    // user management
 	Route::get('/user-management', [UserManagementController::class, 'index'])->name('user-management');
+	Route::get('/user-management/create', [UserManagementController::class, 'create'])->name('user-management.create');
+	Route::get('/user-management/edit/{id}', [UserManagementController::class, 'edit'])->name('user-management.edit');
+	Route::get('/user-management/show/{id}', [UserManagementController::class, 'show'])->name('user-management.show');
+    Route::get('/user-management/delete/{id}', [UserManagementController::class, 'confirmDelete'])->name('user-management.confirm-delete');
+    Route::delete('/user-management/{id}', [UserManagementController::class, 'delete'])->name('user-management.delete');
+    Route::patch('/user-management/{id}', [UserManagementController::class, 'update'])->name('user-management.update');
+    Route::post('/user-management/store', [UserManagementController::class, 'store'])->name('user-management.store');
+    // user management filter
     Route::post('/user-management/filter', [UserManagementController::class, 'filter'])->name('user-management.filter');
+    Route::post('/user-management/filterKec', [UserManagementController::class, 'filterKec'])->name('user-management.filterKec');
+
+    // Population Data
+	Route::get('/population-data', [PopulationDataController::class, 'index'])->name('population-data');
+	Route::get('/population-data/create', [PopulationDataController::class, 'create'])->name('population-data.create');
+	Route::get('/population-data/edit/{id}', [PopulationDataController::class, 'edit'])->name('population-data.edit');
+	Route::get('/population-data/show/{id}', [PopulationDataController::class, 'show'])->name('population-data.show');
+    Route::get('/population-data/delete/{id}', [PopulationDataController::class, 'confirmDelete'])->name('population-data.confirm-delete');
+    Route::delete('/population-data/{id}', [PopulationDataController::class, 'delete'])->name('population-data.delete');
+    Route::patch('/population-data/{id}', [PopulationDataController::class, 'update'])->name('population-data.update');
+
+
 	Route::get('/population-data', [PopulationDataController::class, 'index'])->name('population-data');
 	Route::get('/poverty', [PovertyController::class, 'index'])->name('poverty');
 	Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
