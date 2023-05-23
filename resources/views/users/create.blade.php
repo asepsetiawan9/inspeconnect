@@ -97,7 +97,6 @@
         var selectedKecamatan = kecamatanSelect.value;
         var selectedKecamatanName = kecamatanSelect.options[kecamatanSelect.selectedIndex].text;
 
-        // Mengatur nilai ID dan nama kecamatan pada input tersembunyi
         kecamatanIdInput.value = selectedKecamatan;
         kecamatanNameInput.value = selectedKecamatanName;
 

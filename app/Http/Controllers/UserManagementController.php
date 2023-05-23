@@ -71,5 +71,75 @@ class UserManagementController extends Controller
         return redirect('user-management');
     }
 
+    public function edit($id)
+    {
+
+        $user = User::find($id);
+        if (!$user) {
+            return redirect('user-management')->with('error', 'Pengguna tidak ditemukan.');
+        }
+
+        return view('users.edit', compact('user'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $attributes = $request->validate([
+            'username' => 'max:255|min:5',
+            'phone' => 'min:10|max:15',
+        ], [
+            'konfirm-pass.same' => 'Password Harus Sama.',
+        ]);
+
+        $user = User::findOrFail($id);
+        $user->username = $attributes['username'];
+        $user->phone = $attributes['phone'];
+        $user->role = $request->role;
+        $user->email = $request->email;
+        $user->city = ucwords(strtolower($request->kecamatan_name));
+        $user->desa = ucwords(strtolower($request->desa));
+
+        if (!empty($request->password)) {
+            $user->password = $request->password;
+        }
+
+        $user->save();
+
+        if ($user) {
+            Alert::success('Sukses', 'Data berhasil diubah.')->autoclose(3500);
+        } else {
+            Alert::error('Error', 'Terjadi kesalahan saat menyimpan data.')->autoclose(3500);
+        }
+
+        return redirect('user-management');
+    }
+
+    public function show($id)
+    {
+        $user = User::find($id);
+        if (!$user) {
+            return redirect('user-management')->with('error', 'Pengguna tidak ditemukan.');
+        }
+        return view('users.show', compact('user'));
+    }
+
+    public function confirmDelete($id)
+    {
+        $user = User::findOrFail($id);
+        return view('user-management.confirm-delete', compact('user'));
+    }
+
+    public function delete($id)
+    {
+        $user = User::findOrFail($id);
+
+        if ($user->delete()) {
+            Alert::success('Sukses', 'Data berhasil dihapus.')->autoclose(3500);
+        } else {
+            Alert::error('Error', 'Terjadi kesalahan saat menghapus data.')->autoclose(3500);
+        }
+
+        return redirect('user-management');
+    }
 
 }

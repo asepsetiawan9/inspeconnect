@@ -6,17 +6,14 @@
     <div class="position-relative">
         <h5 class="text-white">Data Pengguna</h5>
         <div class="row">
-
-        <div class="col-md-4">
-            <div class="form-group">
-                <label for="filter1" class="text-white text-sm pb-2 font-weight-bold">Tampilkan Berdasarkan:</label>
-                <select class="form-select select2" id="filter1" onchange="filterKecamatan(this.value)">
-                    <option selected value="semua">Semua Data</option>
-                </select>
+            <div class="col-md-4">
+                <div class="form-group ">
+                    <label for="filter1" class="text-white text-sm pb-2 font-weight-bold">Tampilkan Berdasarkan:</label>
+                    <select class="form-select" id="filter1" onchange="filterKecamatan(this.value)">
+                        <option selected value="semua">Semua Data</option>
+                    </select>
+                </div>
             </div>
-        </div>
-
-
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="filter2" class="text-white text-sm pb-2 font-weight-bold">Jenis Pengguna:</label>
@@ -132,15 +129,6 @@ fetch('https://www.emsifa.com/api-wilayah-indonesia/api/districts/3205.json')
     })
     .catch(error => {
         console.error('Error:', error);
-    });
-</script>
-@endpush
-
-@push('js')
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script>
-    $(document).ready(function() {
-        $('.select2').select2();
     });
 </script>
 @endpush
