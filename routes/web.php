@@ -67,8 +67,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::patch('/population-data/{id}', [PopulationDataController::class, 'update'])->name('population-data.update');
     Route::post('/population-data/store', [PopulationDataController::class, 'store'])->name('population-data.store');
 
-
+    // Poverty Data
 	Route::get('/poverty', [PovertyController::class, 'index'])->name('poverty');
+	Route::get('/poverty/create', [PovertyController::class, 'create'])->name('poverty.create');
+	Route::get('/poverty/edit/{id}', [PovertyController::class, 'edit'])->name('poverty.edit');
+	Route::get('/poverty/show/{id}', [PovertyController::class, 'show'])->name('poverty.show');
+    Route::get('/poverty/delete/{id}', [PovertyController::class, 'confirmDelete'])->name('poverty.confirm-delete');
+    Route::delete('/poverty/{id}', [PovertyController::class, 'delete'])->name('poverty.delete');
+    Route::patch('/poverty/{id}', [PovertyController::class, 'update'])->name('poverty.update');
+    Route::post('/poverty/store', [PovertyController::class, 'store'])->name('poverty.store');
+
 	Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
 	Route::post('/profile', [UserProfileController::class, 'update'])->name('profile.update');
 	Route::get('/profile-static', [PageController::class, 'profile'])->name('profile-static');
