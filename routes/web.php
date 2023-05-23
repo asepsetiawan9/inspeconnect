@@ -65,9 +65,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/population-data/delete/{id}', [PopulationDataController::class, 'confirmDelete'])->name('population-data.confirm-delete');
     Route::delete('/population-data/{id}', [PopulationDataController::class, 'delete'])->name('population-data.delete');
     Route::patch('/population-data/{id}', [PopulationDataController::class, 'update'])->name('population-data.update');
+    Route::post('/population-data/store', [PopulationDataController::class, 'store'])->name('population-data.store');
 
 
-	Route::get('/population-data', [PopulationDataController::class, 'index'])->name('population-data');
 	Route::get('/poverty', [PovertyController::class, 'index'])->name('poverty');
 	Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
 	Route::post('/profile', [UserProfileController::class, 'update'])->name('profile.update');
