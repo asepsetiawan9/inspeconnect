@@ -1,17 +1,10 @@
-@if ($povertys->isEmpty())
-<tr>
-    <td class="text-center" colspan="8">Data tidak ditemukan.</td>
-</tr>
-@else
 @foreach ($povertys as $poverty)
 <tr>
     <td class="align-middle text-sm">
-        <p class="text-sm font-weight-bold mb-0 text-capitalize ">
-            {{ $poverty->nama }}</p>
+        <p class="text-sm font-weight-bold mb-0 text-capitalize ">{{ $poverty->nama }}</p>
     </td>
     <td class="align-middle text-sm">
-        <p class="text-sm font-weight-bold mb-0 text-capitalize">
-            {{ $poverty->nik }}</p>
+        <p class="text-sm font-weight-bold mb-0 text-capitalize">{{ $poverty->nik }}</p>
     </td>
     <td class="align-middle text-sm">
         <p class="text-sm font-weight-bold mb-0 ">{{ $poverty->kk }}</p>
@@ -25,9 +18,8 @@
     <td class="align-middle text-sm">
         <p class="text-sm font-weight-bold mb-0 text-capitalize ">{{ $poverty->desil }}</p>
     </td>
-
     <td class="align-middle text-sm">
-        <p class="text-sm font-weight-bold mb-0 text-capitalize ">{{ $poverty->tahun }}</p>
+        <p class="text-sm font-weight-bold mb-0 text-capitalize ">{{ $poverty->tahun_input }}</p>
     </td>
     <td class="align-middle text-left">
         <div class="d-flex justify-content-center align-items-center gap-1 action-buttons">
@@ -37,25 +29,29 @@
                 </div>
             </a>
 
-            <a href="{{ route('poverty.confirm-delete', ['id' => $poverty->id]) }}"
-                class="text-decoration-none">
+            <a href="{{ route('poverty.show', ['id' => $poverty->id]) }}" class="text-decoration-none">
+                <div class="px-2 py-1 bg-primary rounded text-white">
+                    <i class="fa fa-eye" aria-hidden="true"></i>
+                </div>
+            </a>
+
+            <a href="{{ route('poverty.confirm-delete', ['id' => $poverty->id]) }}" class="text-decoration-none">
                 <div class="px-2 py-1 bg-danger rounded text-white"
                     onclick="event.preventDefault(); deleteItem('{{ $poverty->id }}')">
                     <i class="fa fa-trash" aria-hidden="true"></i>
                 </div>
             </a>
 
-            <form id="delete-form-{{ $poverty->id }}"
-                action="{{ route('poverty.delete', ['id' => $poverty->id]) }}" method="POST"
-                style="display: none;">
+            <form id="delete-form-{{ $poverty->id }}" action="{{ route('poverty.delete', ['id' => $poverty->id]) }}"
+                method="POST" style="display: none;">
                 @csrf
                 @method('DELETE')
             </form>
         </div>
     </td>
 </tr>
-
 @endforeach
+
 @push('js')
 <script src="{{ asset('vendor/sweetalert/sweetalert.all.js') }}"></script>
 <script>
@@ -78,4 +74,3 @@
 </script>
 
 @endpush
-@endif

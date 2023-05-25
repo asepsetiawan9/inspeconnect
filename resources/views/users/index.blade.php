@@ -9,7 +9,7 @@
             <div class="col-md-4">
                 <div class="form-group ">
                     <label for="filter1" class="text-white text-sm pb-2 font-weight-bold">Tampilkan Berdasarkan:</label>
-                    <select class="form-select" id="filter1" onchange="filterKecamatan(this.value)">
+                    <select class="form-select" id="filter1">
                         <option selected value="semua">Semua Data</option>
                     </select>
                 </div>
@@ -17,10 +17,10 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="filter2" class="text-white text-sm pb-2 font-weight-bold">Jenis Pengguna:</label>
-                    <select class="form-select" id="filter2" onchange="filterData(this.value)">
-                        <option selected>Semua</option>
-                        <option value="kecamatan">Admin Kecamatan</option>
-                        <option value="desa">Admin Desa</option>
+                    <select class="form-select" id="filter2">
+                        <option selected value="semua">Semua</option>
+                        <option value="kec">Admin Kecamatan</option>
+                        <option value="des">Admin Desa</option>
                     </select>
                 </div>
             </div>
@@ -49,17 +49,22 @@
                             </tr>
                         </thead>
                         <tbody id="users-table">
-                            @include('users.partial_table')
+                            @if ($users->isEmpty())
+                            <tr>
+                                <td class="text-center" colspan="8">Data tidak ada.</td>
+                            </tr>
+                            @else
+                                @include('users.partial_table')
+                            @endif
                         </tbody>
                     </table>
                 </div>
-                @if ($users->isEmpty())
-                <div></div>
-                @else
                 <div class="d-flex justify-content-center mt-4">
-                    {{ $users->links('pagination::bootstrap-4') }}
+                    <div id="pagination-links">
+                        {{ $users->links('pagination::bootstrap-4') }}
+                    </div>
                 </div>
-                @endif
+
             </div>
         </div>
     </div>
@@ -69,44 +74,47 @@
 @push('js')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    function filterData(filterValue) {
-        $.ajax({
+    function filterData(page = 1) {
+        var filterKecamatan = $('#filter1').val();
+        var filterRole = $('#filter2').val();
 
-            url: '{{ route("user-management.filter") }}',
+        $.ajax({
+            url: '{{ route("user-management.filterData") }}',
             method: 'POST',
             data: {
                 _token: '{{ csrf_token() }}',
-                filter: filterValue
+                kecamatan: filterKecamatan,
+                role: filterRole,
+                page: page
             },
-            // data: { filter: filterValue },
+
             success: function(response) {
                 // Mengganti isi tabel dengan data yang baru
-                $('#users-table').html(response);
+                $('#users-table').html(response.table);
+
+                // Memperbarui link pagination dengan link baru
+                $('.pagination').html(response.pagination);
+
+                // Menambahkan event click pada link pagination
+                $('.pagination .page-link').click(function(e) {
+                    e.preventDefault();
+                    var page = $(this).attr('href').split('page=')[1];
+                    filterData(page);
+                });
             },
             error: function(xhr) {
                 // Menangani kesalahan jika ada
             }
         });
     }
-    function filterKecamatan(filterValue) {
-        $.ajax({
 
-            url: '{{ route("user-management.filterKec") }}',
-            method: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-                filter: filterValue
-            },
-            // data: { filter: filterValue },
-            success: function(response) {
-                // Mengganti isi tabel dengan data yang baru
-                $('#users-table').html(response);
-            },
-            error: function(xhr) {
-                // Menangani kesalahan jika ada
-            }
+    // Memanggil fungsi filterData saat halaman dimuat
+    $(document).ready(function() {
+        // Menangkap event change pada dropdown filter
+        $('#filter1, #filter2').change(function() {
+            filterData();
         });
-    }
+    });
 </script>
 @endpush
 
