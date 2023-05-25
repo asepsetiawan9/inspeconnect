@@ -1,10 +1,10 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-@include('layouts.navbars.auth.topnav', ['title' => 'Tambah Data Kemiskinan'])
+@include('layouts.navbars.auth.topnav', ['title' => 'Ubah Data Kemiskinan'])
 <div class="row mt-4 mx-4">
     <div class="position-relative">
-        <h5 class="text-white">Tambah Data Kemiskinan</h5>
+        <h5 class="text-white">Ubah Data Kemiskinan</h5>
         <div class="card px-5 py-3">
             <div class="d-flex flex-row justify-content-center gap-3">
                 <div class="d-flex flex-column align-items-center cursor-pointer">
@@ -28,7 +28,8 @@
             </div>
 
 
-            <form id="poverty-form" action="{{ route('poverty.store') }}" method="POST" enctype="multipart/form-data">
+            <form id="poverty-form" action="{{ route('poverty.update', $poverty->id) }}" method="POST" enctype="multipart/form-data">
+                @method('PATCH')
                 @csrf
                 <div class="row">
                     <div id="form-1" class="form-section row pt-3">

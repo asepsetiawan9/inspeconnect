@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Alert;
+use View;
 
 class UserManagementController extends Controller
 {
@@ -14,34 +15,33 @@ class UserManagementController extends Controller
 
         return view('users.index', compact('users'));
     }
-
-    public function filter(Request $request)
+    public function filterData(Request $request)
     {
-        $filter = $request->input('filter');
 
-        if ($filter === 'kecamatan') {
-            $users = User::where('role', 'kec')->paginate(5);
-        } elseif ($filter === 'desa') {
-            $users = User::where('role', 'des')->paginate(5);
-        } else {
-            $users = User::paginate(5);
+        $filterKecamatan = $request->input('kecamatan');
+        $filterRole = $request->input('role');
+        $page = $request->input('page', 1);
+
+        $query = User::query();
+
+        if ($filterKecamatan !== 'semua') {
+            $query->where('city', $filterKecamatan);
         }
 
-        return view('users.partial_table', compact('users'));
-    }
-    public function filterKec(Request $request)
-    {
-        $filter = $request->input('filter');
-
-        if ($filter === 'semua') {
-            $users = User::paginate(5);
-        } else {
-            $users = User::where('city', $filter)->paginate(5);
+        if ($filterRole !== 'semua') {
+            $query->where('role', $filterRole);
         }
 
-        return view('users.partial_table', compact('users'));
-    }
+        $users = $query->paginate(5, ['*'], 'page', $page);
 
+        $table = View::make('users.partial_table', compact('users'))->render();
+        $pagination = $users->links('pagination::bootstrap-4')->render();
+
+        return response()->json([
+            'table' => $table,
+            'pagination' => $pagination,
+        ]);
+    }
 
     public function create()
     {

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Poverty extends Model
 {
-    use HasFactory;
+    protected $table = 'poverties';
     protected $fillable = [
         'nik',
         'nama',
@@ -36,5 +36,9 @@ class Poverty extends Model
         'penghasilan_perbulan',
         'bantuan_diterima',
         'tahun_input',
+        'sumber_penerangan_utama',
+        'bab',
     ];
+
+
 }

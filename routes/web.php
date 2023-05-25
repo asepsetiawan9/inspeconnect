@@ -54,8 +54,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::patch('/user-management/{id}', [UserManagementController::class, 'update'])->name('user-management.update');
     Route::post('/user-management/store', [UserManagementController::class, 'store'])->name('user-management.store');
     // user management filter
-    Route::post('/user-management/filter', [UserManagementController::class, 'filter'])->name('user-management.filter');
-    Route::post('/user-management/filterKec', [UserManagementController::class, 'filterKec'])->name('user-management.filterKec');
+    Route::post('/user-management/filter', [UserManagementController::class, 'FilterData'])->name('user-management.filterData');
+    // Route::post('/user-management/filter', [UserManagementController::class, 'filter'])->name('user-management.filter');
+    // Route::post('/user-management/filterKec', [UserManagementController::class, 'filterKec'])->name('user-management.filterKec');
 
     // Population Data
 	Route::get('/population-data', [PopulationDataController::class, 'index'])->name('population-data');
@@ -76,6 +77,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('/poverty/{id}', [PovertyController::class, 'delete'])->name('poverty.delete');
     Route::patch('/poverty/{id}', [PovertyController::class, 'update'])->name('poverty.update');
     Route::post('/poverty/store', [PovertyController::class, 'store'])->name('poverty.store');
+     // Poverty Data filter
+     Route::post('/poverty/filter', [PovertyController::class, 'FilterData'])->name('poverty.filterData');
+     Route::post('/poverty/searchData', [PovertyController::class, 'searchData'])->name('poverty.searchData');
 
 	Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
 	Route::post('/profile', [UserProfileController::class, 'update'])->name('profile.update');
