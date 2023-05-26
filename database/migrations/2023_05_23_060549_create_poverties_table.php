@@ -13,18 +13,18 @@ return new class extends Migration
     {
         Schema::create('poverties', function (Blueprint $table) {
             $table->id();
-            $table->integer('nik')->nullable();
+            $table->bigInteger('nik')->nullable();
             $table->string('nama')->nullable();
             $table->text('alamat')->nullable();
-            $table->string('kecamatan')->nullable();
+            $table->string('id_kecamatan')->nullable()->default(0);
+            $table->string('id_desa')->nullable()->default(0);
             $table->string('tempat_lahir')->nullable();
             $table->string('status')->nullable();
-            $table->integer('kk')->nullable();
+            $table->bigInteger('kk')->nullable();
             $table->string('jk')->nullable();
             $table->string('rt')->nullable();
             $table->string('rw')->nullable();
-            $table->string('desa')->nullable();
-            $table->date('tgl')->nullable();
+            $table->string('tgl')->nullable();
             $table->text('foto_diri')->nullable();
             $table->string('status_pendidikan')->nullable();
             $table->string('pekerjaan')->nullable();
@@ -40,6 +40,8 @@ return new class extends Migration
             $table->integer('penghasilan_perbulan')->nullable();
             $table->text('bantuan_diterima')->nullable();
             $table->year('tahun_input')->nullable();
+            $table->string('sumber_penerangan_utama')->default(0)->nullable();
+            $table->string('bab')->nullable();
             $table->timestamps();
         });
     }

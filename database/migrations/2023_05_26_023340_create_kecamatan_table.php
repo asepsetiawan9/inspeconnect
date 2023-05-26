@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('poverties', function (Blueprint $table) {
-            $table->string('sumber_penerangan_utama')->default(0)->nullable();
-            $table->string('bab')->nullable();
+        Schema::create('kecamatan', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('type');
+            $table->longText('coordinates');
+            $table->timestamps();
         });
     }
 
@@ -22,9 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('poverties', function (Blueprint $table) {
-            $table->dropColumn("sumber_penerangan_utama");
-            $table->dropColumn("bab");
-        });
+        Schema::dropIfExists('kecamatan');
     }
 };

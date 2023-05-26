@@ -74,6 +74,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/poverty/edit/{id}', [PovertyController::class, 'edit'])->name('poverty.edit');
 	Route::get('/poverty/show/{id}', [PovertyController::class, 'show'])->name('poverty.show');
     Route::get('/poverty/delete/{id}', [PovertyController::class, 'confirmDelete'])->name('poverty.confirm-delete');
+    Route::get('/poverty/getKecamatan', [PovertyController::class, 'getKecamatan'])->name('poverty.getKecamatan');
+    Route::get('/poverty/getDesa/{id}', [PovertyController::class, 'getDesa'])->name('poverty.getDesa');
     Route::delete('/poverty/{id}', [PovertyController::class, 'delete'])->name('poverty.delete');
     Route::patch('/poverty/{id}', [PovertyController::class, 'update'])->name('poverty.update');
     Route::post('/poverty/store', [PovertyController::class, 'store'])->name('poverty.store');

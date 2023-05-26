@@ -63,18 +63,20 @@
     <label for="kecamatan2">Kecamatan</label>
     <select class="form-select" id="kecamatan2">
         <option selected value="">-- Pilih kecamatan --</option>
+        <input type="hidden" id="kecamatan" name="kecamatan" value="">
+        <input type="hidden" id="id_kecamatan" name="id_kecamatan" value="">
     </select>
-    <input type="hidden" id="kecamatan" name="kecamatan" value="">
-    <input type="hidden" id="kecamatan_id" name="kecamatan_id" value="">
+    @error('id_kecamatan') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
 </div>
 
 
 <div class="col-md-6 form-group">
     <label for="kelurahan">Desa</label>
-    <select name="desa" class="form-select" id="kelurahan">
+    <select name="id_desa" class="form-select" id="kelurahan">
         <option selected value="">-- Pilih Desa --</option>
         <!-- load kelurahan/desa-->
     </select>
+    @error('id_desa') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
 </div>
 
 <div class="col-md-6">
@@ -255,30 +257,30 @@
 <script>
     var kecamatanSelect = document.getElementById('kecamatan2');
     var kelurahanSelect = document.getElementById('kelurahan');
-    var kecamatanIdInput = document.getElementById('kecamatan_id');
+    var kecamatanIdInput = document.getElementById('id_kecamatan');
     var kecamatanNameInput = document.getElementById('kecamatan');
 
     kecamatanSelect.addEventListener('change', function () {
         kelurahanSelect.innerHTML = '<option selected value="">-- Pilih Desa --</option>';
 
-        var selectedkecamatan = kecamatanSelect.value;
-        var selectedkecamatanName = kecamatanSelect.options[kecamatanSelect.selectedIndex].text;
+        var selectedKecamatan = kecamatanSelect.value;
+        var selectedKecamatanName = kecamatanSelect.options[kecamatanSelect.selectedIndex].text;
 
-        kecamatanIdInput.value = selectedkecamatan;
-        kecamatanNameInput.value = selectedkecamatanName;
+        kecamatanIdInput.value = selectedKecamatan;
+        kecamatanNameInput.value = selectedKecamatanName;
 
-        if (selectedkecamatan) {
-            // fetch desa
-            fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/villages/${selectedkecamatan}.json`)
+        if (selectedKecamatan) {
+            // Fetch desa berdasarkan kecamatan yang dipilih
+            fetch(`/poverty/getDesa/${selectedKecamatan}`)
                 .then(response => response.json())
-                .then(villages => {
+                .then(data => {
                     kelurahanSelect.innerHTML = '<option selected value="">-- Pilih Desa --</option>';
 
-                    // list kelurahan/desa
-                    villages.forEach(village => {
+                    // Menambahkan opsi desa berdasarkan data yang diterima
+                    data.forEach(desa => {
                         var option = document.createElement('option');
-                        option.value = village.name;
-                        option.text = village.name;
+                        option.value = desa.id;
+                        option.text = desa.name_desa;
                         kelurahanSelect.add(option);
                     });
                 })
@@ -288,22 +290,23 @@
         }
     });
 
-    // ambil data smua kecamatan2 grt
-    fetch('https://www.emsifa.com/api-wilayah-indonesia/api/districts/3205.json')
+    // Mengambil data semua kecamatan dari database
+    fetch('/poverty/getKecamatan')
         .then(response => response.json())
-        .then(districts => {
+        .then(data => {
             kecamatanSelect.innerHTML = '<option selected value="">-- Pilih kecamatan --</option>';
 
-            districts.forEach(district => {
+            // Menambahkan opsi kecamatan berdasarkan data yang diterima
+            data.data.forEach(kecamatan => {
+
                 var option = document.createElement('option');
-                option.value = district.id;
-                option.text = district.name;
+                option.value = kecamatan.id;
+                option.text = kecamatan.name;
                 kecamatanSelect.add(option);
             });
         })
         .catch(error => {
             console.error('Error:', error);
         });
-
 </script>
 @endpush

@@ -10,10 +10,14 @@
         <p class="text-sm font-weight-bold mb-0 ">{{ $poverty->kk }}</p>
     </td>
     <td class="align-middle text-sm">
-        <p class="text-sm font-weight-bold mb-0 text-capitalize ">{{ $poverty->kecamatan }}</p>
+        <p class="text-sm font-weight-bold mb-0 text-capitalize">
+            {{ $poverty->kecamatan ? $poverty->kecamatan->name : '' }}
+        </p>
     </td>
     <td class="align-middle text-sm">
-        <p class="text-sm font-weight-bold mb-0 text-capitalize ">{{ $poverty->desa }}</p>
+        <p class="text-sm font-weight-bold mb-0 text-capitalize">
+            {{ $poverty->kecamatan ? $poverty->desa->name_desa : '' }}
+        </p>
     </td>
     <td class="align-middle text-sm">
         <p class="text-sm font-weight-bold mb-0 text-capitalize ">{{ $poverty->desil }}</p>

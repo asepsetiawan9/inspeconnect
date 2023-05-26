@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Desa;
+use App\Models\kecamatan;
 use App\Models\Poverty;
 use Alert;
 use Illuminate\Http\Request;
@@ -12,10 +14,11 @@ class PovertyController extends Controller
 {
     public function index()
     {
-        $povertys = Poverty::paginate(5);
+        $povertys = Poverty::with('kecamatan', 'desa')->paginate(5);
 
         return view('poverty.index', compact('povertys'));
     }
+
     public function searchData(Request $request)
     {
         $query = $request->input('query');
@@ -42,7 +45,7 @@ class PovertyController extends Controller
         $query = Poverty::query();
 
         if ($filterKecamatan !== 'semua') {
-            $query->where('kecamatan', $filterKecamatan);
+            $query->where('id_kecamatan', $filterKecamatan);
         }
 
         if ($filterDesil !== 'semua') {
@@ -70,6 +73,7 @@ class PovertyController extends Controller
     }
     public function store(Request $request)
     {
+        //  dd($request);
         $validatedData = $request->validate([
             'nik' => 'required',
             'nama' => 'required',
@@ -81,8 +85,6 @@ class PovertyController extends Controller
             'rt' => 'required',
             'rw' => 'required',
             'tgl' => 'required',
-            'kecamatan' => 'required',
-            'desa' => 'required',
             'status_pendidikan' => 'required',
             'pekerjaan' => 'required',
             'tempat_tinggal' => 'required',
@@ -102,7 +104,9 @@ class PovertyController extends Controller
         $data = Poverty::create($validatedData);
         $data->jenis_pekerjaan = $request->jenis_pekerjaan;
         $data->pendidikan_terakhir = $request->pendidikan_terakhir;
-
+        $data->id_kecamatan = $request->id_kecamatan;
+        $data->id_desa = $request->id_desa;
+        // dd($data);
         if ($request->hasFile('foto_diri')) {
             $fotoDiri = $request->file('foto_diri');
             $fotoDiriPath = Str::random(5) . '.' . $fotoDiri->getClientOriginalExtension();
@@ -219,6 +223,30 @@ class PovertyController extends Controller
         }
 
         return redirect('poverty');
+    }
+
+    public function getKecamatan()
+    {
+        $kecamatan = kecamatan::all();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $kecamatan
+        ]);
+    }
+    public function getDesa($id_kecamatan)
+    {
+        // Cari kecamatan berdasarkan id_kecamatan
+        $kecamatan = Kecamatan::find($id_kecamatan);
+
+        if (!$kecamatan) {
+            return response()->json(['error' => 'Kecamatan tidak ditemukan'], 404);
+        }
+
+        // Cari semua desa yang terkait dengan kecamatan
+        $desa = Desa::where('id_kecamatan', $id_kecamatan)->get();
+
+        return response()->json($desa);
     }
 
 
