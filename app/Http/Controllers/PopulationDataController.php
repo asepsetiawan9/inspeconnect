@@ -29,9 +29,52 @@ class PopulationDataController extends Controller
             'tahun' => 'required|numeric',
         ]);
 
-        $population = Population::create($attributes);
 
-        if ($population) {
+        $population = Population::create($attributes);
+        $population->garut_kota = $request->garut_kota;
+        $population->karangpawitan = $request->karangpawitan;
+        $population->wanaraja = $request->wanaraja;
+        $population->tarogong_kaler = $request->tarogong_kaler;
+        $population->tarogong_kidul = $request->tarogong_kidul;
+        $population->banyuresmi = $request->banyuresmi;
+        $population->samarang = $request->samarang;
+        $population->pasirwangi = $request->pasirwangi;
+        $population->leles = $request->leles;
+        $population->kadungora = $request->kadungora;
+        $population->leuwigoong = $request->leuwigoong;
+        $population->cibatu = $request->cibatu;
+        $population->kersamanah = $request->kersamanah;
+        $population->malangbong = $request->malangbong;
+        $population->sukawening = $request->sukawening;
+        $population->karangtengah = $request->karangtengah;
+        $population->bayongbong = $request->bayongbong;
+        $population->cigedug = $request->cigedug;
+        $population->cilawu = $request->cilawu;
+        $population->cisurupan = $request->cisurupan;
+        $population->sukaresmi = $request->sukaresmi;
+        $population->cikajang = $request->cikajang;
+        $population->banjarwangi = $request->banjarwangi;
+        $population->singajaya = $request->singajaya;
+        $population->cihurip = $request->cihurip;
+        $population->peundeuy = $request->peundeuy;
+        $population->pameungpeuk = $request->pameungpeuk;
+        $population->cisompet = $request->cisompet;
+        $population->cibalong = $request->cibalong;
+        $population->cikelet = $request->cikelet;
+        $population->bungbulang = $request->bungbulang;
+        $population->mekarmukti = $request->mekarmukti;
+        $population->pakenjeng = $request->pakenjeng;
+        $population->pamulihan = $request->pamulihan;
+        $population->cisewu = $request->cisewu;
+        $population->caringin = $request->caringin;
+        $population->talegong = $request->talegong;
+        $population->balubur_limbangan = $request->balubur_limbangan;
+        $population->selaawi = $request->selaawi;
+        $population->cibiuk = $request->cibiuk;
+        $population->pangatikan = $request->pangatikan;
+        $population->sucinaraja = $request->sucinaraja;
+
+        if ($population->save()) {
             Alert::success('Sukses', 'Data Penduduk berhasil disimpan.')->autoclose(3500);
         } else {
             Alert::error('Error', 'Terjadi kesalahan saat menyimpan data.')->autoclose(3500);
@@ -59,6 +102,48 @@ class PopulationDataController extends Controller
         $population->jumlah_laki_laki = $request->jumlah_laki_laki;
         $population->jumlah_perempuan = $request->jumlah_perempuan;
         $population->tahun = $request->tahun;
+        $population->garut_kota = $request->garut_kota;
+        $population->karangpawitan = $request->karangpawitan;
+        $population->wanaraja = $request->wanaraja;
+        $population->tarogong_kaler = $request->tarogong_kaler;
+        $population->tarogong_kidul = $request->tarogong_kidul;
+        $population->banyuresmi = $request->banyuresmi;
+        $population->samarang = $request->samarang;
+        $population->pasirwangi = $request->pasirwangi;
+        $population->leles = $request->leles;
+        $population->kadungora = $request->kadungora;
+        $population->leuwigoong = $request->leuwigoong;
+        $population->cibatu = $request->cibatu;
+        $population->kersamanah = $request->kersamanah;
+        $population->malangbong = $request->malangbong;
+        $population->sukawening = $request->sukawening;
+        $population->karangtengah = $request->karangtengah;
+        $population->bayongbong = $request->bayongbong;
+        $population->cigedug = $request->cigedug;
+        $population->cilawu = $request->cilawu;
+        $population->cisurupan = $request->cisurupan;
+        $population->sukaresmi = $request->sukaresmi;
+        $population->cikajang = $request->cikajang;
+        $population->banjarwangi = $request->banjarwangi;
+        $population->singajaya = $request->singajaya;
+        $population->cihurip = $request->cihurip;
+        $population->peundeuy = $request->peundeuy;
+        $population->pameungpeuk = $request->pameungpeuk;
+        $population->cisompet = $request->cisompet;
+        $population->cibalong = $request->cibalong;
+        $population->cikelet = $request->cikelet;
+        $population->bungbulang = $request->bungbulang;
+        $population->mekarmukti = $request->mekarmukti;
+        $population->pakenjeng = $request->pakenjeng;
+        $population->pamulihan = $request->pamulihan;
+        $population->cisewu = $request->cisewu;
+        $population->caringin = $request->caringin;
+        $population->talegong = $request->talegong;
+        $population->balubur_limbangan = $request->balubur_limbangan;
+        $population->selaawi = $request->selaawi;
+        $population->cibiuk = $request->cibiuk;
+        $population->pangatikan = $request->pangatikan;
+        $population->sucinaraja = $request->sucinaraja;
 
         $population->save();
 
