@@ -154,8 +154,6 @@ class PovertyController extends Controller
             'rt' => 'required',
             'rw' => 'required',
             'tgl' => 'required',
-            'kecamatan' => 'required',
-            'desa' => 'required',
             'status_pendidikan' => 'required',
             'pekerjaan' => 'required',
             'tempat_tinggal' => 'required',
@@ -173,6 +171,8 @@ class PovertyController extends Controller
         $data = Poverty::findOrFail($id);
         $data->jenis_pekerjaan = $request->jenis_pekerjaan;
         $data->pendidikan_terakhir = $request->pendidikan_terakhir;
+        $data->id_kecamatan = $request->id_kecamatan;
+        $data->id_desa = $request->id_desa;
         $data->update($validatedData);
 
         if ($request->hasFile('foto_diri')) {
@@ -236,14 +236,12 @@ class PovertyController extends Controller
     }
     public function getDesa($id_kecamatan)
     {
-        // Cari kecamatan berdasarkan id_kecamatan
         $kecamatan = Kecamatan::find($id_kecamatan);
 
         if (!$kecamatan) {
             return response()->json(['error' => 'Kecamatan tidak ditemukan'], 404);
         }
 
-        // Cari semua desa yang terkait dengan kecamatan
         $desa = Desa::where('id_kecamatan', $id_kecamatan)->get();
 
         return response()->json($desa);
