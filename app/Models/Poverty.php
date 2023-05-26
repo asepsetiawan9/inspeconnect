@@ -40,5 +40,15 @@ class Poverty extends Model
         'bab',
     ];
 
+    public function kecamatan()
+    {
+        return $this->belongsTo(Kecamatan::class, 'id_kecamatan', 'id');
+    }
+
+    public function desa()
+    {
+        return $this->belongsTo(Desa::class, 'id_desa', 'id');
+    }
+
 
 }

@@ -112,18 +112,14 @@
 
 @push('js')
 <script>
-    fetch('https://www.emsifa.com/api-wilayah-indonesia/api/districts/3205.json')
+    fetch('/poverty/getKecamatan')
         .then(response => response.json())
         .then(data => {
-            // Mendapatkan daftar kecamatan dari data
-            const kecamatanList = data.map(kecamatan => kecamatan.name);
-
-            // Menambahkan opsi kecamatan ke elemen select
             const selectElement = document.getElementById('filter1');
-            kecamatanList.forEach(kecamatan => {
+            data.data.forEach(kecamatan => {
                 const option = document.createElement('option');
-                option.value = kecamatan;
-                option.text = kecamatan;
+                option.value = kecamatan.id;
+                option.text = kecamatan.name;
                 selectElement.appendChild(option);
             });
         })
