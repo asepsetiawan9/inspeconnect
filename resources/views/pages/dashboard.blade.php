@@ -91,7 +91,7 @@
                             <div class="numbers">
                                 <p class="text-xs mb-0 text-uppercase font-weight-bold">JUMLAH PENDUDUK</p>
                                 <h5 class="font-weight-bolder">
-                                    2.759.490
+                                    {{ number_format($latestPopulation->jumlah_penduduk ?? 0) }}
                                 </h5>
                                 <p class="mb-0">
                                     Jiwa
@@ -115,7 +115,7 @@
                             <div class="numbers">
                                 <p class="text-xs mb-0 text-uppercase font-weight-bold">JUMLAH KK</p>
                                 <h5 class="font-weight-bolder">
-                                    915.327
+                                    {{ number_format($latestPopulation->jumlah_kk ?? 0) }}
                                 </h5>
                                 <p class="mb-0">
                                     Kepala Keluarga
@@ -139,7 +139,7 @@
                             <div class="numbers">
                                 <p class="text-xs mb-0 text-uppercase font-weight-bold">JUMLAH PENDUDUK MISKIN</p>
                                 <h5 class="font-weight-bolder">
-                                    1.263.220
+                                    {{ number_format($jml_pen_miskin ?? 0) }}
                                 </h5>
                                 <p class="mb-0">
                                     Jiwa
@@ -163,7 +163,7 @@
                             <div class="numbers">
                                 <p class="text-xs mb-0 text-uppercase font-weight-bold">PERSENTASE PENDUDUK MISKIN</p>
                                 <h5 class="font-weight-bolder">
-                                    10,42
+                                    {{ number_format($persentasePendudukMiskin ?? 0, 2) }}
                                 </h5>
                                 <p class="mb-0">
                                     %
