@@ -86,6 +86,10 @@ Route::group(['middleware' => 'auth'], function () {
      // Poverty Data filter
      Route::post('/poverty/filter', [PovertyController::class, 'FilterData'])->name('poverty.filterData');
      Route::post('/poverty/searchData', [PovertyController::class, 'searchData'])->name('poverty.searchData');
+    // import dan export
+    Route::get('/export-data', 'DataController@export')->name('export.data');
+    Route::post('/import-data', 'DataController@import')->name('import.data');
+
 
 	Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
 	Route::post('/profile', [UserProfileController::class, 'update'])->name('profile.update');

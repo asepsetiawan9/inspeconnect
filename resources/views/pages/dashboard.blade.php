@@ -9,9 +9,11 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <div for="filter1 " class="text-white text-sm pb-2 text-bold">Tampilkan Berdasarkan:</div>
-                        <select class="form-select" id="filter1">
-                            <option selected>Jumlah Penduduk</option>
-                            <option value="1">Jumlah KK</option>
+                        <select class="form-select" id="filter1" onchange="filterByKecamatan()">
+                                <option selected value="all">Jumlah Penduduk</option>
+                            @foreach ($status as $stat)
+                                <option value="{{ $stat }}">{{ $stat }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
@@ -275,12 +277,15 @@
     chart2 = createChart2(labels2, data2);
 
     function filterByKecamatan() {
+        const selectElement1 = document.getElementById('filter1');
+        const selectedStatus = selectElement1.value;
         const selectElement = document.getElementById('filter2');
         const selectedKecId = selectElement.value;
         const selectedKecLabel = selectElement.options[selectElement.selectedIndex].text;
         const selectedYear = document.getElementById('filter3').value;
 
         const data = {
+            status: selectedStatus,
             kecId: selectedKecId,
             kecLabel: selectedKecId === 'jumlah_penduduk' ? 'jumlah_penduduk' : selectedKecLabel,
             year: selectedYear
@@ -319,7 +324,7 @@
             }
         });
     }
-
+    document.getElementById('filter1').addEventListener('change', filterByKecamatan);
     document.getElementById('filter2').addEventListener('change', filterByKecamatan);
     document.getElementById('filter3').addEventListener('change', filterByKecamatan);
 });
