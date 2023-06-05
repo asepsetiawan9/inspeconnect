@@ -14,6 +14,7 @@ class GeoJSONController extends Controller
         $kecamatanData = Kecamatan::all();
 
         $selectedYear = $request->input('year');
+        $selectedVariable = $request->input('variable');
         $latestYear = Poverty::max('tahun_input');
 
         if ($selectedYear === 'all') {
@@ -27,6 +28,10 @@ class GeoJSONController extends Controller
                 $query->where('tahun_input', $selectedYear); // Menambahkan filter tahun jika dipilih
             }
 
+            if ($selectedVariable !== 'all') {
+                $query->where('pendidikan_terakhir', $selectedVariable); // Menambahkan filter variabel jika dipilih
+            }
+
             $povertyData = $query->get();
 
             $feature = [
@@ -34,6 +39,7 @@ class GeoJSONController extends Controller
                 'properties' => [
                     'nmkab' => 'GARUT',
                     'tahun' => $selectedYear,
+                    'variabel' => $selectedVariable,
                     'kecamatan' => $kecamatan->name,
                     'nmprov' => 'JAWA BARAT',
                     'keterangan' => $kecamatan->key_kecamatan,
@@ -55,5 +61,6 @@ class GeoJSONController extends Controller
 
         return response()->json($geojson);
     }
+
 
 }

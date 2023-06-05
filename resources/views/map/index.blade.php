@@ -9,15 +9,17 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <div for="filter1 " class="text-white text-sm pb-2 text-bold">Tampilkan Berdasarkan:</div>
-                        <select class="form-select" id="filter1">
-                            <option selected>Jumlah Penduduk</option>
-                            <option value="1">Jumlah KK</option>
+                        <select class="form-select" id="filter1" onchange="filterByKecamatan()">
+                                <option selected value="all">Jumlah Penduduk</option>
+                            @foreach ($status as $stat)
+                                <option value="{{ $stat }}">{{ $stat }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <div for="filter1 " class="text-white text-sm pb-2 text-bold">Variabel:</div>
+                        <div for="filterVar " class="text-white text-sm pb-2 text-bold">Variabel:</div>
                         <select class="form-select" id="filterVar" onchange="filterByKecamatan()">
                             <option selected value="all">Pilih Variabel</option>
                             @foreach ($variabels as $variabel)
@@ -135,6 +137,8 @@
     chart2 = createChart2(labels2, data2);
 
     function filterByKecamatan() {
+        const selectElement1 = document.getElementById('filter1');
+        const selectedStatus = selectElement1.value;
         const selectElement = document.getElementById('filter2');
         const selectedKecId = selectElement.value;
         const selectedKecLabel = selectElement.options[selectElement.selectedIndex].text;
@@ -142,6 +146,7 @@
         const selectedVar = document.getElementById('filterVar').value;
 
         const data = {
+            status: selectedStatus,
             kecId: selectedKecId,
             kecLabel: selectedKecId === 'jumlah_penduduk' ? 'jumlah_penduduk' : selectedKecLabel,
             year: selectedYear,
@@ -172,7 +177,7 @@
             }
         });
     }
-
+    document.getElementById('filter1').addEventListener('change', filterByKecamatan);
     document.getElementById('filter2').addEventListener('change', filterByKecamatan);
     document.getElementById('filter3').addEventListener('change', filterByKecamatan);
     document.getElementById('filterVar').addEventListener('change', filterByKecamatan);
@@ -194,13 +199,17 @@
     }).addTo(map);
 
     // Fungsi untuk memperbarui tampilan geojson dengan filter tahun
-    function updateGeojson(year) {
-        fetch(`/api/geojson?year=${year}`)
+    function updateGeojson(year, variable) {
+        // console.log(variable);
+        fetch(`/api/geojson?year=${year}&variable=${variable}`)
+
             .then(function (response) {
+
                 return response.json();
             })
             .then(function (data) {
                 // Menghapus layer geojson yang ada sebelumnya
+                console.log(data);
                 if (geojsonLayer) {
                     map.removeLayer(geojsonLayer);
                 }
@@ -256,12 +265,15 @@
                         // Menampilkan popup saat mouse memasuki area kecamatan
                         layer.on('mouseover', function (e) {
                             var tahun = properties.tahun !== null ? properties.tahun : 'Semua Tahun';
+                            var variabel = properties.variabel !== 'all' ? properties.variabel : 'Semua Variabel';
+                                variabel = properties.variabel === null ? 'TIDAK BERSEKOLAH' : variabel;
+
                             layer.bindPopup(
                                 "<b>Tahun: </b>" + tahun +
+                                "<br><b>Variabel: </b>" + variabel +
                                 "<br><b>Kecamatan: </b>" + properties.kecamatan +
                                 "<br><b>Kabupaten: </b>" + properties.nmkab +
                                 "<br><b>Provinsi: </b>" + properties.nmprov +
-                                "<br><b>Keterangan: </b>" + properties.keterangan +
                                 "<br><b>Nilai: </b>" + properties.nilai
                             ).openPopup();
                         });
@@ -309,19 +321,28 @@
             });
     }
 
+    // Mendapatkan elemen select untuk filter variabel
+    var filterVarSelect = document.getElementById('filterVar');
     // Mendapatkan elemen select untuk filter tahun
     var filterYearSelect = document.getElementById('filter3');
 
-    // Menambahkan event listener saat nilai filter tahun berubah
+    // Menambahkan event listener saat nilai filter variabel berubah
+    filterVarSelect.addEventListener('change', function () {
+        var selectedVariable = this.value;
+        var selectedYear = filterYearSelect.value;
+        updateGeojson(selectedYear, selectedVariable);
+    });
+
+    // Menambahkan event listener saat nilai filter variabel berubah
     filterYearSelect.addEventListener('change', function () {
         var selectedYear = this.value;
-        updateGeojson(selectedYear);
+        var selectedVariable = filterVarSelect.value;
+        updateGeojson(selectedYear, selectedVariable);
     });
 
     // Memuat geojson awal saat halaman dimuat
     var geojsonLayer;
-    updateGeojson('all');
-
+    updateGeojson('all', 'all');
 
 </script>
 
