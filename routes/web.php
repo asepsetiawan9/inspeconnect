@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\DataManagement;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,6 +29,7 @@ use App\Http\Controllers\MapController;
 use App\Http\Controllers\PopulationDataController;
 use App\Http\Controllers\PovertyController;
 use App\Http\Controllers\UserManagementController;
+use App\Http\Controllers\DataManagementController;
 
 
 Route::get('/', function () {return redirect('/dashboard');})->middleware('auth');
@@ -87,9 +89,10 @@ Route::group(['middleware' => 'auth'], function () {
      Route::post('/poverty/filter', [PovertyController::class, 'FilterData'])->name('poverty.filterData');
      Route::post('/poverty/searchData', [PovertyController::class, 'searchData'])->name('poverty.searchData');
     // import dan export
-    Route::get('/export-data', 'DataController@export')->name('export.data');
-    Route::post('/import-data', 'DataController@import')->name('import.data');
-
+    Route::get('/datamanagement', [DataManagementController::class, 'index'])->name('datamanagement');
+    Route::get('/datamanagement/export', [DataManagementController::class, 'export'])->name('datamanagement.export');
+    Route::post('/datamanagement/import', [DataManagementController::class, 'import'])->name('datamanagement.import');
+    Route::get('/datamanagement/download-template', [DataManagementController::class, 'download'])->name('datamanagement.downloadTemplate');
 
 	Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
 	Route::post('/profile', [UserProfileController::class, 'update'])->name('profile.update');

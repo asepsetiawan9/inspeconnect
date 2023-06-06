@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('poverties', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('nik')->nullable();
+            $table->string('nik')->nullable();
             $table->string('nama')->nullable();
             $table->text('alamat')->nullable();
             $table->string('id_kecamatan')->nullable()->default(0);
             $table->string('id_desa')->nullable()->default(0);
             $table->string('tempat_lahir')->nullable();
             $table->string('status')->nullable();
-            $table->bigInteger('kk')->nullable();
+            $table->string('kk')->nullable();
             $table->string('jk')->nullable();
             $table->string('rt')->nullable();
             $table->string('rw')->nullable();
