@@ -30,6 +30,7 @@ use App\Http\Controllers\PopulationDataController;
 use App\Http\Controllers\PovertyController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\DataManagementController;
+use App\Http\Controllers\AssistanceController;
 
 
 Route::get('/', function () {return redirect('/dashboard');})->middleware('auth');
@@ -93,6 +94,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/datamanagement/export', [DataManagementController::class, 'export'])->name('datamanagement.export');
     Route::post('/datamanagement/import', [DataManagementController::class, 'import'])->name('datamanagement.import');
     Route::get('/datamanagement/download-template', [DataManagementController::class, 'download'])->name('datamanagement.downloadTemplate');
+    //bantuan
+    Route::resource('assistance', App\Http\Controllers\AssistanceController::class);
+    Route::get('/get-poverty-data', [AssistanceController::class, 'getPovertyData']);
 
 	Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
 	Route::post('/profile', [UserProfileController::class, 'update'])->name('profile.update');

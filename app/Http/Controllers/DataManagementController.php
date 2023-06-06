@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\DataManagementExport;
 use App\Imports\DataManagementImport;
+use DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Storage;
@@ -55,5 +56,7 @@ class DataManagementController extends Controller
 
         return response()->download($filePath, 'template.xlsx', $headers);
     }
+
+
 
 }

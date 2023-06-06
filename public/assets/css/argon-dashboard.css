@@ -9472,6 +9472,9 @@ textarea.form-control-lg {
 .text-decoration-none {
     text-decoration: none;
 }
+.select2-container {
+    border-radius: 50%;
+}
 
 .rounded {
     border-radius: 50%;
