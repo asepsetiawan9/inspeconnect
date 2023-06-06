@@ -66,7 +66,7 @@
             </li>
 
             <li class="nav-item mt-3">
-                <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">MANAJEMEN AKUN</h6>
+                <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">MANAJEMEN</h6>
             </li>
             <li class="nav-item">
             <a class="nav-link {{ str_contains(request()->url(), 'profile') == true ? 'active' : '' }}"
@@ -76,6 +76,16 @@
                         <i class="fa fa-cog text-dark text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Ubah Profil</span>
+                </a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link {{ str_contains(request()->url(), 'datamanagement') == true ? 'active' : '' }}"
+                    href="{{ route('page', ['page' => 'datamanagement']) }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fa fa-cog text-dark text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Management Data</span>
                 </a>
             </li>
         </ul>
