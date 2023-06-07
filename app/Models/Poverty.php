@@ -50,5 +50,9 @@ class Poverty extends Model
         return $this->belongsTo(Desa::class, 'id_desa', 'id');
     }
 
+    public function assistance()
+    {
+        return $this->hasOne(Assistance::class, 'id_poverty', 'id');
+    }
 
 }

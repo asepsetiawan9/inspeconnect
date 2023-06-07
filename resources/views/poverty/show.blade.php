@@ -57,13 +57,13 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <strong for="name">KECAMATAN</strong>
-                        <p>{{ $poverty->kecamatan ?: '' }}</p>
+                        <p>{{ $poverty->kecamatan->name ?: '' }}</p>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <strong for="name">DESA</strong>
-                        <p>{{ $poverty->desa ?: '' }}</p>
+                        <p>{{ $poverty->desa->name_desa ?: '' }}</p>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -184,6 +184,71 @@
                         @endif
                     </div>
                 </div>
+                <!-- Tombol untuk membuka modal -->
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#assistanceModal">
+                    Lihat Bantuan
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="assistanceModal" tabindex="-1" aria-labelledby="assistanceModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="assistanceModalLabel">Bantuan yang Diterima</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Isi dari modal -->
+                                @if ($poverty->assistance->assistDetails )
+                                @foreach ($poverty->assistance->assistDetails as $assistDetail)
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <strong for="name">Nama Bantuan</strong>
+                                            <p>{{ $assistDetail->nama_bantuan ?: '' }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <strong for="name">Pemberi bantuan</strong>
+                                            <p>{{ $assistDetail->pemberi_bantuan ?: '' }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <strong for="alamat">Keterangan</strong>
+                                            <p>{{ $assistDetail->keterangan ?: '' }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group d-flex flex-column thumbnail">
+                                            <strong for="name">Bukti Bantuan</strong>
+                                            @if ($assistDetail->bukti)
+                                            <img src="{{ asset('storage/bukti/' . $assistDetail->bukti) }}" alt="Foto Bukti"
+                                                style="max-width: 50%; height: auto;">
+                                            @else
+                                            <p>Tidak ada foto bantuan</p>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                @endforeach
+
+
+                                @else
+                                <p>Tidak ada data bantuan.</p>
+                                @endif
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 
             </div>
@@ -191,3 +256,10 @@
     </div>
 </div>
 @endsection
+
+@push('js')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+@endpush
