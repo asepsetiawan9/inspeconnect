@@ -15,10 +15,13 @@
         </p>
     </td>
     <td class="align-middle text-sm">
-        <p class="text-sm font-weight-bold mb-0 text-capitalize">
-            {{ $poverty->kecamatan ? $poverty->desa->name_desa : '' }}
-        </p>
+        @if ($poverty->status_bantuan === 2)
+        <p class="text-sm font-weight-bold mb-0 text-capitalize">Sudah Diberi</p>
+        @else
+        <p class="text-sm font-weight-bold mb-0 text-capitalize">belum Diberi</p>
+        @endif
     </td>
+
     <td class="align-middle text-sm">
         <p class="text-sm font-weight-bold mb-0 text-capitalize ">{{ $poverty->desil }}</p>
     </td>

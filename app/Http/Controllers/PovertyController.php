@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Desa;
 use App\Models\kecamatan;
 use App\Models\Poverty;
-use Alert;
+use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Http\Request;
 use Storage;
 use Str;
@@ -200,12 +200,15 @@ class PovertyController extends Controller
 
     public function show($id)
     {
-        $poverty = Poverty::find($id);
+        $poverty = Poverty::with('kecamatan', 'desa', 'assistance.assistDetails')->findOrFail($id);
+// dd($poverty);
         if (!$poverty) {
             return redirect('poverty')->with('error', 'Data tidak ditemukan.');
         }
+
         return view('poverty.show', compact('poverty'));
     }
+
     public function confirmDelete($id)
     {
         $poverty = Poverty::findOrFail($id);

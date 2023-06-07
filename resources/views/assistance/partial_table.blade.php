@@ -7,28 +7,28 @@
 <tr>
     <td class="align-middle text-sm">
         <p class="text-sm font-weight-bold mb-0 text-capitalize ">
-            {{ number_format($assistance->jumlah_penduduk, 0, ',', '.') }}</p>
+            {{$assistance->poverty->nama}}</p>
     </td>
     <td class="align-middle text-sm">
         <p class="text-sm font-weight-bold mb-0 text-capitalize">
-            {{ number_format($assistance->jumlah_kk, 0, ',', '.') }}</p>
+            {{$assistance->poverty->nik}}</p>
     </td>
     <td class="align-middle text-sm">
-        <p class="text-sm font-weight-bold mb-0 ">{{ number_format($assistance->jumlah_laki_laki, 0, ',', '.') }}</p>
-    </td>
-    <td class="align-middle text-sm">
-        <p class="text-sm font-weight-bold mb-0 text-capitalize ">
-            {{ number_format($assistance->jumlah_perempuan, 0, ',', '.') }}</p>
+        <p class="text-sm font-weight-bold mb-0 ">{{$assistance->tahun}}</p>
     </td>
 
-    <td class="align-middle text-sm">
-        <p class="text-sm font-weight-bold mb-0 text-capitalize ">{{ $assistance->tahun }}</p>
-    </td>
     <td class="align-middle text-left">
         <div class="d-flex justify-content-center align-items-center gap-1 action-buttons">
-            <a href="{{ route('assistance.edit', ['id' => $assistance->id]) }}" class="text-decoration-none">
+            <a href="{{ route('assistance.edit', ['assistance' => $assistance->id]) }}" class="text-decoration-none">
+
                 <div class="px-2 py-1 bg-warning rounded">
                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                </div>
+            </a>
+
+            <a href="{{ route('assistance.show', ['assistance' => $assistance->id]) }}" class="text-decoration-none">
+                <div class="px-2 py-1 bg-primary rounded text-white">
+                    <i class="fa fa-eye" aria-hidden="true"></i>
                 </div>
             </a>
 

@@ -96,6 +96,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/datamanagement/download-template', [DataManagementController::class, 'download'])->name('datamanagement.downloadTemplate');
     //bantuan
     Route::resource('assistance', App\Http\Controllers\AssistanceController::class);
+    Route::get('/assistance/delete/{id}', [AssistanceController::class, 'confirmDelete'])->name('assistance.confirm-delete');
+    Route::delete('/assistance/{id}', [AssistanceController::class, 'delete'])->name('assistance.delete');
+
     Route::get('/get-poverty-data', [AssistanceController::class, 'getPovertyData']);
 
 	Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');

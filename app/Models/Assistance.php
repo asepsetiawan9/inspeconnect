@@ -10,11 +10,17 @@ class Assistance extends Model
     use HasFactory;
 
     protected $table = 'assistance';
+
     public $timestamps = false;
 
-    // Relasi dengan model Kecamatan
-    // public function kecamatan()
-    // {
-    //     return $this->belongsTo(Kecamatan::class, 'id_kecamatan', 'id_kecamatan');
-    // }
+    public function assistDetails()
+    {
+        return $this->hasMany(AssistDetail::class, 'id_assistance', 'id');
+    }
+
+    public function poverty()
+    {
+        return $this->hasOne(Poverty::class, 'id', 'id_poverty');
+    }
+
 }
