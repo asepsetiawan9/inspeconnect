@@ -23,4 +23,10 @@ class Assistance extends Model
         return $this->hasOne(Poverty::class, 'id', 'id_poverty');
     }
 
+    public function poverties()
+    {
+        return $this->hasMany(Poverty::class,  'id', 'id_poverty');
+    }
+
+
 }

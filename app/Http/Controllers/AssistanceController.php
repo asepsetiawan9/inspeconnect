@@ -120,6 +120,7 @@ class AssistanceController extends Controller
      */
     public function show($id)
     {
+
         $assistance = Assistance::with('assistDetails', 'poverty')->findOrFail($id);
 
         return view('assistance.show', compact('assistance'));
@@ -128,18 +129,70 @@ class AssistanceController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $assistance = Assistance::with('assistDetails', 'poverties')->findOrFail($id);
+        $years = Poverty::distinct('tahun_input')->pluck('tahun_input')->toArray();
+
+        return view('assistance.edit', compact('assistance', 'years'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+
+    public function update(Request $request, $id)
     {
-        //
+
+        $assistance = Assistance::findOrFail($id);
+        $assistance->tahun = $request->tahun;
+        $assistance->id_poverty = $request->id_poverty;
+
+        if ($assistance->id_poverty) {
+            $poverty = Poverty::find($assistance->id_poverty);
+            if ($poverty) {
+                $poverty->status_bantuan = 2;
+                $poverty->save();
+            }
+        }
+
+        $assistance->save();
+
+        $assistDetails = [];
+
+        $nama_bantuans = $request->nama_bantuan ?? [];
+        $pemberi_bantuans = $request->pemberi_bantuan ?? [];
+        $keterangans = $request->keterangan ?? [];
+        $buktis = $request->file('bukti') ?? [];
+
+        foreach ($nama_bantuans as $key => $nama_bantuan) {
+            $detail = [
+                'id_assistance' => $assistance->id,
+                'nama_bantuan' => $nama_bantuan,
+                'pemberi_bantuan' => $pemberi_bantuans[$key] ?? null,
+                'keterangan' => $keterangans[$key] ?? null,
+                'bukti' => null,
+            ];
+
+            if (isset($buktis[$key]) && $buktis[$key]->isValid()) {
+                $bukti = $buktis[$key];
+                $buktiPath = Str::random(10) . '.' . $bukti->getClientOriginalExtension();
+                Storage::putFileAs('public/bukti', $bukti, $buktiPath);
+                $detail['bukti'] = $buktiPath;
+            }
+
+            $assistDetails[] = $detail;
+        }
+
+        $assistance->assistDetails()->delete();
+        $assistance->assistDetails()->createMany($assistDetails);
+
+        if ($assistance->save()) {
+            Alert::success('Sukses', 'Data Bantuan berhasil diperbarui.')->autoclose(3500);
+        } else {
+            Alert::error('Error', 'Terjadi kesalahan saat memperbarui data.')->autoclose(3500);
+        }
+
+        return redirect('assistance');
     }
+
 
     /**
      * Remove the specified resource from storage.

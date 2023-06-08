@@ -15,8 +15,9 @@ class PovertyController extends Controller
     public function index()
     {
         $povertys = Poverty::with('kecamatan', 'desa')->paginate(5);
+        $years = Poverty::distinct('tahun_input')->pluck('tahun_input')->toArray();
 
-        return view('poverty.index', compact('povertys'));
+        return view('poverty.index', compact('povertys', 'years'));
     }
 
     public function searchData(Request $request)
@@ -24,7 +25,7 @@ class PovertyController extends Controller
         $query = $request->input('query');
         $page = $request->input('page', 1);
 
-        $povertys = Poverty::where('nama', 'LIKE', '%'.$query.'%')->paginate(5, ['*'], 'page', $page);
+        $povertys = Poverty::where('nama', 'LIKE', '%'.$query.'%')->orWhere('nik', 'LIKE', '%' . $query . '%')->paginate(5, ['*'], 'page', $page);
 
         $table = View::make('poverty.partial_table', compact('povertys'))->render();
         $pagination = $povertys->links('pagination::bootstrap-4')->render();
@@ -40,6 +41,7 @@ class PovertyController extends Controller
         $filterKecamatan = $request->input('kecamatan');
         $filterDesil = $request->input('desil');
         $filterTahun = $request->input('tahun');
+        $filterStatusBantuan = $request->input('status_bantuan');
         $page = $request->input('page', 1);
 
         $query = Poverty::query();
@@ -56,6 +58,10 @@ class PovertyController extends Controller
             $query->where('tahun_input', $filterTahun);
         }
 
+        if ($filterStatusBantuan !== 'semua') {
+            $query->where('status_bantuan', $filterStatusBantuan);
+        }
+
         $povertys = $query->paginate(5, ['*'], 'page', $page);
 
         $table = View::make('poverty.partial_table', compact('povertys'))->render();
@@ -66,6 +72,7 @@ class PovertyController extends Controller
             'pagination' => $pagination,
         ]);
     }
+
 
     public function create()
     {

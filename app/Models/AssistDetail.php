@@ -10,6 +10,14 @@ class AssistDetail extends Model
     use HasFactory;
 
     protected $table = 'assist_detail';
+    protected $fillable = [
+        'id_assistance',
+        'nama_bantuan',
+        'pemberi_bantuan',
+        'bukti',
+        'keterangan'
+    ];
+
 
     public $timestamps = false;
 
