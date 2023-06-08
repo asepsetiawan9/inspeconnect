@@ -7,19 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Poverty extends Model
 {
+    use HasFactory;
     protected $table = 'poverties';
     protected $fillable = [
         'nik',
         'nama',
         'alamat',
-        'kecamatan',
+        'id_kecamatan',
         'tempat_lahir',
         'status',
         'kk',
         'jk',
         'rt',
         'rw',
-        'desa',
+        'id_desa',
         'tgl',
         'foto_diri',
         'status_pendidikan',
@@ -31,13 +32,13 @@ class Poverty extends Model
         'bahan_bakar_memasak',
         'foto_rumah',
         'desil',
-        'penghasilan',
         'dtks',
         'penghasilan_perbulan',
         'bantuan_diterima',
         'tahun_input',
         'sumber_penerangan_utama',
         'bab',
+        'status_bantuan',
     ];
 
     public function kecamatan()

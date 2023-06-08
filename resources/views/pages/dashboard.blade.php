@@ -17,6 +17,8 @@
                         </select>
                     </div>
                 </div>
+
+                    <input class="form-select d-none" id="filterVar" onchange="filterByKecamatan()" value="all">
                 <div class="col-md-4">
                     <div class="form-group">
                         <div for="filter2" class="text-white text-sm pb-2 text-bold">Kecamatan:</div>
@@ -336,144 +338,157 @@
 
 @push('js')
 <script>
-    // Inisialisasi peta
     var map = L.map('map').setView([-7.2278, 107.9087], 10);
-    var colors = ['#ffd1d1', '#ffa3a3', '#fc5151', '#ff0000', '#a60202'];
-    var legend;
+var colors = ['#ffd1d1', '#ffa3a3', '#fc5151', '#ff0000', '#a60202'];
+var legend;
 
-    // Tambahkan layer peta dari OpenStreetMap
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+// Tambahkan layer peta dari OpenStreetMap
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
 
-    // Fungsi untuk memperbarui tampilan geojson dengan filter tahun
-    function updateGeojson(year) {
-        fetch(`/api/geojson?year=${year}`)
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (data) {
-                // Menghapus layer geojson yang ada sebelumnya
-                if (geojsonLayer) {
-                    map.removeLayer(geojsonLayer);
-                }
+// Fungsi untuk memperbarui tampilan geojson dengan filter tahun dan variabel
+function updateGeojson(year, variable) {
+    fetch(`/api/geojson?year=${year}&variable=${variable}`)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            console.log(data);
+            // Menghapus layer geojson yang ada sebelumnya
+            if (geojsonLayer) {
+                map.removeLayer(geojsonLayer);
+            }
 
-                // Mendapatkan semua nilai dari setiap kecamatan
-                var allValues = data.features.map(function (feature) {
-                    return feature.properties.nilai;
+            // Mendapatkan semua nilai dari setiap kecamatan
+            var allValues = data.features.map(function (feature) {
+                return feature.properties.nilai;
+            });
+
+            // Menghitung rentang nilai secara dinamis
+            var min = Math.min.apply(null, allValues);
+            var max = Math.max.apply(null, allValues);
+            var rangeSize = Math.ceil((max - min + 1) / 5); // Jumlah rentang diatur menjadi 5
+
+            // Definisikan rentangan nilai dan warna yang sesuai
+            var ranges = [];
+            for (var i = 0; i < 5; i++) {
+                var rangeMin = min + i * rangeSize;
+                var rangeMax = rangeMin + rangeSize - 1;
+                ranges.push({
+                    min: rangeMin,
+                    max: rangeMax,
+                    color: colors[i % colors.length]
                 });
+            }
 
-                // Menghitung rentang nilai secara dinamis
-                var min = Math.min.apply(null, allValues);
-                var max = Math.max.apply(null, allValues);
-                var rangeSize = Math.ceil((max - min + 1) / 5); // Jumlah rentang diatur menjadi 5
+            geojsonLayer = L.geoJSON(data, {
+                style: function (feature) {
+                    // Mendapatkan nilai dari setiap kecamatan
+                    var nilai = feature.properties.nilai;
 
-                // Definisikan rentangan nilai dan warna yang sesuai
-                var ranges = [];
-                for (var i = 0; i < 5; i++) {
-                    var rangeMin = min + i * rangeSize;
-                    var rangeMax = rangeMin + rangeSize - 1;
-                    ranges.push({
-                        min: rangeMin,
-                        max: rangeMax,
-                        color: colors[i % colors.length]
+                    // Tentukan warna berdasarkan rentangan nilai
+                    var color = 'gray'; // Warna default
+                    for (var i = 0; i < ranges.length; i++) {
+                        if (nilai >= ranges[i].min && nilai <= ranges[i].max) {
+                            color = ranges[i].color;
+                            break;
+                        }
+                    }
+
+                    // Kembalikan style dengan warna yang sesuai
+                    return {
+                        fillColor: color,
+                        color: '#000000',
+                        fillOpacity: 1,
+                        weight: 1
+                    };
+                },
+                onEachFeature: function (feature, layer) {
+                    // Mendapatkan properti dari setiap kecamatan
+                    var properties = feature.properties;
+
+                    // Menampilkan popup saat mouse memasuki area kecamatan
+                    layer.on('mouseover', function (e) {
+                        var tahun = properties.tahun !== null ? properties.tahun : 'Semua Tahun';
+                        var variabel = properties.variabel !== 'all' ? properties.variabel : 'Semua Variabel';
+                        variabel = properties.variabel === null ? 'TIDAK BERSEKOLAH' : variabel;
+
+                        layer.bindPopup(
+                            "<b>Tahun: </b>" + tahun +
+                            "<br><b>Variabel: </b>" + variabel +
+                            "<br><b>Kecamatan: </b>" + properties.kecamatan +
+                            "<br><b>Kabupaten: </b>" + properties.nmkab +
+                            "<br><b>Provinsi: </b>" + properties.nmprov +
+                            "<br><b>Nilai: </b>" + properties.nilai
+                        ).openPopup();
+                    });
+
+                    // Menutup popup saat mouse meninggalkan area kecamatan
+                    layer.on('mouseout', function (e) {
+                        layer.closePopup();
                     });
                 }
+            });
 
-                geojsonLayer = L.geoJSON(data, {
-                    style: function (feature) {
-                        // Mendapatkan nilai dari setiap kecamatan
-                        var nilai = feature.properties.nilai;
+            geojsonLayer.addTo(map);
 
-                        // Tentukan warna berdasarkan rentangan nilai
-                        var color = 'gray'; // Warna default
-                        for (var i = 0; i < ranges.length; i++) {
-                            if (nilai >= ranges[i].min && nilai <= ranges[i].max) {
-                                color = ranges[i].color;
-                                break;
-                            }
-                        }
+            // Menghapus legenda yang ada sebelumnya
+            if (legend) {
+                legend.remove();
+            }
 
-                        // Kembalikan style dengan warna yang sesuai
-                        return {
-                            fillColor: color,
-                            color: '#000000',
-                            fillOpacity: 1,
-                            weight: 1
-                        };
-                    },
-                    onEachFeature: function (feature, layer) {
-                        // Mendapatkan properti dari setiap kecamatan
-                        var properties = feature.properties;
+            // Membuat legenda secara dinamis
+            legend = L.control({ position: 'bottomleft' });
 
-                        // Menampilkan popup saat mouse memasuki area kecamatan
-                        layer.on('mouseover', function (e) {
-                            var tahun = properties.tahun !== null ? properties.tahun : 'Semua Tahun';
-                            layer.bindPopup(
-                                "<b>Tahun: </b>" + tahun +
-                                "<br><b>Kecamatan: </b>" + properties.kecamatan +
-                                "<br><b>Kabupaten: </b>" + properties.nmkab +
-                                "<br><b>Provinsi: </b>" + properties.nmprov +
-                                "<br><b>Keterangan: </b>" + properties.keterangan +
-                                "<br><b>Nilai: </b>" + properties.nilai
-                            ).openPopup();
-                        });
+            legend.onAdd = function (map) {
+                var div = L.DomUtil.create('div', 'legend');
+                var labels = [];
 
-                        // Menutup popup saat mouse meninggalkan area kecamatan
-                        layer.on('mouseout', function (e) {
-                            layer.closePopup();
-                        });
-                    }
-                });
+                // Menampilkan label untuk setiap rentangan nilai
+                for (var i = 0; i < ranges.length; i++) {
+                    var range = ranges[i];
+                    var color = range.color;
 
-                geojsonLayer.addTo(map);
-
-                // Menghapus legenda yang ada sebelumnya
-                if (legend) {
-                    legend.remove();
+                    labels.push(
+                        '<i style="background:' + color + '"></i> ' +
+                        range.min + ' - ' + range.max
+                    );
                 }
 
-                // Membuat legenda secara dinamis
-                legend = L.control({ position: 'bottomleft' });
+                div.innerHTML = labels.join('<br>');
+                return div;
+            };
 
-                legend.onAdd = function (map) {
-                    var div = L.DomUtil.create('div', 'legend');
-                    var labels = [];
+            legend.addTo(map);
+        })
+        .catch(function (error) {
+            console.error('Error:', error);
+        });
+}
 
-                    // Menampilkan label untuk setiap rentangan nilai
-                    for (var i = 0; i < ranges.length; i++) {
-                        var range = ranges[i];
-                        var color = range.color;
+// Mendapatkan elemen select untuk filter variabel
+var filterVarSelect = document.getElementById('filterVar');
+// Mendapatkan elemen select untuk filter tahun
+var filterYearSelect = document.getElementById('filter3');
 
-                        labels.push(
-                            '<i style="background:' + color + '"></i> ' +
-                            range.min + ' - ' + range.max
-                        );
-                    }
+// Menambahkan event listener saat nilai filter variabel berubah
+filterVarSelect.addEventListener('change', function () {
+    var selectedVariable = this.value;
+    var selectedYear = filterYearSelect.value;
+    updateGeojson(selectedYear, selectedVariable);
+});
 
-                    div.innerHTML = labels.join('<br>');
-                    return div;
-                };
+// Menambahkan event listener saat nilai filter tahun berubah
+filterYearSelect.addEventListener('change', function () {
+    var selectedYear = this.value;
+    var selectedVariable = filterVarSelect.value;
+    updateGeojson(selectedYear, selectedVariable);
+});
 
-                legend.addTo(map);
-            })
-            .catch(function (error) {
-                console.error('Error:', error);
-            });
-    }
-
-    // Mendapatkan elemen select untuk filter tahun
-    var filterYearSelect = document.getElementById('filter3');
-
-    // Menambahkan event listener saat nilai filter tahun berubah
-    filterYearSelect.addEventListener('change', function () {
-        var selectedYear = this.value;
-        updateGeojson(selectedYear);
-    });
-
-    // Memuat geojson awal saat halaman dimuat
-    var geojsonLayer;
-    updateGeojson('all');
+// Memuat geojson awal saat halaman dimuat
+var geojsonLayer;
+updateGeojson('all', 'all');
 
 
 </script>
