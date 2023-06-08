@@ -86,7 +86,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <strong for="name">SETATUS PENDIDIKAN</strong>
+                        <strong for="name">STATUS PENDIDIKAN</strong>
                         <p>{{ $poverty->status_pendidikan ?: '' }}</p>
                     </div>
                 </div>
@@ -98,7 +98,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <strong for="name">SETATUS PEKERJAAN</strong>
+                        <strong for="name">STATUS PEKERJAAN</strong>
                         <p>{{ $poverty->pekerjaan ?: '' }}</p>
                     </div>
                 </div>
@@ -202,7 +202,8 @@
                             </div>
                             <div class="modal-body">
                                 <!-- Isi dari modal -->
-                                @if ($poverty->assistance->assistDetails )
+                                @if ($poverty->assistance)
+                                @if ($poverty->assistance->assistDetails->count() > 0)
                                 @foreach ($poverty->assistance->assistDetails as $assistDetail)
                                 <div class="row">
                                     <div class="col-md-6">
@@ -227,8 +228,8 @@
                                         <div class="form-group d-flex flex-column thumbnail">
                                             <strong for="name">Bukti Bantuan</strong>
                                             @if ($assistDetail->bukti)
-                                            <img src="{{ asset('storage/bukti/' . $assistDetail->bukti) }}" alt="Foto Bukti"
-                                                style="max-width: 50%; height: auto;">
+                                            <img src="{{ asset('storage/bukti/' . $assistDetail->bukti) }}"
+                                                alt="Foto Bukti" style="max-width: 50%; height: auto;">
                                             @else
                                             <p>Tidak ada foto bantuan</p>
                                             @endif
@@ -237,11 +238,14 @@
                                 </div>
                                 <hr>
                                 @endforeach
-
-
                                 @else
-                                <p>Tidak ada data bantuan.</p>
+                                <p>Tidak ada data bantuan diterima.</p>
                                 @endif
+                                @else
+                                <p>Tidak ada data bantuan diterima.</p>
+                                @endif
+
+
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>

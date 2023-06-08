@@ -16,9 +16,9 @@
     </td>
     <td class="align-middle text-sm">
         @if ($poverty->status_bantuan === 2)
-        <p class="text-sm font-weight-bold mb-0 text-capitalize">Sudah Diberi</p>
+        <p class="text-sm font-weight-bold mb-0 text-capitalize text-center rounded px-2 py-1 bg-success">Sudah Mendapatkan</p>
         @else
-        <p class="text-sm font-weight-bold mb-0 text-capitalize">belum Diberi</p>
+        <p class="text-sm font-weight-bold mb-0 text-capitalize text-center text-white rounded px-2 py-1 bg-danger">Belum Mendapatkan</p>
         @endif
     </td>
 
