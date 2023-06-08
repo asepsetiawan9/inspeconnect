@@ -42,6 +42,7 @@ return new class extends Migration
             $table->year('tahun_input')->nullable();
             $table->string('sumber_penerangan_utama')->default(0)->nullable();
             $table->string('bab')->nullable();
+            $table->string('status_bantuan')->default(1)->nullable();
             $table->timestamps();
         });
     }

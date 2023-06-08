@@ -23,7 +23,7 @@ class GeoJSONController extends Controller
 
         foreach ($kecamatanData as $kecamatan) {
             $query = Poverty::where('id_kecamatan', $kecamatan->id);
-
+            // dd($query);
             if ($selectedYear !== null) {
                 $query->where('tahun_input', $selectedYear); // Menambahkan filter tahun jika dipilih
             }
@@ -33,7 +33,9 @@ class GeoJSONController extends Controller
             }
 
             $povertyData = $query->get();
+            // dd($povertyData);
 
+            // dd($povertyData);
             $feature = [
                 'type' => 'Feature',
                 'properties' => [
@@ -42,7 +44,6 @@ class GeoJSONController extends Controller
                     'variabel' => $selectedVariable,
                     'kecamatan' => $kecamatan->name,
                     'nmprov' => 'JAWA BARAT',
-                    'keterangan' => $kecamatan->key_kecamatan,
                     'nilai' => $povertyData->count(),
                 ],
                 'geometry' => [

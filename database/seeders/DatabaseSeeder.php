@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Poverty;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -15,13 +16,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert([
-            'username' => 'admin',
-            'firstname' => 'Admin',
-            'lastname' => 'Admin',
-            'role' => 'admin',
-            'email' => 'admin@argon.com',
-            'password' => bcrypt('secret')
-        ]);
+        //seeder penduduk
+        Poverty::factory()->count(50)->create();
+
+        //seeder user
+        // DB::table('users')->insert([
+        //     'username' => 'admin',
+        //     'firstname' => 'Admin',
+        //     'lastname' => 'Admin',
+        //     'role' => 'admin',
+        //     'email' => 'admin@argon.com',
+        //     'password' => bcrypt('secret')
+        // ]);
     }
+
 }

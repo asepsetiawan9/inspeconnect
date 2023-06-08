@@ -28,12 +28,19 @@ class HomeController extends Controller
     {
         $latestPopulation = Population::latest()->first();
 
-        $jml_penduduk = $latestPopulation->jumlah_penduduk;
+        $jml_penduduk = $latestPopulation ? $latestPopulation->jumlah_penduduk : 0;
+
 
         //jumlah  penduduk miskin tahun terakhir
         $latestYear = Poverty::max('tahun_input');
         $jml_pen_miskin = Poverty::where('tahun_input', $latestYear)->count();
-        $persentasePendudukMiskin = ($jml_pen_miskin / $jml_penduduk) * 100;
+
+        $persentasePendudukMiskin = 0;
+
+        if ($jml_penduduk > 0) {
+            $persentasePendudukMiskin = ($jml_pen_miskin / $jml_penduduk) * 100;
+        }
+
         //jumlah desil terakhir
         $jml_desil1 = Poverty::where('tahun_input', $latestYear)
         ->where('desil', 'Desil 1')
@@ -72,6 +79,7 @@ class HomeController extends Controller
             $count = Poverty::where('id_kecamatan', $kec)->count();
             $kecValue[] = $count;
         }
+        // dd($kecValue);
 
         $nameDes = Poverty::join('kecamatan', 'poverties.id_kecamatan', '=', 'kecamatan.id')
         ->distinct('kecamatan.name')
