@@ -32,17 +32,17 @@ return new class extends Migration
             $table->string('pendidikan_terakhir')->nullable();
             $table->string('jenis_pekerjaan')->nullable();
             $table->string('sumber_air_minum')->nullable();
-            $table->string('bahan_bakar_memasak')->nullable();
             $table->text('foto_rumah')->nullable();
-            $table->string('desil')->nullable();
-            $table->integer('penghasilan')->nullable();
-            $table->string('dtks')->nullable();
-            $table->integer('penghasilan_perbulan')->nullable();
-            $table->text('bantuan_diterima')->nullable();
             $table->year('tahun_input')->nullable();
             $table->string('sumber_penerangan_utama')->default(0)->nullable();
             $table->string('bab')->nullable();
             $table->string('status_bantuan')->default(1)->nullable();
+            $table->string('tinggi_pondasi_rumah')->nullable();
+            $table->integer('jumlah_jiwa')->default(0)->nullable();
+            $table->integer('luas_ruangan')->default(0)->nullable();
+            $table->string('kondisi_rumah')->nullable();
+            $table->integer('status_rumah')->default(0)->nullable();
+            
             $table->timestamps();
         });
     }

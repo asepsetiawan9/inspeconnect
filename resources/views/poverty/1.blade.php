@@ -164,8 +164,11 @@
     }
 
     function validateUpload2(input) {
-        if (input.files && input.files[0]) {
-            var file = input.files[0];
+    if (input.files && input.files.length > 0) {
+        $('#previewFotoThumbnails').html(''); // Kosongkan area thumbnail sebelum menampilkan yang baru
+
+        for (var i = 0; i < input.files.length; i++) {
+            var file = input.files[i];
             var fileSize = file.size / 1024 / 1024; // Size in MB
             var validExtensions = ['jpg', 'jpeg', 'png'];
             var fileExtension = file.name.split('.').pop().toLowerCase();
@@ -177,6 +180,7 @@
                     text: 'Ukuran file terlalu besar. Mohon pilih file dengan ukuran maksimum 2MB.'
                 });
                 input.value = ''; // Reset the input file
+                return; // Keluar dari fungsi jika ada file yang tidak valid
             } else if (!validExtensions.includes(fileExtension)) {
                 Swal.fire({
                     icon: 'error',
@@ -184,16 +188,19 @@
                     text: 'Format file tidak valid. Mohon pilih file dengan format JPG, JPEG, atau PNG.'
                 });
                 input.value = ''; // Reset the input file
+                return; // Keluar dari fungsi jika ada file yang tidak valid
             } else {
                 var reader = new FileReader();
                 reader.onload = function (e) {
-                    $('#previewFoto2').html('<img src="' + e.target.result +
-                        '" class="img-thumbnail" style="max-width: 200px;">');
+                    // Tampilkan preview foto sebagai thumbnail
+                    var thumbnail = '<img src="' + e.target.result + '" class="img-thumbnail" style="max-width: 100px;">';
+                    $('#previewFotoThumbnails').append(thumbnail);
                 };
                 reader.readAsDataURL(file);
             }
         }
     }
+}
 
     $(document).ready(function () {
         // Ambil nilai foto_diri dari data yang sedang diedit
@@ -211,17 +218,18 @@
         }
 
         // Ambil nilai foto_rumah dari data yang sedang diedit
-        var fotoRumah = '{{ $poverty->foto_rumah ?? '' }}';
+        var fotoRumahs = {!! json_encode($poverty->foto_rumah ?? []) !!};
 
-        if (fotoRumah) {
-            // Tampilkan foto yang telah diunggah
-            var fotoUrl2 = '{{ asset("storage/foto_rumah") }}/' + fotoRumah;
-            $('#previewFoto2').html('<img src="' + fotoUrl2 +
-                '" class="img-thumbnail" style="max-width: 200px;">');
+        if (fotoRumahs.length > 0) {
+            // Tampilkan foto yang telah diunggah sebagai thumbnail
+            fotoRumahs.forEach(function (fotoRumah) {
+                var fotoUrl = '{{ asset("storage/foto_rumah") }}/' + fotoRumah;
+                var thumbnail = '<img src="' + fotoUrl + '" class="img-thumbnail" style="max-width: 100px;">';
+                $('#previewFotoThumbnails').append(thumbnail);
+            });
         } else {
             // Tampilkan placeholder atau ikon default
-            $('#previewFoto2').html(
-                '<i class="fa fa-home" aria-hidden="true" style="font-size: 64px;"></i>');
+            $('#previewFoto2').html('<i class="fa fa-home" aria-hidden="true" style="font-size: 64px;"></i>');
         }
     });
 

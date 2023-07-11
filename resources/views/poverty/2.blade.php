@@ -86,17 +86,7 @@
     </select>
     @error('sumber_penerangan_utama') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
 </div>
-<div class="col-md-6 form-group">
-    <label for="bahan_bakar_memasak">BAHAN BAKAR MEMASAK</label>
-    <select name="bahan_bakar_memasak" class="form-select" id="bahan_bakar_memasak">
-        <option selected value="">Pilih Bahan Bakar</option>
-        <option value="LISTRIK/GAS" @if(isset($poverty) && $poverty->bahan_bakar_memasak === 'LISTRIK/GAS') selected @endif>LISTRIK/GAS</option>
-        <option value="MINYAK TANAH" @if(isset($poverty) && $poverty->bahan_bakar_memasak === 'MINYAK TANAH') selected @endif>MINYAK TANAH</option>
-        <option value="ARANG KAYU" @if(isset($poverty) && $poverty->bahan_bakar_memasak === 'ARANG KAYU') selected @endif>ARANG KAYU</option>
-        <option value="LAINNYA" @if(isset($poverty) && $poverty->bahan_bakar_memasak === 'LAINNYA') selected @endif>LAINNYA</option>
-    </select>
-    @error('bahan_bakar_memasak') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
-</div>
+
 <div class="col-md-6 form-group">
     <label for="bab">FASILITAS BAB</label>
     <select name="bab" class="form-select" id="bab">
@@ -113,20 +103,22 @@
     <div class="col-md-4">
         <div class="form-group">
             <label for="foto_rumah">FOTO RUMAH</label><br>
-            <input type="file" name="foto_rumah" class="form-control-file" id="uploadFoto2" accept=".jpg, .jpeg, .png"
-                onchange="validateUpload2(this)" value="{{ $poverty->foto_rumah ?? '' }}">
+            <input type="file" name="foto_rumah[]" class="form-control-file" id="uploadFoto2" accept=".jpg, .jpeg, .png" multiple>
             <small class="text-muted">Ukuran maksimum: 2MB</small>
         </div>
     </div>
     <div class="col-md-3">
-        <div id="previewFoto2"
-            class="text-center border-dashed h-100 fs-6 d-flex align-items-center justify-content-center">
+        <div id="previewFoto2" class="text-center border-dashed h-100 fs-6 d-flex align-items-center justify-content-center">
+            <!-- Placeholder atau ikon default -->
             <i class="fa fa-home" aria-hidden="true" style="font-size: 64px;"></i>
         </div>
     </div>
     <div class="col-md-5">
+        <!-- Tampilkan preview lebih dari satu foto -->
+        <div id="previewFotoThumbnails" class="d-flex flex-wrap"></div>
     </div>
 </div>
+
 
 @push('css')
 <style>
