@@ -265,7 +265,16 @@ class HomeController extends Controller
             }
 
         }
-        $persentasePendudukMiskin = ($jml_pen_miskin / $jml_penduduk) * 100;
+        if ($jml_penduduk != 0) {
+            $persentasePendudukMiskin = ($jml_pen_miskin / $jml_penduduk) * 100;
+        } else {
+            // Handle the division by zero error
+            // You can assign a default value or display an error message
+            $persentasePendudukMiskin = 0; // or any other appropriate value
+            // Alternatively, you can display an error message:
+            // echo "Error: Division by zero!";
+        }
+        
 
         $message = [
             'jml_penduduk' => number_format($jml_penduduk),

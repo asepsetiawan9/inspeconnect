@@ -6,7 +6,7 @@
     <div class="row">
         <div class="container position-relative ">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-3 d-none">
                     <div class="form-group">
                         <div for="filter1 " class="text-white text-sm pb-2 text-bold">Tampilkan Berdasarkan:</div>
                         <select class="form-select" id="filter1" onchange="filterByKecamatan()">
@@ -17,7 +17,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 d-none" >
                     <div class="form-group">
                         <div for="filterVar " class="text-white text-sm pb-2 text-bold">Variabel:</div>
                         <select class="form-select" id="filterVar" onchange="filterByKecamatan()">
@@ -28,7 +28,20 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
+                <div class="form-group">
+                    <div for="filter2" class="text-white text-sm pb-2 text-bold">Status Rumah:</div>
+                        <select class="form-select" >
+                            <option  value="jumlah_penduduk">Pilih Status</option>
+                            <option  value="jumlah_penduduk">Rumah Sehat dan Layak Huni</option>
+                            <option selected value="jumlah_penduduk">Rumah Tidak Sehat dan Tidak Layak Huni</option>
+                            <!-- @foreach ($kecLabels as $index => $kecLabel)
+                                <option value="{{ $kecId[$index] }}">{{ $kecLabel }}</option>
+                            @endforeach -->
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
                 <div class="form-group">
                     <div for="filter2" class="text-white text-sm pb-2 text-bold">Kecamatan:</div>
                         <select class="form-select" id="filter2" onchange="filterByKecamatan()">
@@ -39,7 +52,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="form-group">
                         <div for="filter3 " class="text-white text-sm pb-2 text-bold">Tahun:</div>
                         <select class="form-select" id="filter3" onchange="filterByKecamatan()" name="year">
@@ -51,15 +64,14 @@
                     </div>
                 </div>
             </div>
-            <div class="pb-3 text-bold text-white">Dashboard Kemiskinan Berdasarkan Jumlah Penduduk Kabupaten Garut
-                Tahun 2022
+            <div class="pb-3 text-bold text-white">Dashboard Perumahan Berdasarkan Status Layak dan Tidak Layak Huni
             </div>
         </div>
     </div>
     <div class="row mt-4">
         <div class="col-lg-7 mb-lg-0 mb-4">
 
-            <div class="d-flex flex-row gap-3 w-100 mt-3 position-relative">
+            <div class="d-flex flex-row gap-3 w-100 mt-3 position-relative d-none">
                 <div class="bg-danger rounded-3 p-3 w-100 text-white text-bold">Desil 1
                     <div class="fs-4 text-bold" id="jml_desil1">{{ number_format($jml_desil1 ?? 0) }}</div>
                 </div>
@@ -74,9 +86,13 @@
                 </div>
             </div>
             <div class="card mt-3 p-3">
-                <h5>Peta Sebaran</h5>
+                <h5>Peta Sebaran Rumah Tidak Layak Huni</h5>
                 <div id="map"></div>
             </div>
+            <!-- <div class="card mt-3 p-3">
+                <h5>Peta Sebaran Rumah Layak Huni</h5>
+                <div id="map"></div>
+            </div> -->
         </div>
         <div class="col-lg-5">
             <div class="card ">
@@ -270,11 +286,11 @@
 
                             layer.bindPopup(
                                 "<b>Tahun: </b>" + tahun +
-                                "<br><b>Variabel: </b>" + variabel +
+                                // "<br><b>Variabel: </b>" + variabel +
                                 "<br><b>Kecamatan: </b>" + properties.kecamatan +
                                 "<br><b>Kabupaten: </b>" + properties.nmkab +
                                 "<br><b>Provinsi: </b>" + properties.nmprov +
-                                "<br><b>Nilai: </b>" + properties.nilai
+                                "<br><b>Jumlah: </b>" + properties.nilai
                             ).openPopup();
                         });
 

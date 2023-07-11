@@ -15,16 +15,16 @@
         </p>
     </td>
     <td class="align-middle text-sm">
-        @if ($poverty->status_bantuan === 2)
+        @if ($poverty->status_bantuan === "2")
         <p class="text-sm font-weight-bold mb-0 text-capitalize text-center rounded px-2 py-1 bg-success">Sudah Mendapatkan</p>
         @else
         <p class="text-sm font-weight-bold mb-0 text-capitalize text-center text-white rounded px-2 py-1 bg-danger">Belum Mendapatkan</p>
         @endif
     </td>
 
-    <td class="align-middle text-sm">
+    <!-- <td class="align-middle text-sm">
         <p class="text-sm font-weight-bold mb-0 text-capitalize ">{{ $poverty->desil }}</p>
-    </td>
+    </td> -->
     <td class="align-middle text-sm">
         <p class="text-sm font-weight-bold mb-0 text-capitalize ">{{ $poverty->tahun_input }}</p>
     </td>

@@ -1,12 +1,12 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-@include('layouts.navbars.auth.topnav', ['title' => 'Data Kemiskinan'])
+@include('layouts.navbars.auth.topnav', ['title' => 'Data Rumah Tidak Layak Huni'])
 <div class="row mt-4 mx-4">
     <div class="position-relative">
-        <h5 class="text-white">Data Kemiskinan</h5>
+        <h5 class="text-white">Data Rumah Tidak Layak Huni</h5>
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group ">
                     <label for="filter1" class="text-white text-sm pb-2 font-weight-bold">Tampilkan Berdasarkan:</label>
                     <select class="form-select selectKecamatan" id="filter1" style="border-radius: 5px" >
@@ -15,9 +15,9 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 d-none">
                 <div class="form-group">
-                    <label for="filter2" class="text-white text-sm pb-2 font-weight-bold">Desil:</label>
+                    <label for="filter2" class="text-white text-sm pb-2 font-weight-bold ">Desil:</label>
                     <select class="form-select" id="filter2">
                         <option value="semua">Semua Desil</option>
                         <option value="desil 1">Desil 1</option>
@@ -27,7 +27,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label for="filter3" class="text-white text-sm pb-2 font-weight-bold">Tahun:</label>
                     <select class="form-select" id="filter3">
@@ -38,7 +38,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label for="filter4" class="text-white text-sm pb-2 font-weight-bold">Status Bantuan:</label>
                     <select class="form-select" id="filter4">
@@ -87,8 +87,8 @@
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">STATUS
                                     BANTUAN
                                 </th>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">DESIL
-                                </th>
+                                <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">DESIL
+                                </th> -->
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">TAHUN
                                 </th>
                                 <th

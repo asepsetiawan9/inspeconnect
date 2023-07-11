@@ -5,7 +5,7 @@
             aria-hidden="true" id="iconSidenav"></i>
         <a class="navbar-brand m-0" href="{{ route('home') }}" target="_blank">
             <img src="{{ asset('img/logo-ct-dark.png') }}" class="navbar-brand-img h-100" alt="main_logo">
-            <span class="ms-1 font-weight-bold">Dashboard Kemiskinan</span>
+            <span class="ms-1 font-weight-bold">Dashboard Perumahan</span>
         </a>
     </div>
     <hr class="horizontal dark mt-0">
@@ -43,6 +43,7 @@
                     <span class="nav-link-text ms-1">Data Pengguna</span>
                 </a>
             </li>
+        <!-- it will be delete -->
             <li class="nav-item">
                 <a class="nav-link {{ str_contains(request()->url(), 'population-data') == true ? 'active' : '' }}"
                     href="{{ route('page', ['page' => 'population-data']) }}">
@@ -50,7 +51,7 @@
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="fa fa-users text-success text-sm opacity-10"></i>
                     </div>
-                    <span class="nav-link-text ms-1">Data Penduduk</span>
+                    <span class="nav-link-text ms-1">Data Rumah</span>
                 </a>
             </li>
 
@@ -61,7 +62,17 @@
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="ni ni-bullet-list-67 text-success text-sm opacity-10"></i>
                     </div>
-                    <span class="nav-link-text ms-1">Data Kemiskinan</span>
+                    <span class="nav-link-text ms-1">Rumah Tidak Layak</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ str_contains(request()->url(), 'worthy') ? 'active' : '' }}"
+                    href="{{ route('worthy') }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-bullet-list-67 text-success text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Rumah Layak Huni</span>
                 </a>
             </li>
 

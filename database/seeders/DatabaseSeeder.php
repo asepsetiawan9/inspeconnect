@@ -17,9 +17,9 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         //seeder penduduk
-        Poverty::factory()->count(50)->create();
+        Poverty::factory()->count(500)->create();
 
-        //seeder user
+        // seeder user
         // DB::table('users')->insert([
         //     'username' => 'admin',
         //     'firstname' => 'Admin',

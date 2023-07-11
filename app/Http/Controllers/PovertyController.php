@@ -14,10 +14,18 @@ class PovertyController extends Controller
 {
     public function index()
     {
-        $povertys = Poverty::with('kecamatan', 'desa')->paginate(5);
+        $povertys = Poverty::with('kecamatan', 'desa')->paginate(8);
         $years = Poverty::distinct('tahun_input')->pluck('tahun_input')->toArray();
 
         return view('poverty.index', compact('povertys', 'years'));
+    }
+    //rumah layak huni
+    public function getWorthyData()
+    {
+        // $povertys = Poverty::with('kecamatan', 'desa')->paginate(5);
+        // $years = Poverty::distinct('tahun_input')->pluck('tahun_input')->toArray();
+
+        return view('poverty.layak');
     }
 
     public function searchData(Request $request)

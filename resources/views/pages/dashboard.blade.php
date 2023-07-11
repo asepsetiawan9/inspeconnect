@@ -6,7 +6,7 @@
     <div class="row">
         <div class="container position-relative ">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-4 d-none">
                     <div class="form-group">
                         <div for="filter1 " class="text-white text-sm pb-2 text-bold">Tampilkan Berdasarkan:</div>
                         <select class="form-select" id="filter1" onchange="filterByKecamatan()">
@@ -19,7 +19,7 @@
                 </div>
 
                     <input class="form-select d-none" id="filterVar" onchange="filterByKecamatan()" value="all">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="form-group">
                         <div for="filter2" class="text-white text-sm pb-2 text-bold">Kecamatan:</div>
                         <select class="form-select" id="filter2" onchange="filterByKecamatan()">
@@ -30,7 +30,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="form-group">
                         <div for="filter3 " class="text-white text-sm pb-2 text-bold">Tahun:</div>
                         <select class="form-select" id="filter3" onchange="filterByKecamatan()" name="year">
@@ -42,8 +42,7 @@
                     </div>
                 </div>
             </div>
-            <div class="pb-3 text-bold text-white">Dashboard Kemiskinan Berdasarkan Jumlah Penduduk Kabupaten Garut
-                Tahun 2022
+            <div class="pb-3 text-bold text-white">Dashboard Perumahan Kabupaten Garut
             </div>
         </div>
 
@@ -53,7 +52,7 @@
                     <div class="row">
                     <div class="col-8">
                         <div class="numbers">
-                            <p class="text-xs mb-0 text-uppercase font-weight-bold">JUMLAH PENDUDUK</p>
+                            <p class="text-xs mb-0 text-uppercase font-weight-bold">JUMLAH RUMAH</p>
                             <h5 class="font-weight-bolder" id="jml_penduduk">
                                 {{ number_format($latestPopulation->jumlah_penduduk ?? 0) }}
                             </h5>
@@ -101,12 +100,12 @@
                     <div class="row">
                         <div class="col-8">
                             <div class="numbers">
-                                <p class="text-xs mb-0 text-uppercase font-weight-bold">JUMLAH PENDUDUK MISKIN</p>
+                                <p class="text-xs mb-0 text-uppercase font-weight-bold">Jumlah Rumah Tidak Sehat dan Tidak Layak Huni</p>
                                 <h5 class="font-weight-bolder" id="jmlPendudukMiskin">
                                     {{ number_format($jml_pen_miskin ?? 0) }}
                                 </h5>
                                 <p class="mb-0">
-                                    Jiwa
+                                    Rumah
                                 </p>
                             </div>
                         </div>
@@ -125,12 +124,12 @@
                     <div class="row">
                         <div class="col-8">
                             <div class="numbers">
-                                <p class="text-xs mb-0 text-uppercase font-weight-bold">PERSENTASE PENDUDUK MISKIN</p>
-                                <h5 class="font-weight-bolder" id="persentasePendudukMiskin">
-                                    {{ number_format($persentasePendudukMiskin ?? 0, 2) }}
+                                <p class="text-xs mb-0 text-uppercase font-weight-bold">Jumlah Rumah Sehat dan layak Huni </p>
+                                <h5 class="font-weight-bolder">
+                                    0
                                 </h5>
                                 <p class="mb-0">
-                                    %
+                                    Rumah
                                 </p>
                             </div>
                         </div>
@@ -148,7 +147,7 @@
         <div class="col-lg-7 mb-lg-0 mb-4">
             <div class="card z-index-2">
                 <div class="card-header pb-0 pt-3 bg-transparent">
-                    <h6 class="text-capitalize">Perkembangan Persentase Penduduk Miskin</h6>
+                    <h6 class="text-capitalize">Perkembangan Jumlah Rumah Tidak Layak Huni</h6>
 
                 </div>
                 <div class="card-body p-3">
@@ -157,7 +156,7 @@
                     </div>
                 </div>
             </div>
-            <div class="d-flex flex-row gap-3 w-100 mt-3">
+            <!-- <div class="d-flex flex-row gap-3 w-100 mt-3">
                 <div class="bg-danger rounded-3 p-3 w-100 text-white text-bold">Desil 1
                     <div class="fs-4 text-bold" id="jml_desil1">{{ number_format($jml_desil1 ?? 0) }}</div>
                 </div>
@@ -170,7 +169,7 @@
                 <div class="bg-desil-4 rounded-3 p-3 w-100 text-white text-bold">Desil 4
                      <div class="fs-4 text-bold" id="jml_desil4">{{ number_format($jml_desil4 ?? 0) }}</div>
                 </div>
-            </div>
+            </div> -->
             <div class="card mt-3 p-3">
                 <h5>Peta Sebaran</h5>
                 <div id="map"></div>
@@ -416,11 +415,11 @@ function updateGeojson(year, variable) {
 
                         layer.bindPopup(
                             "<b>Tahun: </b>" + tahun +
-                            "<br><b>Variabel: </b>" + variabel +
+                            // "<br><b>Variabel: </b>" + variabel +
                             "<br><b>Kecamatan: </b>" + properties.kecamatan +
                             "<br><b>Kabupaten: </b>" + properties.nmkab +
                             "<br><b>Provinsi: </b>" + properties.nmprov +
-                            "<br><b>Nilai: </b>" + properties.nilai
+                            "<br><b>Jumlah: </b>" + properties.nilai
                         ).openPopup();
                     });
 

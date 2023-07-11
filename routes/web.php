@@ -101,6 +101,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/get-poverty-data', [AssistanceController::class, 'getPovertyData']);
 
+    Route::get('/get-worthy-data', [PovertyController::class, 'getWorthyData'])->name('worthy');
+
 	Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
 	Route::post('/profile', [UserProfileController::class, 'update'])->name('profile.update');
 	Route::get('/profile-static', [PageController::class, 'profile'])->name('profile-static');
