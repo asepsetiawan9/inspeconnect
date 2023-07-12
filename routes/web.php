@@ -75,12 +75,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::patch('/population-data/{id}', [PopulationDataController::class, 'update'])->name('population-data.update');
     Route::post('/population-data/store', [PopulationDataController::class, 'store'])->name('population-data.store');
 
-    // Poverty Data
-	Route::get('/poverty', [PovertyController::class, 'index'])->name('poverty');
-	Route::get('/poverty/create', [PovertyController::class, 'create'])->name('poverty.create');
-	Route::get('/poverty/edit/{id}', [PovertyController::class, 'edit'])->name('poverty.edit');
-	Route::get('/poverty/show/{id}', [PovertyController::class, 'show'])->name('poverty.show');
-    Route::get('/poverty/delete/{id}', [PovertyController::class, 'confirmDelete'])->name('poverty.confirm-delete');
+    // rumah tidak layak
+	Route::get('/not_feasible', [PovertyController::class, 'index'])->name('not_feasible');
+	Route::get('/not_feasible/create', [PovertyController::class, 'create'])->name('not_feasible.create');
+	Route::get('/not_feasible/edit/{id}', [PovertyController::class, 'edit'])->name('not_feasible.edit');
+	Route::get('/not_feasible/show/{id}', [PovertyController::class, 'show'])->name('not_feasible.show');
+    Route::get('/not_feasible/delete/{id}', [PovertyController::class, 'confirmDelete'])->name('not_feasible.confirm-delete');
+    //rumah layak huni
+    Route::get('/worthy', [PovertyController::class, 'layakHuni'])->name('worthy');
+    Route::get('/worthy/create', [PovertyController::class, 'create'])->name('worthy.create');
+
     Route::get('/poverty/getKecamatan', [PovertyController::class, 'getKecamatan'])->name('poverty.getKecamatan');
     Route::get('/poverty/getDesa/{id}', [PovertyController::class, 'getDesa'])->name('poverty.getDesa');
     Route::delete('/poverty/{id}', [PovertyController::class, 'delete'])->name('poverty.delete');
@@ -101,7 +105,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/get-poverty-data', [AssistanceController::class, 'getPovertyData']);
 
-    Route::get('/get-worthy-data', [PovertyController::class, 'getWorthyData'])->name('worthy');
+    Route::get('/get-worthy-data', [PovertyController::class, 'layakHuni'])->name('worthy');
 
 	Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
 	Route::post('/profile', [UserProfileController::class, 'update'])->name('profile.update');

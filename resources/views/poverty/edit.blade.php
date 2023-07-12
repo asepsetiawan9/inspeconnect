@@ -1,10 +1,10 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-@include('layouts.navbars.auth.topnav', ['title' => 'Ubah Data Kemiskinan'])
+@include('layouts.navbars.auth.topnav', ['title' => 'Ubah Data Rumah Layak dan Tidak Layak Huni'])
 <div class="row mt-4 mx-4">
     <div class="position-relative">
-        <h5 class="text-white">Ubah Data Kemiskinan</h5>
+        <h5 class="text-white">Ubah Data Rumah Layak dan Tidak Layak Huni</h5>
         <div class="card px-5 py-3">
             <div class="d-flex flex-row justify-content-center gap-3">
                 <div class="d-flex flex-column align-items-center cursor-pointer">

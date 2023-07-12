@@ -14,6 +14,7 @@
             {{ $poverty->kecamatan ? $poverty->kecamatan->name : '' }}
         </p>
     </td>
+    @if($poverty->status_rumah === 1)
     <td class="align-middle text-sm">
         @if ($poverty->status_bantuan === "2")
         <p class="text-sm font-weight-bold mb-0 text-capitalize text-center rounded px-2 py-1 bg-success">Sudah Mendapatkan</p>
@@ -21,6 +22,8 @@
         <p class="text-sm font-weight-bold mb-0 text-capitalize text-center text-white rounded px-2 py-1 bg-danger">Belum Mendapatkan</p>
         @endif
     </td>
+    @else
+    @endif
 
     <!-- <td class="align-middle text-sm">
         <p class="text-sm font-weight-bold mb-0 text-capitalize ">{{ $poverty->desil }}</p>
@@ -30,19 +33,19 @@
     </td>
     <td class="align-middle text-left">
         <div class="d-flex justify-content-center align-items-center gap-1 action-buttons">
-            <a href="{{ route('poverty.edit', ['id' => $poverty->id]) }}" class="text-decoration-none">
+            <a href="{{ route('not_feasible.edit', ['id' => $poverty->id]) }}" class="text-decoration-none">
                 <div class="px-2 py-1 bg-warning rounded">
                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                 </div>
             </a>
 
-            <a href="{{ route('poverty.show', ['id' => $poverty->id]) }}" class="text-decoration-none">
+            <a href="{{ route('not_feasible.show', ['id' => $poverty->id]) }}" class="text-decoration-none">
                 <div class="px-2 py-1 bg-primary rounded text-white">
                     <i class="fa fa-eye" aria-hidden="true"></i>
                 </div>
             </a>
 
-            <a href="{{ route('poverty.confirm-delete', ['id' => $poverty->id]) }}" class="text-decoration-none">
+            <a href="{{ route('not_feasible.confirm-delete', ['id' => $poverty->id]) }}" class="text-decoration-none">
                 <div class="px-2 py-1 bg-danger rounded text-white"
                     onclick="event.preventDefault(); deleteItem('{{ $poverty->id }}')">
                     <i class="fa fa-trash" aria-hidden="true"></i>

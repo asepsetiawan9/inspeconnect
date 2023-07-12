@@ -202,36 +202,43 @@
     }
 }
 
-    $(document).ready(function () {
-        // Ambil nilai foto_diri dari data yang sedang diedit
-        var fotoDiri = '{{ $poverty->foto_diri ?? '' }}';
+$(document).ready(function () {
 
-        if (fotoDiri) {
-            // Tampilkan foto yang telah diunggah
-            var fotoUrl = '{{ asset("storage/foto_diri") }}/' + fotoDiri;
-            $('#previewFoto').html('<img src="' + fotoUrl +
-                '" class="img-thumbnail" style="max-width: 200px;">');
-        } else {
-            // Tampilkan placeholder atau ikon default
-            $('#previewFoto').html(
-                '<i class="fa fa-user-circle-o" aria-hidden="true" style="font-size: 64px;"></i>');
-        }
+    var fotoDiri = '{{ $poverty->foto_diri ?? '' }}';
+    
+    if (fotoDiri) {
+ 
+        var fotoUrl = '{{ asset("storage/foto_diri") }}/' + fotoDiri;
+        $('#previewFoto').html('<img src="' + fotoUrl + '" class="img-thumbnail" style="max-width: 200px;">');
+    } else {
 
-        // Ambil nilai foto_rumah dari data yang sedang diedit
-        var fotoRumahs = {!! json_encode($poverty->foto_rumah ?? []) !!};
+        $('#previewFoto').html('<i class="fa fa-user-circle-o" aria-hidden="true" style="font-size: 64px;"></i>');
+    }
 
-        if (fotoRumahs.length > 0) {
-            // Tampilkan foto yang telah diunggah sebagai thumbnail
-            fotoRumahs.forEach(function (fotoRumah) {
-                var fotoUrl = '{{ asset("storage/foto_rumah") }}/' + fotoRumah;
-                var thumbnail = '<img src="' + fotoUrl + '" class="img-thumbnail" style="max-width: 100px;">';
-                $('#previewFotoThumbnails').append(thumbnail);
-            });
-        } else {
-            // Tampilkan placeholder atau ikon default
-            $('#previewFoto2').html('<i class="fa fa-home" aria-hidden="true" style="font-size: 64px;"></i>');
-        }
-    });
+    var fotoRumahs = {!! json_encode($poverty->foto_rumah ?? []) !!};
+
+    if (typeof fotoRumahs === 'string') {
+        // Convert string to array
+        fotoRumahs = JSON.parse(fotoRumahs);
+    }
+
+    if (Array.isArray(fotoRumahs) && fotoRumahs.length > 0) {
+
+        $('#previewFotoThumbnails').html('');
+
+        // Tampilkan foto yang telah diunggah sebagai thumbnail
+        fotoRumahs.forEach(function (fotoRumah) {
+            var fotoUrl = '{{ asset("storage/foto_rumah") }}/' + fotoRumah;
+            var thumbnail = '<div class="col-md-3"><a href="' + fotoUrl + '" target="_blank"><img src="' + fotoUrl + '" class="img-thumbnail" style="max-width: 100%; height: auto;"></a></div>';
+            $('#previewFotoThumbnails').append(thumbnail);
+        });
+    } else {
+        // Tampilkan placeholder atau ikon default
+        $('#previewFotoThumbnails').html('<p>Tidak ada foto rumah</p>');
+    }
+});
+
+
 
 </script>
 @endpush

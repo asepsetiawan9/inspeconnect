@@ -15,18 +15,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-3 d-none">
-                <div class="form-group">
-                    <label for="filter2" class="text-white text-sm pb-2 font-weight-bold ">Desil:</label>
-                    <select class="form-select" id="filter2">
-                        <option value="semua">Semua Desil</option>
-                        <option value="desil 1">Desil 1</option>
-                        <option value="desil 2">Desil 2</option>
-                        <option value="desil 3">Desil 3</option>
-                        <option value="desil 4">Desil 4</option>
-                    </select>
-                </div>
-            </div>
+
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="filter3" class="text-white text-sm pb-2 font-weight-bold">Tahun:</label>
@@ -51,7 +40,7 @@
 
             <div class="d-flex justify-content-end">
                 <div class="d-flex justify-content-end">
-                    <a href="{{ route('poverty.create') }}" class="mt-1"> <button
+                    <a href="{{ route('not_feasible.create') }}" class="mt-1"> <button
                             class="btn btn-success">Tambah</button></a>
                 </div>
             </div>
@@ -63,7 +52,7 @@
         <div class="card mb-4 border">
 
             <div class="card-header pb-0 d-flex justify-content-between">
-                <h6>Data Kemiskinan</h6>
+                <h6>Data Rumah Tidak Sehat dan Tidak Layak Huni</h6>
                 <div>
                     <input type="text" id="searchInput" class="form-control" placeholder="Cari..."
                         onchange="searchData()">

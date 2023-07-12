@@ -8,14 +8,14 @@
 </div>
 <div class="col-md-6">
     <div class="form-group">
-        <label for="tinggi_pondasi_rumah">TINGGI PONDASI RUMAH</label>
+        <label for="tinggi_pondasi_rumah">TINGGI PONDASI RUMAH<span class="text-xs">(cm)</span></label>
         <input type="text" name="tinggi_pondasi_rumah" class="form-control" placeholder="Tinggi Pondasi Rumah" value="{{ $poverty->tinggi_pondasi_rumah ?? '' }}">
         @error('tinggi_pondasi_rumah') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
     </div>
 </div>
 <div class="col-md-6">
     <div class="form-group">
-        <label for="jumlah_jiwa">JUMLAH JIWA DIDALAM RUMAH</label>
+        <label for="jumlah_jiwa">JUMLAH JIWA DIDALAM RUMAH<span class="text-xs">(orang)</span></label>
         <input type="number" name="jumlah_jiwa" class="form-control" placeholder="Jumlah Jiwa Didalam Rumah" value="{{ $poverty->jumlah_jiwa ?? '' }}">
         @error('jumlah_jiwa') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
     </div>

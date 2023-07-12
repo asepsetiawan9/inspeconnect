@@ -103,16 +103,15 @@
     <div class="col-md-4">
         <div class="form-group">
             <label for="foto_rumah">FOTO RUMAH</label><br>
-            <input type="file" name="foto_rumah[]" class="form-control-file" id="uploadFoto2" accept=".jpg, .jpeg, .png" multiple>
+            <input type="file" name="foto_rumah[]" class="form-control-file" id="uploadFoto2" accept=".jpg, .jpeg, .png" multiple onchange="validateUpload2(this)">
             <small class="text-muted">Ukuran maksimum: 2MB</small>
         </div>
     </div>
-    <div class="col-md-3">
+    <!-- <div class="col-md-3">
         <div id="previewFoto2" class="text-center border-dashed h-100 fs-6 d-flex align-items-center justify-content-center">
-            <!-- Placeholder atau ikon default -->
             <i class="fa fa-home" aria-hidden="true" style="font-size: 64px;"></i>
         </div>
-    </div>
+    </div> -->
     <div class="col-md-5">
         <!-- Tampilkan preview lebih dari satu foto -->
         <div id="previewFotoThumbnails" class="d-flex flex-wrap"></div>

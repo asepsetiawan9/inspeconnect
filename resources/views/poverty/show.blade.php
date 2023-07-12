@@ -1,10 +1,10 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-@include('layouts.navbars.auth.topnav', ['title' => ' Detail Rumah Tidak Layak Huni'])
+@include('layouts.navbars.auth.topnav', ['title' => ' Detail Rumah Layak dan Tidak Layak Huni'])
 <div class="row mt-4 mx-4">
     <div class="position-relative">
-        <h5 class="text-white"> Detail Data Kemiskinan</h5>
+        <h5 class="text-white"> Detail Rumah Layak dan Tidak Layak Huni</h5>
     </div>
 </div>
 
@@ -57,13 +57,13 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <strong for="name">KECAMATAN</strong>
-                        <p>{{ $poverty->kecamatan->name ?: '' }}</p>
+                        <p>{{ $poverty->kecamatan ? poverty->kecamatan->name : '-' }}</p>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <strong for="name">DESA</strong>
-                        <p>{{ $poverty->desa->name_desa ?: '' }}</p>
+                        <p>{{ $poverty->desa ? $poverty->desa->name_desa : '-' }}</p>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -176,14 +176,25 @@
                 <div class="col-md-6">
                     <div class="form-group d-flex flex-column thumbnail">
                         <strong for="name">FOTO RUMAH</strong>
-                        @if ($poverty->foto_rumah)
-                        <img src="{{ asset('storage/foto_rumah/' . $poverty->foto_rumah) }}" alt="Foto Rumah"
-                            style="max-width: 50%; height: auto;">
+                        @php
+                            $fotoRumahArray = json_decode($poverty->foto_rumah);
+                        @endphp
+                        @if ($fotoRumahArray)
+                            <div class="row">
+                                @foreach ($fotoRumahArray as $fotoRumah)
+                                    <div class="col-md-6">
+                                        <a href="{{ asset('storage/foto_rumah/' . $fotoRumah) }}" target="_blank">
+                                            <img src="{{ asset('storage/foto_rumah/' . $fotoRumah) }}" alt="Foto Rumah" style="max-width: 100%; height: auto;">
+                                        </a>
+                                    </div>
+                                @endforeach
+                            </div>
                         @else
-                        <p>Tidak ada foto diri</p>
+                            <p>Tidak ada foto rumah</p>
                         @endif
                     </div>
                 </div>
+
                 <!-- Tombol untuk membuka modal -->
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#assistanceModal">
                     Lihat Bantuan
