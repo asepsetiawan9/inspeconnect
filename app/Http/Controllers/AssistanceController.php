@@ -213,11 +213,14 @@ class AssistanceController extends Controller
     public function getPovertyData(Request $request)
     {
         $year = $request->input('year');
-        $povertyData = Poverty::where('tahun_input', $year)->where('status_rumah', 1)->select('id', 'nama', 'nik')->get();
-
+        $povertyData = Poverty::where('tahun_input', $year)
+            ->where('status_rumah', 1)
+            ->select('id', 'nama', 'nik')
+            ->get();
 
         return response()->json($povertyData);
     }
+
     public function confirmDelete($id)
     {
         $assistance = Assistance::findOrFail($id);

@@ -113,7 +113,7 @@
                         year: selectedYear
                     },
                     success: function (response) {
-                        console.log(response);
+                        console.log(response)
                         // Menghapus opsi sebelumnya pada filter2
                         filter2.empty();
                         // Menambahkan opsi baru berdasarkan data yang diterima dari backend
