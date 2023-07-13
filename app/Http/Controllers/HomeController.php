@@ -26,46 +26,32 @@ class HomeController extends Controller
      */
     public function index()
     {
+        
         $latestPopulation = Population::latest()->first();
 
-        $jml_penduduk = $latestPopulation ? $latestPopulation->jumlah_penduduk : 0;
+        $jml_kk = $latestPopulation ? $latestPopulation->jumlah_kk : 0;
 
 
-        //jumlah  penduduk miskin tahun terakhir
+        //jumlah rumah tidak layak huni tahun terakhir
         $latestYear = Poverty::max('tahun_input');
-        $jml_pen_miskin = Poverty::where('tahun_input', $latestYear)->count();
-
-        $persentasePendudukMiskin = 0;
-
-        if ($jml_penduduk > 0) {
-            $persentasePendudukMiskin = ($jml_pen_miskin / $jml_penduduk) * 100;
-        }
-
-        //jumlah desil terakhir
-        $jml_desil1 = Poverty::where('tahun_input', $latestYear)
-        ->where('desil', 'Desil 1')
-        ->count();
-        $jml_desil2 = Poverty::where('tahun_input', $latestYear)
-        ->where('desil', 'Desil 2')
-        ->count();
-        $jml_desil3 = Poverty::where('tahun_input', $latestYear)
-        ->where('desil', 'Desil 3')
-        ->count();
-        $jml_desil4 = Poverty::where('tahun_input', $latestYear)
-        ->where('desil', 'Desil 4')
-        ->count();
-
+        $jml_rmh_tdak_layak = Poverty::where('status_rumah', 1)->count();
+        $jml_rmh_layak = Poverty::where('status_rumah', 0)->count();
+        //  dd($jml_rmh_tdak_layak);
 
         //ambil semua tahun
         $years = Poverty::distinct('tahun_input')->pluck('tahun_input')->toArray();
-        $status = Poverty::distinct('status')->pluck('status')->toArray();
-
+        $status_rumah = Poverty::distinct('status_rumah')->pluck('status_rumah')->toArray();
+        
         //ambil semua nilai pertahun
-        $dataCountByYear = [];
+        $dataTidakLayakCountByYear = [];
+        $dataLayakCountByYear = [];
         foreach ($years as $year) {
-            $count = Poverty::where('tahun_input', $year)->count();
-            $dataCountByYear[] = $count;
+            $count = Poverty::where('tahun_input', $year)->where('status_rumah', 1)->count();
+            $count2 = Poverty::where('tahun_input', $year)->where('status_rumah', 0)->count();
+            $dataTidakLayakCountByYear[] = $count;
+            $dataLayakCountByYear[] = $count2;
         }
+
         //ambil semua tahun
         $kecId = Poverty::distinct('id_kecamatan')->pluck('id_kecamatan')->toArray();
         $kecLabels = Poverty::join('kecamatan', 'poverties.id_kecamatan', '=', 'kecamatan.id')
@@ -74,12 +60,18 @@ class HomeController extends Controller
             ->toArray();
 
         //ambil semua nilai pertahun
-        $kecValue = [];
+        $kecValueTidakLayak = [];
         foreach ($kecId as $kec) {
-            $count = Poverty::where('id_kecamatan', $kec)->count();
-            $kecValue[] = $count;
+            $count = Poverty::where('id_kecamatan', $kec)->where('status_rumah', 1)->count();
+            $kecValueTidakLayak[] = $count;
         }
-        // dd($kecValue);
+
+        $kecValueLayak = [];
+        foreach ($kecId as $kec) {
+            $count = Poverty::where('id_kecamatan', $kec)->where('status_rumah', 0)->count();
+            $kecValueLayak[] = $count;
+        }
+        // dd($kecValueLayak);
 
         $nameDes = Poverty::join('kecamatan', 'poverties.id_kecamatan', '=', 'kecamatan.id')
         ->distinct('kecamatan.name')
@@ -87,209 +79,218 @@ class HomeController extends Controller
         ->toArray();
 
         //ambil semua nilai pertahun
-        $desValue = [];
+        $desValueTidakLayak = [];
         foreach ($kecId as $kec) {
-            $count = Poverty::where('id_kecamatan', $kec)->count();
-            $kecValue[] = $count;
+            $count = Poverty::where('id_kecamatan', $kec)->where('status_rumah', 1)->count();
+            $desValueTidakLayak[] = $count;
         }
+        $desValueLayak = [];
+        foreach ($kecId as $kec) {
+            $count = Poverty::where('id_kecamatan', $kec)->where('status_rumah', 0)->count();
+            $desValueLayak[] = $count;
+        }
+
         $message = 'kosong';
 
-        return view('pages.dashboard', compact('latestPopulation', 'jml_pen_miskin', 'persentasePendudukMiskin', 'jml_desil1', 'jml_desil2', 'jml_desil3', 'jml_desil4', 'years',
-        'dataCountByYear', 'kecLabels', 'kecId',
-        'kecValue', 'message', 'nameDes', 'desValue', 'status'));
+        return view('pages.dashboard', compact('latestPopulation', 'jml_rmh_tdak_layak',
+        'jml_rmh_layak', 'years',
+        'dataTidakLayakCountByYear', 'dataLayakCountByYear', 'kecLabels', 'kecId', 'kecValueTidakLayak',
+        'kecValueLayak', 'message', 'nameDes', 'desValueTidakLayak',
+        'desValueLayak', 'status_rumah'));
     }
 
     public function filterKecamatan(Request $request)
     {
-        $status = $request->input('status');
+        // dd($request);
+        // $status = $request->input('status');
         $kecLabel = $request->input('kecLabel');
         $kecLabel = strtolower($kecLabel);
         $kecLabel = str_replace(' ', '_', $kecLabel);
         $kecId = $request->input('kecId');
-        $selectedYear = $request->input('year');
+        //  dd($kecId);
+        
 
         $latestPopulation = Population::latest()->first();
 
-        if ($status !== 'all') {
-            Poverty::where('status', $status);
-        }
+        // if ($status !== 'all') {
+        //     Poverty::where('status_rumah', $status);
+        // }
 
-        $jml_penduduk = $latestPopulation->{$kecLabel};
+        $jml_kk = $latestPopulation->{$kecLabel};
+        // dd($jml_kk);
 
-        if ($selectedYear === 'all') {
-            $latestYear = Poverty::max('tahun_input');
-            $selectedYear = $latestYear;
-        } else {
-            $latestYear = $selectedYear;
-        }
+        // if ($selectedYear === 'all') {
+        //     $latestYear = Poverty::max('tahun_input');
+        //     $selectedYear = $latestYear;
+        // } else {
+        //     $latestYear = $selectedYear;
+        // }
 
-
+        $selectedYear = $request->input('year');
+        $kecId = $request->input('kecId');
         $id_desa = Poverty::where('id_kecamatan', $kecId)->distinct('id_desa')->pluck('id_desa')->toArray();
+        // $years = Poverty::distinct('tahun_input')->pluck('tahun_input')->toArray();
 
-        if($kecId==='jumlah_penduduk'){
-            if ($status !== 'all') {
-                $jml_pen_miskin = Poverty::where('tahun_input', $latestYear)->where('status', $status)->count();
-            }else{
-                $jml_pen_miskin = Poverty::where('tahun_input', $latestYear)->count();
+        if ($selectedYear === 'all' && $kecId === 'kec_all') {
+            $jumlah_rumah = Poverty::count();
+            $jml_tidak_layak = Poverty::where('status_rumah', 1)->count();
+            $jml_layak = Poverty::where('status_rumah', 0)->count();
+            $label_tahun = Poverty::distinct('tahun_input')->pluck('tahun_input')->toArray();
+            $jml_kk = Poverty::groupBy('kk')->count();
+            $jml_tidak_layak_tahun = [];
+            $jml_layak_tahun = [];
+        
+            foreach ($label_tahun as $tahun) {
+                $jml_tidak_layak_tahun[] = Poverty::where('tahun_input', $tahun)->where('status_rumah', 1)->count();
+                $jml_layak_tahun[] = Poverty::where('tahun_input', $tahun)->where('status_rumah', 0)->count();
             }
-            if ($status !== 'all') {
-                $jml_desil1 = Poverty::where('tahun_input', $latestYear)
-                ->where('desil', 'Desil 1')->where('status', $status)
-                ->count();
-            }else{
-                $jml_desil1 = Poverty::where('tahun_input', $latestYear)
-                ->where('desil', 'Desil 1')
-                ->count();
+        
+            array_multisort($label_tahun, $jml_layak_tahun, $jml_tidak_layak_tahun);
+        } elseif ($selectedYear === 'all') {
+            $jumlah_rumah = Poverty::where('id_kecamatan', $kecId)->count();
+            $jml_tidak_layak = Poverty::where('id_kecamatan', $kecId)->where('status_rumah', 1)->count();
+            $jml_layak = Poverty::where('id_kecamatan', $kecId)->where('status_rumah', 0)->count();
+            $label_tahun = Poverty::where('id_kecamatan', $kecId)->distinct('tahun_input')->pluck('tahun_input')->toArray();
+            $jml_kk = Poverty::where('id_kecamatan', $kecId)->groupBy('kk')->count();
+            $jml_tidak_layak_tahun = [];
+            $jml_layak_tahun = [];
+        
+            foreach ($label_tahun as $tahun) {
+                $jml_tidak_layak_tahun[] = Poverty::where('tahun_input', $tahun)->where('id_kecamatan', $kecId)->where('status_rumah', 1)->count();
+                $jml_layak_tahun[] = Poverty::where('tahun_input', $tahun)->where('id_kecamatan', $kecId)->where('status_rumah', 0)->count();
             }
-
-            if ($status !== 'all') {
-                $jml_desil2 = Poverty::where('tahun_input', $latestYear)
-                ->where('desil', 'Desil 2')->where('status', $status)
-                ->count();
-            }else{
-                $jml_desil2 = Poverty::where('tahun_input', $latestYear)
-                ->where('desil', 'Desil 2')
-                ->count();
+        
+            array_multisort($label_tahun, $jml_layak_tahun, $jml_tidak_layak_tahun);
+        } elseif ($kecId === 'kec_all') {
+            $jumlah_rumah = Poverty::where('tahun_input', $selectedYear)->count();
+            $jml_tidak_layak = Poverty::where('tahun_input', $selectedYear)->where('status_rumah', 1)->count();
+            $jml_layak = Poverty::where('tahun_input', $selectedYear)->where('status_rumah', 0)->count();
+            $label_tahun = Poverty::where('tahun_input', $selectedYear)->distinct('tahun_input')->pluck('tahun_input')->toArray();
+            $jml_kk = Poverty::where('tahun_input', $selectedYear)->groupBy('kk')->count();
+            $jml_tidak_layak_tahun = [];
+            $jml_layak_tahun = [];
+        
+            foreach ($label_tahun as $tahun) {
+                $jml_tidak_layak_tahun[] = Poverty::where('tahun_input', $tahun)->where('status_rumah', 1)->count();
+                $jml_layak_tahun[] = Poverty::where('tahun_input', $tahun)->where('status_rumah', 0)->count();
             }
-            if ($status !== 'all') {
-                $jml_desil3 = Poverty::where('tahun_input', $latestYear)
-                ->where('desil', 'Desil 3')->where('status', $status)
-                ->count();
-            }else{
-                $jml_desil3 = Poverty::where('tahun_input', $latestYear)
-                ->where('desil', 'Desil 3')
-                ->count();
-            }
-            if ($status !== 'all') {
-                $jml_desil4 = Poverty::where('tahun_input', $latestYear)
-                ->where('desil', 'Desil 4')->where('status', $status)
-                ->count();
-            }else{
-                $jml_desil4 = Poverty::where('tahun_input', $latestYear)
-                ->where('desil', 'Desil 4')
-                ->count();
-            }
-            $years = Poverty::distinct('tahun_input')->pluck('tahun_input')->toArray();
-            $dataCountByYear = [];
-            if ($status !== 'all') {
-                foreach ($years as $year) {
-                    $count = Poverty::where('tahun_input', $latestYear)->where('status', $status)->count();
-                    $dataCountByYear[] = $count;
-                }
-            }else{
-                foreach ($years as $year) {
-                    $count = Poverty::where('tahun_input', $year)->count();
-                    $dataCountByYear[] = $count;
-                }
-            }
-
-            $id_kec = Poverty::distinct('id_kecamatan')->pluck('id_kecamatan')->toArray();
-            $nameDes = Poverty::join('kecamatan', 'poverties.id_kecamatan', '=', 'kecamatan.id')
-            ->distinct('kecamatan.name')
-            ->pluck('kecamatan.name')
-            ->toArray();
-
-            //ambil semua nilai pertahun
-            $desValue = [];
-            if ($status !== 'all') {
-                foreach ($id_kec as $kec) {
-                    $count = Poverty::where('id_kecamatan', $kec)->where('tahun_input', $latestYear)->where('status', $status)->count();
-                    $desValue[] = $count;
-                }
-            }else{
-                foreach ($id_kec as $kec) {
-                    $count = Poverty::where('id_kecamatan', $kec)->where('tahun_input', $latestYear)->count();
-                    $desValue[] = $count;
-                }
-            }
-
-        }else{
-            if ($status !== 'all') {
-                $jml_pen_miskin = Poverty::where('tahun_input', $latestYear)->where('id_kecamatan', $kecId)->where('status', $status)->count();
-            }else{
-                $jml_pen_miskin = Poverty::where('tahun_input', $latestYear)->where('id_kecamatan', $kecId)->count();
-            }
-            if ($status !== 'all') {
-                $jml_desil1 = Poverty::where('tahun_input', $latestYear)->where('id_kecamatan', $kecId)
-                    ->where('desil', 'Desil 1')->where('status', $status)
-                    ->count();
-            }else{
-                $jml_desil1 = Poverty::where('tahun_input', $latestYear)->where('id_kecamatan', $kecId)
-                    ->where('desil', 'Desil 1')
-                    ->count();
-            }
-            if ($status !== 'all') {
-                $jml_desil2 = Poverty::where('tahun_input', $latestYear)->where('id_kecamatan', $kecId)
-                    ->where('desil', 'Desil 2')->where('status', $status)
-                    ->count();
-            }else{
-                $jml_desil2 = Poverty::where('tahun_input', $latestYear)->where('id_kecamatan', $kecId)
-                    ->where('desil', 'Desil 2')
-                    ->count();
-            }
-            if ($status !== 'all') {
-                $jml_desil3 = Poverty::where('tahun_input', $latestYear)->where('id_kecamatan', $kecId)
-                    ->where('desil', 'Desil 3')->where('status', $status)
-                    ->count();
-            }else{
-                $jml_desil3 = Poverty::where('tahun_input', $latestYear)->where('id_kecamatan', $kecId)
-                    ->where('desil', 'Desil 3')
-                    ->count();
-            }
-            if ($status !== 'all') {
-                $jml_desil4 = Poverty::where('tahun_input', $latestYear)->where('id_kecamatan', $kecId)
-                    ->where('desil', 'Desil 4')->where('status', $status)
-                    ->count();
-            }else{
-                $jml_desil4 = Poverty::where('tahun_input', $latestYear)->where('id_kecamatan', $kecId)
-                    ->where('desil', 'Desil 4')
-                    ->count();
-            }
-            $years = Poverty::distinct('tahun_input')->where('id_kecamatan', $kecId)->where('tahun_input', $latestYear)->pluck('tahun_input')->toArray();
-            $dataCountByYear = [];
-            foreach ($years as $year) {
-                $count = Poverty::where('tahun_input', $year)->count();
-                $dataCountByYear[] = $count;
-            }
-
-            $nameDes = Poverty::join('desa', 'poverties.id_desa', '=', 'desa.id')
-            ->where('poverties.id_kecamatan', $kecId)->where('tahun_input', $latestYear)
-            ->distinct('desa.name_desa')
-            ->pluck('desa.name_desa')
-            ->toArray();
-
-            $desValue = [];
-            foreach ($id_desa as $des) {
-                $count = Poverty::where('id_desa', $des)->where('tahun_input', $latestYear)->count();
-                $desValue[] = $count;
-            }
-
-        }
-        if ($jml_penduduk != 0) {
-            $persentasePendudukMiskin = ($jml_pen_miskin / $jml_penduduk) * 100;
+            // dd($jml_layak_tahun);
+        
+            array_multisort($label_tahun, $jml_layak_tahun, $jml_tidak_layak_tahun);
         } else {
-            // Handle the division by zero error
-            // You can assign a default value or display an error message
-            $persentasePendudukMiskin = 0; // or any other appropriate value
-            // Alternatively, you can display an error message:
-            // echo "Error: Division by zero!";
+            $jumlah_rumah = Poverty::where('tahun_input', $selectedYear)->where('id_kecamatan', $kecId)->count();
+            $jml_tidak_layak = Poverty::where('tahun_input', $selectedYear)->where('id_kecamatan', $kecId)->where('status_rumah', 1)->count();
+            $jml_layak = Poverty::where('tahun_input', $selectedYear)->where('id_kecamatan', $kecId)->where('status_rumah', 0)->count();
+            $label_tahun = Poverty::where('tahun_input', $selectedYear)->distinct('tahun_input')->pluck('tahun_input')->toArray();
+            $jml_kk = Poverty::where('tahun_input', $selectedYear)->where('id_kecamatan', $kecId)->groupBy('kk')->count();
+            $jml_tidak_layak_tahun = [];
+            $jml_layak_tahun = [];
+        
+            foreach ($label_tahun as $tahun) {
+                $jml_tidak_layak_tahun[] = Poverty::where('tahun_input', $tahun)->where('id_kecamatan', $kecId)->where('status_rumah', 1)->count();
+                $jml_layak_tahun[] = Poverty::where('tahun_input', $tahun)->where('id_kecamatan', $kecId)->where('status_rumah', 0)->count();
+            }
+        
+            array_multisort($label_tahun, $jml_layak_tahun, $jml_tidak_layak_tahun);
         }
+        
+        
+        
+                
+        // dd($id_desa);
+
+        // if($kecId==='jumlah_penduduk'){
+        //     if ($status !== 'all') {
+        //         $jml_tidak_layak = Poverty::where('tahun_input', $latestYear)->where('status', $status)->count();
+        //     }else{
+        //         $jml_tidak_layak = Poverty::where('tahun_input', $latestYear)->count();
+        //     }
+        //     $years = Poverty::distinct('tahun_input')->pluck('tahun_input')->toArray();
+        //     $dataCountByYear = [];
+        //     if ($status !== 'all') {
+        //         foreach ($years as $year) {
+        //             $count = Poverty::where('tahun_input', $latestYear)->where('status', $status)->count();
+        //             $dataCountByYear[] = $count;
+        //         }
+        //     }else{
+        //         foreach ($years as $year) {
+        //             $count = Poverty::where('tahun_input', $year)->count();
+        //             $dataCountByYear[] = $count;
+        //         }
+        //     }
+
+        //     $id_kec = Poverty::distinct('id_kecamatan')->pluck('id_kecamatan')->toArray();
+        //     $nameDes = Poverty::join('kecamatan', 'poverties.id_kecamatan', '=', 'kecamatan.id')
+        //     ->distinct('kecamatan.name')
+        //     ->pluck('kecamatan.name')
+        //     ->toArray();
+
+        //     //ambil semua nilai pertahun
+        //     $desValue = [];
+        //     if ($status !== 'all') {
+        //         foreach ($id_kec as $kec) {
+        //             $count = Poverty::where('id_kecamatan', $kec)->where('tahun_input', $latestYear)->where('status', $status)->count();
+        //             $desValue[] = $count;
+        //         }
+        //     }else{
+        //         foreach ($id_kec as $kec) {
+        //             $count = Poverty::where('id_kecamatan', $kec)->where('tahun_input', $latestYear)->count();
+        //             $desValue[] = $count;
+        //         }
+        //     }
+
+        // }else{
+        //     if ($status !== 'all') {
+        //         $jml_tidak_layak = Poverty::where('tahun_input', $latestYear)->where('id_kecamatan', $kecId)->where('status', $status)->count();
+        //     }else{
+        //         $jml_tidak_layak = Poverty::where('tahun_input', $latestYear)->where('id_kecamatan', $kecId)->count();
+        //     }
+            
+        //     $years = Poverty::distinct('tahun_input')->where('id_kecamatan', $kecId)->where('tahun_input', $latestYear)->pluck('tahun_input')->toArray();
+        //     $dataCountByYear = [];
+        //     foreach ($years as $year) {
+        //         $count = Poverty::where('tahun_input', $year)->count();
+        //         $dataCountByYear[] = $count;
+        //     }
+
+        //     $nameDes = Poverty::join('desa', 'poverties.id_desa', '=', 'desa.id')
+        //     ->where('poverties.id_kecamatan', $kecId)->where('tahun_input', $latestYear)
+        //     ->distinct('desa.name_desa')
+        //     ->pluck('desa.name_desa')
+        //     ->toArray();
+
+        //     $desValue = [];
+        //     foreach ($id_desa as $des) {
+        //         $count = Poverty::where('id_desa', $des)->where('tahun_input', $latestYear)->count();
+        //         $desValue[] = $count;
+        //     }
+
+        // }
+        // if ($jml_kk != 0) {
+        //     $persentasePendudukMiskin = ($jml_tidak_layak / $jml_penduduk) * 100;
+        // } else {
+        //     // Handle the division by zero error
+        //     // You can assign a default value or display an error message
+        //     $persentasePendudukMiskin = 0; // or any other appropriate value
+        //     // Alternatively, you can display an error message:
+        //     // echo "Error: Division by zero!";
+        // }
         
 
         $message = [
-            'jml_penduduk' => number_format($jml_penduduk),
-            'jml_pen_miskin' => number_format($jml_pen_miskin),
-            'persentase_penduduk_miskin' => round($persentasePendudukMiskin, 2),
-            'jml_desil1' => number_format($jml_desil1),
-            'jml_desil2' => number_format($jml_desil2),
-            'jml_desil3' => number_format($jml_desil3),
-            'jml_desil4' => number_format($jml_desil4),
-            'years' => $years,
-            'dataCountByYear' => $dataCountByYear,
-            'nameDes' => $nameDes,
-            'desValue' => $desValue,
+            'jumlah_rumah' => number_format($jumlah_rumah),
+            'jml_tidak_layak' => number_format($jml_tidak_layak),
+            'jml_layak' => number_format($jml_layak),
+            'jml_kk' => number_format($jml_kk),
+            'label_tahun' => $label_tahun,
+            'jml_tidak_layak_tahun' => $jml_tidak_layak_tahun,
+            'jml_layak_tahun' => $jml_layak_tahun,
+            // 'years' => $years,
+            // 'dataCountByYear' => $dataCountByYear,
+            // 'nameDes' => $nameDes,
+            // 'desValue' => $desValue,
         ];
-
+        //  dd($message);
         return response()->json(['message' => $message]);
     }
 

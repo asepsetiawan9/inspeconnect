@@ -545,17 +545,7 @@ class PovertyFactory extends Factory
                 "TIDAK TERLINDUNG",
                 "MINUM UTAMA LAINNYA",
             ]),
-            "bahan_bakar_memasak" => $this->faker->randomElement([
-                "LISTRIK/GAS",
-                "MINYAK TANAH",
-                "ARANG KAYU",
-                "LAINNYA",
-            ]),
             "foto_rumah" => $this->faker->imageUrl(800, 600),
-            "desil" => $this->faker->randomElement(["DESIL 1", "DESIL 2", "DESIL 3", "DESIL 4"]),
-            "dtks" => $this->faker->randomElement(["YA", "TIDAK"]),
-            "penghasilan_perbulan" => $this->faker->numberBetween(100000, 5000000),
-            "bantuan_diterima" => $this->faker->randomElement(["PKH", "BPNT", "BLT"]),
             "tahun_input" => $this->faker->randomElement([2019, 2020, 2021, 2022, 2023]),
             "sumber_penerangan_utama" => $this->faker->randomElement([
                 "LISTRIK PLN",
@@ -565,7 +555,10 @@ class PovertyFactory extends Factory
             ]),
             "bab" => $this->faker->randomElement(["ADA DENGAN SEPTIK TANK", "ADA TANPA SEPTIK TANK", "JAMBAN UMUM/BERSAM", "LAINNYA"]),
             "status_bantuan" => $this->faker->randomElement([
-                1
+                1, 0
+            ]),
+            "status_rumah" => $this->faker->randomElement([
+                1, 0
             ]),
         ];
     }

@@ -57,7 +57,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <strong for="name">KECAMATAN</strong>
-                        <p>{{ $poverty->kecamatan ? poverty->kecamatan->name : '-' }}</p>
+                        <p>{{ $poverty->kecamatan ? $poverty->kecamatan->name : '-' }}</p>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -66,6 +66,7 @@
                         <p>{{ $poverty->desa ? $poverty->desa->name_desa : '-' }}</p>
                     </div>
                 </div>
+
                 <div class="col-md-6">
                     <div class="form-group">
                         <strong for="name">TEMPAT LAHIR</strong>
