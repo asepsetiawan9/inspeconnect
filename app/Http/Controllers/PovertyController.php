@@ -217,6 +217,14 @@ class PovertyController extends Controller
         $data->status_rumah = $status_rumah;
         $data->update($validatedData);
 
+        if ($request->hasFile('foto_diri')) {
+            $fotoDiri = $request->file('foto_diri');
+            $fotoDiriPath = Str::random(10) . '.' . $fotoDiri->getClientOriginalExtension();
+
+            Storage::putFileAs('public/foto_diri', $fotoDiri, $fotoDiriPath);
+            $data->foto_diri = $fotoDiriPath;
+        }
+
         if ($request->hasFile('foto_rumah')) {
             // Hapus foto rumah lama jika ada
             if ($data->foto_rumah) {
@@ -271,6 +279,30 @@ class PovertyController extends Controller
     {
         $poverty = Poverty::findOrFail($id);
 
+        // Menghapus foto rumah
+        if ($poverty->foto_rumah) {
+            $fotoRumahArray = explode(',', $poverty->foto_rumah);
+            foreach ($fotoRumahArray as $fotoRumah) {
+                $fotoRumahPath = 'storage/foto_rumah/' . $fotoRumah;
+                if (Storage::exists($fotoRumahPath)) {
+                    Storage::delete($fotoRumahPath);
+                }
+            }
+        }
+
+        // Menghapus foto diri
+        if ($poverty->foto_diri) {
+            $fotoDiriPath = 'storage/foto_diri/' . $poverty->foto_diri;
+            if (Storage::exists($fotoDiriPath)) {
+                Storage::delete($fotoDiriPath);
+            }
+        }
+
+        // Memastikan file telah dihapus
+        if (Storage::exists($fotoDiriPath)) {
+            dd("File foto diri tidak terhapus");
+        }
+
         if ($poverty->delete()) {
             Alert::success('Sukses', 'Data berhasil dihapus.')->autoclose(3500);
         } else {
@@ -279,6 +311,9 @@ class PovertyController extends Controller
 
         return redirect('not_feasible');
     }
+
+
+    
 
     public function getKecamatan()
     {

@@ -6,24 +6,32 @@
     <div class="row">
         <div class="container position-relative ">
             <div class="row">
-                <div class="col-md-4 d-none">
+                <!-- <div class="col-md-4">
                     <div class="form-group">
-                        <div for="filter1 " class="text-white text-sm pb-2 text-bold">Tampilkan Berdasarkan:</div>
+                        <div for="filter1" class="text-white text-sm pb-2 text-bold">Tampilkan Berdasarkan:</div>
                         <select class="form-select" id="filter1" onchange="filterByKecamatan()">
-                                <option selected value="all">Jumlah Penduduk</option>
-                            @foreach ($status as $stat)
-                                <option value="{{ $stat }}">{{ $stat }}</option>
+                            <option selected value="all">Pilih Status Rumah</option>
+                            @foreach ($status_rumah as $stat)
+                                <option value="{{ $stat }}">
+                                    @if ($stat == 0)
+                                        Rumah Layak Huni
+                                    @elseif ($stat == 1)
+                                        Rumah Tidak Layak Huni
+                                    @else
+                                        {{ $stat }}
+                                    @endif
+                                </option>
                             @endforeach
                         </select>
                     </div>
-                </div>
-
-                    <input class="form-select d-none" id="filterVar" onchange="filterByKecamatan()" value="all">
+                </div> -->
+<!-- 
+                    <input class="form-select d-none" id="filterVar" onchange="filterByKecamatan()" value="all"> -->
                 <div class="col-md-6">
                     <div class="form-group">
                         <div for="filter2" class="text-white text-sm pb-2 text-bold">Kecamatan:</div>
                         <select class="form-select" id="filter2" onchange="filterByKecamatan()">
-                            <option selected value="jumlah_penduduk">Pilih Kecamatan</option>
+                            <option selected value="kec_all">Pilih Kecamatan</option>
                             @foreach ($kecLabels as $index => $kecLabel)
                                 <option value="{{ $kecId[$index] }}">{{ $kecLabel }}</option>
                             @endforeach
@@ -53,7 +61,7 @@
                     <div class="col-8">
                         <div class="numbers">
                             <p class="text-xs mb-0 text-uppercase font-weight-bold">JUMLAH RUMAH</p>
-                            <h5 class="font-weight-bolder" id="jml_penduduk">
+                            <h5 class="font-weight-bolder" id="jumlah_rumah">
                                 {{ number_format($latestPopulation->jumlah_penduduk ?? 0) }}
                             </h5>
                             <p class="mb-0">
@@ -77,7 +85,7 @@
                         <div class="col-8">
                             <div class="numbers">
                                 <p class="text-xs mb-0 text-uppercase font-weight-bold">JUMLAH KK</p>
-                                <h5 class="font-weight-bolder">
+                                <h5 class="font-weight-bolder" id="jml_kk">
                                     {{ number_format($latestPopulation->jumlah_kk ?? 0) }}
                                 </h5>
                                 <p class="mb-0">
@@ -101,7 +109,7 @@
                         <div class="col-8">
                             <div class="numbers">
                                 <p class="text-xs mb-0 text-uppercase font-weight-bold">Jumlah Rumah Tidak Sehat dan Tidak Layak Huni</p>
-                                <h5 class="font-weight-bolder" id="jmlPendudukMiskin">
+                                <h5 class="font-weight-bolder" id="jml_tidak_layak">
                                     {{ number_format($jml_pen_miskin ?? 0) }}
                                 </h5>
                                 <p class="mb-0">
@@ -125,7 +133,7 @@
                         <div class="col-8">
                             <div class="numbers">
                                 <p class="text-xs mb-0 text-uppercase font-weight-bold">Jumlah Rumah Sehat dan layak Huni </p>
-                                <h5 class="font-weight-bolder">
+                                <h5 class="font-weight-bolder" id="jml_layak">
                                     0
                                 </h5>
                                 <p class="mb-0">
@@ -193,100 +201,111 @@
 <script>
  document.addEventListener('DOMContentLoaded', function () {
     const ctx1 = document.getElementById('myChart').getContext('2d');
-    const ctx2 = document.getElementById('horizonChart').getContext('2d');
+    // const ctx2 = document.getElementById('horizonChart').getContext('2d');
     let chart1, chart2;
     let labels = <?php echo json_encode($years); ?>;
-    let labels2 = <?php echo json_encode($nameDes); ?>;
-    let data1 = <?php echo json_encode($dataCountByYear); ?>;
-    let data2 = <?php echo json_encode($kecValue); ?>;
+    // let labels2 = <?php echo json_encode($nameDes); ?>;
+    let data1 = <?php echo json_encode($dataTidakLayakCountByYear); ?>;
+    let data2 = <?php echo json_encode($dataLayakCountByYear); ?>;
+  
 
-    function createChart1(labels, data) {
+    function createChart1(labels, data, data2) {
+        // console.log('ini data', data2);
         chart1 = new Chart(ctx1, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: '#',
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Rumah Tidak Layak',
                     data: data,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.8)',
-                        'rgba(54, 162, 235, 0.8)',
-                        'rgba(255, 206, 86, 0.8)',
-                        'rgba(75, 192, 192, 0.8)',
-                        'rgba(153, 102, 255, 0.8)',
-                        'rgba(255, 159, 64, 0.8)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
+                    backgroundColor: 'rgba(255, 99, 132, 0.8)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
                     borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+                },
+                {
+                    label: 'Rumah Layak',
+                    data: data2,
+                    backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
                 }
-            }
-        });
-
-        return chart1;
-    }
-
-    function createChart2(labels, data) {
-        chart2 = new Chart(ctx2, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: '#',
-                    data: data,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.8)',
-                        'rgba(54, 162, 235, 0.8)',
-                        'rgba(255, 206, 86, 0.8)',
-                        'rgba(75, 192, 192, 0.8)',
-                        'rgba(153, 102, 255, 0.8)',
-                        'rgba(255, 159, 64, 0.8)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
             },
-            options: {
-                indexAxis: 'y',
-            }
-        });
+            plugins: {
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    }
+                },
+                hover: {
+                    mode: 'index',
+                    intersect: false
+                },
+                animation: {
+                    duration: 5000
+                }
+        }
+    });
 
-        return chart2;
+    return chart1;
+
     }
 
-    chart1 = createChart1(labels, data1);
-    chart2 = createChart2(labels2, data2);
+    // function createChart2(labels, data) {
+    //     chart2 = new Chart(ctx2, {
+    //         type: 'bar',
+    //         data: {
+    //             labels: labels,
+    //             datasets: [{
+    //                 label: '#',
+    //                 data: data,
+    //                 backgroundColor: [
+    //                     'rgba(255, 99, 132, 0.8)',
+    //                     'rgba(54, 162, 235, 0.8)',
+    //                     'rgba(255, 206, 86, 0.8)',
+    //                     'rgba(75, 192, 192, 0.8)',
+    //                     'rgba(153, 102, 255, 0.8)',
+    //                     'rgba(255, 159, 64, 0.8)'
+    //                 ],
+    //                 borderColor: [
+    //                     'rgba(255, 99, 132, 1)',
+    //                     'rgba(54, 162, 235, 1)',
+    //                     'rgba(255, 206, 86, 1)',
+    //                     'rgba(75, 192, 192, 1)',
+    //                     'rgba(153, 102, 255, 1)',
+    //                     'rgba(255, 159, 64, 1)'
+    //                 ],
+    //                 borderWidth: 1
+    //             }]
+    //         },
+    //         options: {
+    //             indexAxis: 'y',
+    //         }
+    //     });
+
+    //     return chart2;
+    // }
+
+    chart1 = createChart1(labels, data1, data2);
+    // chart2 = createChart2(labels2, data2);
 
     function filterByKecamatan() {
-        const selectElement1 = document.getElementById('filter1');
-        const selectedStatus = selectElement1.value;
+        // const selectElement1 = document.getElementById('filter1');
+        // const selectedStatus = selectElement1.value;
         const selectElement = document.getElementById('filter2');
         const selectedKecId = selectElement.value;
         const selectedKecLabel = selectElement.options[selectElement.selectedIndex].text;
         const selectedYear = document.getElementById('filter3').value;
 
         const data = {
-            status: selectedStatus,
+            // status: selectedStatus,
             kecId: selectedKecId,
             kecLabel: selectedKecId === 'jumlah_penduduk' ? 'jumlah_penduduk' : selectedKecLabel,
             year: selectedYear
@@ -299,33 +318,31 @@
             data: data,
             success: function (response) {
                 const message = response.message;
-                labels = message.years;
+                labels = message.label_tahun;
                 labels2 = message.nameDes;
-                data1 = message.dataCountByYear;
-                data2 = message.desValue;
+                data1 = message.jml_tidak_layak_tahun;
+                data2 = message.jml_layak_tahun;
 
                 chart1.data.labels = labels;
                 chart1.data.datasets[0].data = data1;
+                chart1.data.datasets[1].data = data2;
                 chart1.update();
 
-                chart2.data.labels = labels2;
-                chart2.data.datasets[0].data = data2;
-                chart2.update();
+                // chart2.data.labels = labels2;
+                // chart2.data.datasets[0].data = data2;
+                // chart2.update();
 
-                document.getElementById('jml_penduduk').innerText = message.jml_penduduk;
-                document.getElementById('jmlPendudukMiskin').innerText = message.jml_pen_miskin;
-                document.getElementById('persentasePendudukMiskin').innerText = message.persentase_penduduk_miskin;
-                document.getElementById('jml_desil1').innerText = message.jml_desil1;
-                document.getElementById('jml_desil2').innerText = message.jml_desil2;
-                document.getElementById('jml_desil3').innerText = message.jml_desil3;
-                document.getElementById('jml_desil4').innerText = message.jml_desil4;
+                document.getElementById('jumlah_rumah').innerText = message.jumlah_rumah;
+                document.getElementById('jml_tidak_layak').innerText = message.jml_tidak_layak;
+                document.getElementById('jml_layak').innerText = message.jml_layak;
+                document.getElementById('jml_kk').innerText = message.jml_kk;
             },
             error: function (error) {
                 console.log(error);
             }
         });
     }
-    document.getElementById('filter1').addEventListener('change', filterByKecamatan);
+    // document.getElementById('filter1').addEventListener('change', filterByKecamatan);
     document.getElementById('filter2').addEventListener('change', filterByKecamatan);
     document.getElementById('filter3').addEventListener('change', filterByKecamatan);
 });
