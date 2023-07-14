@@ -6,27 +6,7 @@
     <div class="row">
         <div class="container position-relative ">
             <div class="row">
-                <!-- <div class="col-md-4">
-                    <div class="form-group">
-                        <div for="filter1" class="text-white text-sm pb-2 text-bold">Tampilkan Berdasarkan:</div>
-                        <select class="form-select" id="filter1" onchange="filterByKecamatan()">
-                            <option selected value="all">Pilih Status Rumah</option>
-                            @foreach ($status_rumah as $stat)
-                                <option value="{{ $stat }}">
-                                    @if ($stat == 0)
-                                        Rumah Layak Huni
-                                    @elseif ($stat == 1)
-                                        Rumah Tidak Layak Huni
-                                    @else
-                                        {{ $stat }}
-                                    @endif
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div> -->
-<!-- 
-                    <input class="form-select d-none" id="filterVar" onchange="filterByKecamatan()" value="all"> -->
+
                 <div class="col-md-6">
                     <div class="form-group">
                         <div for="filter2" class="text-white text-sm pb-2 text-bold">Kecamatan:</div>
@@ -164,20 +144,7 @@
                     </div>
                 </div>
             </div>
-            <!-- <div class="d-flex flex-row gap-3 w-100 mt-3">
-                <div class="bg-danger rounded-3 p-3 w-100 text-white text-bold">Desil 1
-                    <div class="fs-4 text-bold" id="jml_desil1">{{ number_format($jml_desil1 ?? 0) }}</div>
-                </div>
-                <div class="bg-desil-2 rounded-3 p-3 w-100 text-white text-bold">Desil 2
-                     <div class="fs-4 text-bold" id="jml_desil2">{{ number_format($jml_desil2 ?? 0) }}</div>
-                </div>
-                <div class="bg-desil-3 rounded-3 p-3 w-100 text-white text-bold">Desil 3
-                     <div class="fs-4 text-bold" id="jml_desil3">{{ number_format($jml_desil3 ?? 0) }}</div>
-                </div>
-                <div class="bg-desil-4 rounded-3 p-3 w-100 text-white text-bold">Desil 4
-                     <div class="fs-4 text-bold" id="jml_desil4">{{ number_format($jml_desil4 ?? 0) }}</div>
-                </div>
-            </div> -->
+
             <div class="card mt-3 p-3">
                 <h5>Peta Sebaran</h5>
                 <div id="map"></div>
@@ -201,12 +168,14 @@
 <script>
  document.addEventListener('DOMContentLoaded', function () {
     const ctx1 = document.getElementById('myChart').getContext('2d');
-    // const ctx2 = document.getElementById('horizonChart').getContext('2d');
+    const ctx2 = document.getElementById('horizonChart').getContext('2d');
     let chart1, chart2;
     let labels = <?php echo json_encode($years); ?>;
-    // let labels2 = <?php echo json_encode($nameDes); ?>;
+    let labels2 = <?php echo json_encode($namaKecamatan); ?>;
     let data1 = <?php echo json_encode($dataTidakLayakCountByYear); ?>;
     let data2 = <?php echo json_encode($dataLayakCountByYear); ?>;
+    let data3 = <?php echo json_encode($kec_value_rm_tidak_layak); ?>;
+    let data4 = <?php echo json_encode($kec_value_rm_layak); ?>;
   
 
     function createChart1(labels, data, data2) {
@@ -258,43 +227,46 @@
 
     }
 
-    // function createChart2(labels, data) {
-    //     chart2 = new Chart(ctx2, {
-    //         type: 'bar',
-    //         data: {
-    //             labels: labels,
-    //             datasets: [{
-    //                 label: '#',
-    //                 data: data,
-    //                 backgroundColor: [
-    //                     'rgba(255, 99, 132, 0.8)',
-    //                     'rgba(54, 162, 235, 0.8)',
-    //                     'rgba(255, 206, 86, 0.8)',
-    //                     'rgba(75, 192, 192, 0.8)',
-    //                     'rgba(153, 102, 255, 0.8)',
-    //                     'rgba(255, 159, 64, 0.8)'
-    //                 ],
-    //                 borderColor: [
-    //                     'rgba(255, 99, 132, 1)',
-    //                     'rgba(54, 162, 235, 1)',
-    //                     'rgba(255, 206, 86, 1)',
-    //                     'rgba(75, 192, 192, 1)',
-    //                     'rgba(153, 102, 255, 1)',
-    //                     'rgba(255, 159, 64, 1)'
-    //                 ],
-    //                 borderWidth: 1
-    //             }]
-    //         },
-    //         options: {
-    //             indexAxis: 'y',
-    //         }
-    //     });
+    function createChart2(labels, data, data2) {
+        chart2 = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Rumah Tidak Layak',
+                    data: data,
+                    backgroundColor: 'rgba(255, 99, 132, 0.8)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Rumah Layak',
+                    data: data2,
+                    backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }
+            ]
+        },
+            options: {
+                indexAxis: 'y',
+                hover: {
+                    mode: 'index',
+                    intersect: false
+                },
+                animation: {
+                    duration: 5000
+                }
+            },
+            
+        });
 
-    //     return chart2;
-    // }
+        return chart2;
+    }
 
     chart1 = createChart1(labels, data1, data2);
-    // chart2 = createChart2(labels2, data2);
+    chart2 = createChart2(labels2, data3, data4);
 
     function filterByKecamatan() {
         // const selectElement1 = document.getElementById('filter1');
@@ -319,7 +291,8 @@
             success: function (response) {
                 const message = response.message;
                 labels = message.label_tahun;
-                labels2 = message.nameDes;
+                labels2 = message.namaKecamatan;
+
                 data1 = message.jml_tidak_layak_tahun;
                 data2 = message.jml_layak_tahun;
 
@@ -328,9 +301,16 @@
                 chart1.data.datasets[1].data = data2;
                 chart1.update();
 
-                // chart2.data.labels = labels2;
-                // chart2.data.datasets[0].data = data2;
-                // chart2.update();
+                //chart2
+                
+                // console.log(labels2);
+                data3 = message.labels2 = message.kec_value_rm_tidak_layak;
+                data4 =  message.labels2 = message.kec_value_rm_layak;
+                
+                chart2.data.labels = labels2;
+                chart2.data.datasets[0].data = data3;
+                chart2.data.datasets[1].data = data4;
+                chart2.update();
 
                 document.getElementById('jumlah_rumah').innerText = message.jumlah_rumah;
                 document.getElementById('jml_tidak_layak').innerText = message.jml_tidak_layak;
