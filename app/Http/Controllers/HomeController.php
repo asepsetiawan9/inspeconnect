@@ -36,6 +36,7 @@ class HomeController extends Controller
         $latestYear = Poverty::max('tahun_input');
         $jml_rmh_tdak_layak = Poverty::where('status_rumah', 1)->count();
         $jml_rmh_layak = Poverty::where('status_rumah', 0)->count();
+        // dd($jml_rmh_layak);
         //  dd($jml_rmh_tdak_layak);
 
         //ambil semua tahun

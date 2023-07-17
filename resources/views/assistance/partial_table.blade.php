@@ -7,11 +7,11 @@
 <tr>
     <td class="align-middle text-sm">
         <p class="text-sm font-weight-bold mb-0 text-capitalize ">
-            {{$assistance->poverty->nama}}</p>
+            {{$assistance->poverty ? $assistance->poverty->nama : '-' }}</p>
     </td>
     <td class="align-middle text-sm">
         <p class="text-sm font-weight-bold mb-0 text-capitalize">
-            {{$assistance->poverty->nik}}</p>
+            {{$assistance->poverty ? $assistance->poverty->nik : '-'}}</p>
     </td>
     <td class="align-middle text-sm">
         <p class="text-sm font-weight-bold mb-0 ">{{$assistance->tahun}}</p>
