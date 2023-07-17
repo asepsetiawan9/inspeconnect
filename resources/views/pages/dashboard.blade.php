@@ -100,7 +100,7 @@
                             <div class="numbers">
                                 <p class="text-xs mb-0 text-uppercase font-weight-bold">Jumlah Rumah Tidak Sehat dan Tidak Layak Huni</p>
                                 <h5 class="font-weight-bolder" id="jml_tidak_layak">
-                                    {{ number_format($jml_pen_miskin ?? 0) }}
+                                     {{ number_format($jml_rmh_tdak_layak ?? 0) }}
                                 </h5>
                                 <p class="mb-0">
                                     Rumah
@@ -124,7 +124,8 @@
                             <div class="numbers">
                                 <p class="text-xs mb-0 text-uppercase font-weight-bold">Jumlah Rumah Sehat dan layak Huni </p>
                                 <h5 class="font-weight-bolder" id="jml_layak">
-                                    0
+                                    {{ number_format($jml_rmh_layak ?? 0) }}
+                                    
                                 </h5>
                                 <p class="mb-0">
                                     Rumah
@@ -344,7 +345,7 @@
 
 @push('js')
 <script>
-    var map = L.map('map').setView([-7.2278, 107.9087], 10);
+var map = L.map('map').setView([-7.2278, 107.9087], 10);
 var colors = ['#ffd1d1', '#ffa3a3', '#fc5151', '#ff0000', '#a60202'];
 var legend;
 
