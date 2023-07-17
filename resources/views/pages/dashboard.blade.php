@@ -7,7 +7,17 @@
         <div class="container position-relative ">
             <div class="row">
 
-                <div class="col-md-6">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div for="filter2" class="text-white text-sm pb-2 text-bold">Status Rumah:</div>
+                        <select class="form-select" id="filterStatusRumah" name>
+                            <option selected value="all">Pilih Status</option>
+                            <option value="1">Rumah Tidak Layak Huni</option>
+                            <option value="0">Rumah Layak Huni</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
                     <div class="form-group">
                         <div for="filter2" class="text-white text-sm pb-2 text-bold">Kecamatan:</div>
                         <select class="form-select" id="filter2" onchange="filterByKecamatan()">
@@ -18,7 +28,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="form-group">
                         <div for="filter3 " class="text-white text-sm pb-2 text-bold">Tahun:</div>
                         <select class="form-select" id="filter3" onchange="filterByKecamatan()" name="year">
@@ -350,7 +360,7 @@ function updateGeojson(year, variable) {
             return response.json();
         })
         .then(function (data) {
-            console.log(data);
+            // console.log(data);
             // Menghapus layer geojson yang ada sebelumnya
             if (geojsonLayer) {
                 map.removeLayer(geojsonLayer);
@@ -407,18 +417,26 @@ function updateGeojson(year, variable) {
                     // Menampilkan popup saat mouse memasuki area kecamatan
                     layer.on('mouseover', function (e) {
                         var tahun = properties.tahun !== null ? properties.tahun : 'Semua Tahun';
-                        var variabel = properties.variabel !== 'all' ? properties.variabel : 'Semua Variabel';
-                        variabel = properties.variabel === null ? 'TIDAK BERSEKOLAH' : variabel;
+                        var variabel = properties.variabel;
+                        var jumlah = properties.variabel !== 'Semua Status Rumah' ? properties.nilai : (properties.nilai_layak + properties.nilai_tidak_layak);
+                        var rumahTidakLayak = variabel === 'Semua Status Rumah' ? "<br><b>Rumah Tidak Layak Huni: </b>" + properties.nilai_tidak_layak : '';
+                        var rumahLayak = variabel === 'Semua Status Rumah' ? "<br><b>Rumah Layak Huni: </b>" + properties.nilai_layak : '';
 
                         layer.bindPopup(
                             "<b>Tahun: </b>" + tahun +
-                            // "<br><b>Variabel: </b>" + variabel +
+                            "<br><b>Variabel: </b>" + variabel +
                             "<br><b>Kecamatan: </b>" + properties.kecamatan +
                             "<br><b>Kabupaten: </b>" + properties.nmkab +
                             "<br><b>Provinsi: </b>" + properties.nmprov +
-                            "<br><b>Jumlah: </b>" + properties.nilai
+                            "<br><b>Jumlah: </b>" + jumlah +
+                            rumahTidakLayak + rumahLayak
                         ).openPopup();
                     });
+
+
+
+
+
 
                     // Menutup popup saat mouse meninggalkan area kecamatan
                     layer.on('mouseout', function (e) {
@@ -464,7 +482,7 @@ function updateGeojson(year, variable) {
 }
 
 // Mendapatkan elemen select untuk filter variabel
-var filterVarSelect = document.getElementById('filterVar');
+var filterVarSelect = document.getElementById('filterStatusRumah');
 // Mendapatkan elemen select untuk filter tahun
 var filterYearSelect = document.getElementById('filter3');
 
