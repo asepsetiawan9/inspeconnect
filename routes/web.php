@@ -54,12 +54,17 @@ Route::group(['middleware' => 'auth'], function () {
     // user management
 	Route::get('/user-management', [UserManagementController::class, 'index'])->name('user-management');
 	Route::get('/user-management/create', [UserManagementController::class, 'create'])->name('user-management.create');
+	Route::get('/user-management/createskpd', [UserManagementController::class, 'createskpd'])->name('user-management.createskpd');
 	Route::get('/user-management/edit/{id}', [UserManagementController::class, 'edit'])->name('user-management.edit');
 	Route::get('/user-management/show/{id}', [UserManagementController::class, 'show'])->name('user-management.show');
     Route::get('/user-management/delete/{id}', [UserManagementController::class, 'confirmDelete'])->name('user-management.confirm-delete');
     Route::delete('/user-management/{id}', [UserManagementController::class, 'delete'])->name('user-management.delete');
     Route::patch('/user-management/{id}', [UserManagementController::class, 'update'])->name('user-management.update');
+    Route::patch('/user-management/{id}', [UserManagementController::class, 'updateskpd'])->name('user-management.updateskpd');
     Route::post('/user-management/store', [UserManagementController::class, 'store'])->name('user-management.store');
+    Route::post('/user-management/storeskpd', [UserManagementController::class, 'storeskpd'])->name('user-management.storeskpd');
+    Route::put('/users/{user}/update-status', [UserManagementController::class, 'updateStatus'])->name('user-management.updateStatus');
+
     // user management filter
     Route::post('/user-management/filter', [UserManagementController::class, 'FilterData'])->name('user-management.filterData');
     // Route::post('/user-management/filter', [UserManagementController::class, 'filter'])->name('user-management.filter');

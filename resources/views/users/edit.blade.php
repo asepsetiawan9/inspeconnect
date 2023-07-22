@@ -12,67 +12,80 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                                <label for="name">NAMA PENGGUNA</label>
-                                <input type="text" id="username" name="username" class="form-control" placeholder="Nama Pengguna" value="{{ $user->username ?? '' }}">
-                                @error('username')
-                                <p class='text-danger text-xs pt-1'> {{ $message }} </p>
-                                @enderror
-                            </div>
+                            <label for="name">NO NIK</label>
+                            <input type="number" name="nik" class="form-control" placeholder="Masukan No NIK" aria-label="Name" value="{{ $user->nik ?? '' }}" >
+                                        @error('nik') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
                         </div>
-
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" id="email" name="email" class="form-control" placeholder="Email" value="{{ $user->email ?? '' }}">
-                            </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="email">NAMA LENGKAP</label>
+                            <input type="text" name="name" class="form-control" placeholder="Masukan Nama Lengkap" aria-label="Name" value="{{ $user->name ?? '' }}" >
+                                        @error('name') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
                         </div>
-
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="phone">NO. HP</label>
-                                <input type="text" id="phone" name="phone" class="form-control" placeholder="No Telpon" value="{{ $user->phone ?? '' }}">
-                                @error('phone') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
-                            </div>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label for="jenis">JENIS</label>
-                            <select name="role" class="form-select" id="jenis">
-                                <option value="admin" {{ $user->role === 'admin' ? 'selected' : '' }}>Administrator</option>
-                                <option value="kec" {{ $user->role === 'kec' ? 'selected' : '' }}>Admin Kecamatan</option>
-                                <option value="des" {{ $user->role === 'des' ? 'selected' : '' }}>Admin Desa</option>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="phone">JENIS KELAMIN</label>
+                            <select name="gender" class="form-control" aria-label="Gender">
+                                <option value="">Pilih Jenis Kelamin</option>
+                                <option value="Laki-Laki" {{ $user->gender === 'Laki-Laki' ? 'selected' : '' }}>Laki-Laki</option>
+                                <option value="Perempuan" {{ $user->gender === 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
                             </select>
-                            @error('role') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
+                            @error('gender') <p class="text-danger text-xs pt-1"> {{ $message }} </p> @enderror
                         </div>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="jenis">TEMPAT LAHIR</label>
+                        <input type="text" name="tempat" class="form-control " placeholder="Masukan Tempat Lahir"  aria-label="Lahir" value="{{ $user->tempat ?? '' }}" >
+                                        @error('tempat') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="kecamatan">TANGGAL LAHIR</label>
+                        <input type="text" name="datebirth" class="form-control datepicker" placeholder="Tanggal Lahir" data-date-format="dd-mm-yyyy" aria-label="Name" value="{{ $user->datebirth ?? '' }}" >
+                                        @error('datebirth') <p class="text-danger text-xs pt-1"> {{ $message }} </p> @enderror
+                    </div>
 
-                        <div class="col-md-6 form-group">
-                            <label for="kecamatan">KECAMATAN</label>
-                            <select class="form-select" id="kecamatan">
-                                <option selected value="">-- Pilih Kecamatan --</option>
-                                <input type="hidden" id="kecamatan_name" name="kecamatan_name" value="">
-                                <input type="hidden" id="kecamatan_id" name="kecamatan_id" value="">
-                                <!-- load kecamatan -->
-                            </select>
+                    <div class="col-md-6 form-group">
+                        <label for="kelurahan">NO TELPON/HP</label>
+                        <input type="text" name="telp" class="form-control" placeholder="Masukan No Telpon" aria-label="No Hp" value="{{ $user->telp ?? '' }}" >
+                                        @error('telp') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="password">ALAMAT LENGKAP</label>
+                            <textarea type="text" name="address" class="form-control" placeholder="Masukan Alamat Lengkap" aria-label="Alamat">{{ $user->address ?? '' }}</textarea>
+                            @error('address') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
                         </div>
-
-                        <div class="col-md-6 form-group">
-                            <label for="kelurahan">Desa</label>
-                            <select name="desa" class="form-select" id="kelurahan">
-                                <option selected value="">-- Pilih Desa --</option>
-                                <!-- load kelurahan/desa-->
-                            </select>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="konfirm-pass">EMAIL</label>
+                            <input type="email" name="email" class="form-control" placeholder="Email" aria-label="Email" value="{{ $user->email ?? '' }}"  >
+                                        @error('email') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" name="password" class="form-control" placeholder="Password" aria-label="Password">
-                            </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="konfirm-pass">PASSWORD</label>
+                            <input type="password" name="password" class="form-control" placeholder="Password" aria-label="Password">
+                                        @error('password') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="konfirm-pass">Konfirmasi Password</label>
-                                <input type="password" name="konfirm-pass" class="form-control" placeholder="Konfirmasi Password" aria-label="Password">
-                            </div>
+                    </div>
+                    <div class="flex flex-col mb-3 col-6">
+                        <div class="custom-file">
+                          <input type="file" name="photo" class="custom-file-input" id="customFile" aria-label="Photo">
+                          <label class="custom-file-label" for="customFile">Unggal Foto KTP</label>
                         </div>
+                        <div class="preview">
+                          <img id="previewImage" class="preview-image" src="#" alt="Preview Foto" style="display: none;">
+                        </div>
+                        @error('photo') <p class="text-danger text-xs pt-1">{{ $message }}</p> @enderror
+                    </div>
+                    <input type="hidden" name="role" value="warga">
+                    <input type="hidden" name="status" value="1">
+                    <input type="hidden" name="opd_id" value="0">
                  </div>
                 <div class="row">
                     <div class="col-md-12">

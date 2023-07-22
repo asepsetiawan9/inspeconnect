@@ -7,25 +7,29 @@
         <h5 class="text-white">Data Pengguna</h5>
         <div class="row">
             <div class="col-md-4">
-                <div class="form-group ">
-                    <label for="filter1" class="text-white text-sm pb-2 font-weight-bold">Tampilkan Berdasarkan:</label>
-                    <select class="form-select" id="filter1">
-                        <option selected value="semua">Semua Data</option>
+                <div class="form-group">
+                    <label for="filter2" class="text-white text-sm pb-2 font-weight-bold">Jenis Pengguna:</label>
+                    <select class="form-select" id="filter2">
+                        <option selected value="semua">Semua</option>
+                        <option value="skpd">Admin SKPD</option>
+                        <option value="warga">Warga</option>
                     </select>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="filter2" class="text-white text-sm pb-2 font-weight-bold">Jenis Pengguna:</label>
-                    <select class="form-select" id="filter2">
+                    <label for="filter1" class="text-white text-sm pb-2 font-weight-bold">Status Akun:</label>
+                    <select class="form-select" id="filter1">
                         <option selected value="semua">Semua</option>
-                        <option value="kec">Admin Kecamatan</option>
-                        <option value="des">Admin Desa</option>
+                        <option value="0">Belum Di Verifikasi</option>
                     </select>
                 </div>
             </div>
-            <div class="col-md-4 d-flex justify-content-end">
-                <a href="{{ route('user-management.create') }}" class="mt-4"> <button class="btn btn-success">Tambah Pengguna</button></a>
+            <div class="col-md-2 d-flex justify-content-end">
+                <a href="{{ route('user-management.create') }}" class="mt-4"> <button class="btn btn-success">Tambah Warga</button></a>
+            </div>
+            <div class="col-md-2 d-flex justify-content-end">
+                <a href="{{ route('user-management.createskpd') }}" class="mt-4"> <button class="btn btn-info">Tambah SKPD</button></a>
             </div>
         </div>
     </div>
@@ -40,11 +44,11 @@
                     <table class="table align-items-center mb-0">
                         <thead>
                             <tr>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">NAMA PENGGUNA</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">NAMA</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">EMAIL</th>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">NO. HP</th>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">KECAMATAN</th>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">DESA</th>
+                                
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ROLE</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">STATUS</th>
                                 <th class="text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7">AKSI</th>
                             </tr>
                         </thead>
@@ -75,7 +79,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     function filterData(page = 1) {
-        var filterKecamatan = $('#filter1').val();
+        var filterStatus = $('#filter1').val();
         var filterRole = $('#filter2').val();
 
         $.ajax({
@@ -83,7 +87,7 @@
             method: 'POST',
             data: {
                 _token: '{{ csrf_token() }}',
-                kecamatan: filterKecamatan,
+                status: filterStatus,
                 role: filterRole,
                 page: page
             },
@@ -114,29 +118,6 @@
         $('#filter1, #filter2').change(function() {
             filterData();
         });
-    });
-</script>
-@endpush
-
-@push('js')
-<script>
-fetch('https://www.emsifa.com/api-wilayah-indonesia/api/districts/3205.json')
-    .then(response => response.json())
-    .then(data => {
-        // Mendapatkan daftar kecamatan dari data
-        const kecamatanList = data.map(kecamatan => kecamatan.name);
-
-        // Menambahkan opsi kecamatan ke elemen select
-        const selectElement = document.getElementById('filter1');
-        kecamatanList.forEach(kecamatan => {
-            const option = document.createElement('option');
-            option.value = kecamatan;
-            option.text = kecamatan;
-            selectElement.appendChild(option);
-        });
-    })
-    .catch(error => {
-        console.error('Error:', error);
     });
 </script>
 @endpush

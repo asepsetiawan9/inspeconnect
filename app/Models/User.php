@@ -24,12 +24,18 @@ class User extends Authenticatable
         'email',
         'password',
         'address',
-        'city',
         'role',
-        'desa',
-        'phone',
-        'about'
-    ];
+        'nik',
+        'name',
+        'gender',
+        'telp',
+        'tempat',
+        'address',
+        'datebirth',
+        'photo',
+        'status',
+        'opd_id',
+            ];
 
     /**
      * The attributes that should be hidden for serialization.

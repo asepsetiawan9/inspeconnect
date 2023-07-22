@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Password;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class LoginController extends Controller
 {
@@ -20,22 +21,33 @@ class LoginController extends Controller
     }
 
     public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
+{
+    $credentials = $request->validate([
+        'email' => ['required', 'email'],
+        'password' => ['required'],
+    ]);
 
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $request->session()->regenerate();
+    if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        $request->session()->regenerate();
 
+        // Ambil data user yang telah login
+        $user = Auth::user();
+
+        // Cek status user
+        if ($user->status === 0 ) {
+            Auth::logout();
+            return redirect('/');
+            Alert::error('Error', 'Akun belum disetujui admin.')->autoclose(3500);
+        } else {
+            // Jika statusnya bukan 0, arahkan ke halaman dashboard
             return redirect()->intended('dashboard');
         }
-
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ]);
     }
+
+    return back()->withErrors([
+        'email' => 'The provided credentials do not match our records.',
+    ]);
+}
 
     public function logout(Request $request)
     {

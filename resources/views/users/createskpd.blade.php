@@ -4,60 +4,25 @@
 @include('layouts.navbars.auth.topnav', ['title' => 'Tambah Data Pengguna'])
 <div class="row mt-4 mx-4">
     <div class="position-relative">
-        <h5 class="text-white">Tambah Warga</h5>
+        <h5 class="text-white">Tambah Data SKPD</h5>
         <div class="card px-5 py-3">
-            <form action="{{ route('user-management.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('user-management.storeskpd') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
+                    
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="name">NO NIK</label>
-                            <input type="number" name="nik" class="form-control" placeholder="Masukan No NIK" aria-label="Name" value="{{ old('nik') }}" >
-                                        @error('nik') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="email">NAMA LENGKAP</label>
-                            <input type="text" name="name" class="form-control" placeholder="Masukan Nama Lengkap" aria-label="Name" value="{{ old('name') }}" >
-                                        @error('name') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="phone">JENIS KELAMIN</label>
-                            <select name="gender" class="form-control" aria-label="Gender">
-                                <option value="">Pilih Jenis Kelamin</option>
-                                <option value="Laki-Laki">Laki-Laki</option>
-                                <option value="Perempuan">Perempuan</option>
+                            <label for="opd_id">SKPD/OPD</label>
+                            <select name="opd_id" class="form-control selectOpd">
+                                <option value="" selected disabled>-- Pilih SKPD/OPD --</option>
+                                @foreach ($skpds as $skpd)
+                                    <option value="{{ $skpd->id }}">{{ $skpd->name }}</option>
+                                @endforeach
                             </select>
-                            @error('gender') <p class="text-danger text-xs pt-1"> {{ $message }} </p> @enderror
+                            @error('opd_id') <p class="text-danger text-xs pt-1">{{ $message }}</p> @enderror
                         </div>
                     </div>
-                    <div class="col-md-6 form-group">
-                        <label for="jenis">TEMPAT LAHIR</label>
-                        <input type="text" name="tempat" class="form-control " placeholder="Masukan Tempat Lahir"  aria-label="Lahir" value="{{ old('tempat') }}" >
-                                        @error('tempat') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label for="kecamatan">TANGGAL LAHIR</label>
-                        <input type="text" name="datebirth" class="form-control datepicker" placeholder="Tanggal Lahir" data-date-format="dd-mm-yyyy" aria-label="Name" value="{{ old('datebirth') }}" >
-                                        @error('datebirth') <p class="text-danger text-xs pt-1"> {{ $message }} </p> @enderror
-                    </div>
-
-                    <div class="col-md-6 form-group">
-                        <label for="kelurahan">NO TELPON/HP</label>
-                        <input type="text" name="telp" class="form-control" placeholder="Masukan No Telpon" aria-label="No Hp" value="{{ old('telp') }}" >
-                                        @error('telp') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="password">ALAMAT LENGKAP</label>
-                            <textarea type="text" name="address" class="form-control" placeholder="Masukan Alamat Lengkap" aria-label="Alamat" value="{{ old('address') }}" ></textarea>
-                                        @error('address') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
-                        </div>
-                    </div>
+                    
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="konfirm-pass">EMAIL</label>
@@ -72,19 +37,8 @@
                                         @error('password') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
                         </div>
                     </div>
-                    <div class="flex flex-col mb-3 col-6">
-                        <div class="custom-file">
-                          <input type="file" name="photo" class="custom-file-input" id="customFile" aria-label="Photo">
-                          <label class="custom-file-label" for="customFile">Unggal Foto KTP</label>
-                        </div>
-                        <div class="preview">
-                          <img id="previewImage" class="preview-image" src="#" alt="Preview Foto" style="display: none;">
-                        </div>
-                        @error('photo') <p class="text-danger text-xs pt-1">{{ $message }}</p> @enderror
-                    </div>
-                    <input type="hidden" name="role" value="warga">
-                    <input type="hidden" name="status" value="1">
-                    <input type="hidden" name="opd_id" value="0">
+                   
+                  
                  </div>
                 <div class="row">
                     <div class="col-md-12">
@@ -99,6 +53,14 @@
 @endsection
 
 @push('js')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Inisialisasi elemen select2
+        $('.selectOpd').select2();
+    });
+
+</script>
 <script>
     var kecamatanSelect = document.getElementById('kecamatan');
     var kelurahanSelect = document.getElementById('kelurahan');

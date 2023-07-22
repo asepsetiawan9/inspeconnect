@@ -19,30 +19,8 @@
                         <strong>{{ $user->name }}</strong>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <div for="nik">NIK</div>
-                        <strong>{{ $user->nik }}</strong>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <div for="tempat">Tempat Lahir</div>
-                        <strong>{{ $user->tempat }}</strong>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <div for="datebirth">Tanggal Lahir</div>
-                        <strong>{{ $user->datebirth }}</strong>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <div for="gender">Jenis Kelamin</div>
-                        <strong>{{ $user->gender }}</strong>
-                    </div>
-                </div>
+                
+               
                 <div class="col-md-4">
                     <div class="form-group">
                         <div for="status">Status</div>
@@ -55,13 +33,7 @@
                         <strong>{{ $user->address }}</strong>
                     </div>
                 </div>
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <div for="photo">Foto KTP</div>
-                        <br>
-                        <img src="{{ asset('storage/'.$user->photo) }}" alt="Foto Pengguna" class="img-thumbnail" style="max-width: 200px;">
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>
