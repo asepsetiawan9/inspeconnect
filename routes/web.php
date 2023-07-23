@@ -31,6 +31,8 @@ use App\Http\Controllers\PovertyController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\DataManagementController;
 use App\Http\Controllers\AssistanceController;
+use App\Http\Controllers\ConsultantController;
+use App\Http\Controllers\ScheduleController;
 
 
 Route::get('/', function () {return redirect('/dashboard');})->middleware('auth');
@@ -59,11 +61,32 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/user-management/show/{id}', [UserManagementController::class, 'show'])->name('user-management.show');
     Route::get('/user-management/delete/{id}', [UserManagementController::class, 'confirmDelete'])->name('user-management.confirm-delete');
     Route::delete('/user-management/{id}', [UserManagementController::class, 'delete'])->name('user-management.delete');
-    Route::patch('/user-management/{id}', [UserManagementController::class, 'update'])->name('user-management.update');
+    Route::patch('/users-management/{id}/update', [UserManagementController::class, 'update'])->name('user-management.update');
     Route::patch('/user-management/{id}', [UserManagementController::class, 'updateskpd'])->name('user-management.updateskpd');
     Route::post('/user-management/store', [UserManagementController::class, 'store'])->name('user-management.store');
     Route::post('/user-management/storeskpd', [UserManagementController::class, 'storeskpd'])->name('user-management.storeskpd');
     Route::put('/users/{user}/update-status', [UserManagementController::class, 'updateStatus'])->name('user-management.updateStatus');
+
+    
+     // consultant
+	Route::get('/consultant', [ConsultantController::class, 'index'])->name('consultant');
+	Route::get('/consultant/create', [ConsultantController::class, 'create'])->name('consultant.create');
+    Route::get('/consultant/edit/{id}', [ConsultantController::class, 'edit'])->name('consultant.edit');
+	Route::get('/consultant/show/{id}', [ConsultantController::class, 'show'])->name('consultant.show');
+    Route::get('/consultant/delete/{id}', [ConsultantController::class, 'confirmDelete'])->name('consultant.confirm-delete');
+    Route::delete('/consultant/{id}', [ConsultantController::class, 'delete'])->name('consultant.delete');
+    Route::patch('/consultant/{id}', [ConsultantController::class, 'update'])->name('consultant.update');
+    Route::post('/consultant/store', [ConsultantController::class, 'store'])->name('consultant.store');
+     // schedule
+	Route::get('/schedule', [ScheduleController::class, 'index'])->name('schedule');
+	Route::get('/schedule/create', [ScheduleController::class, 'create'])->name('schedule.create');
+    Route::get('/schedule/edit/{id}', [ScheduleController::class, 'edit'])->name('schedule.edit');
+	Route::get('/schedule/show/{id}', [ScheduleController::class, 'show'])->name('schedule.show');
+    Route::get('/schedule/delete/{id}', [ScheduleController::class, 'confirmDelete'])->name('schedule.confirm-delete');
+    Route::delete('/schedule/{id}', [ScheduleController::class, 'delete'])->name('schedule.delete');
+    Route::patch('/schedule/{id}', [ScheduleController::class, 'update'])->name('schedule.update');
+    Route::post('/schedule/store', [ScheduleController::class, 'store'])->name('schedule.store');
+    Route::get('schedule/createschedule/{consultant_id}', [ScheduleController::class, 'createschedule'])->name('schedule.createschedule');
 
     // user management filter
     Route::post('/user-management/filter', [UserManagementController::class, 'FilterData'])->name('user-management.filterData');

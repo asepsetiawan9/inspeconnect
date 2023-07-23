@@ -43,6 +43,26 @@
                     <span class="nav-link-text ms-1">Data Pengguna</span>
                 </a>
             </li>
+            <li class="nav-item">
+            <a class="nav-link {{ str_contains(request()->url(), 'consultant') == true ? 'active' : '' }}"
+                    href="{{ route('page', ['page' => 'consultant']) }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-paper-diploma text-success text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Data Konsultan</span>
+                </a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link {{ str_contains(request()->url(), 'schedule') == true ? 'active' : '' }}"
+                    href="{{ route('page', ['page' => 'schedule']) }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fa fa-handshake-o text-success text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Jadwal Konsultasi</span>
+                </a>
+            </li>
         <!-- it will be delete -->
             <li class="nav-item">
                 <a class="nav-link {{ str_contains(request()->url(), 'population-data') == true ? 'active' : '' }}"

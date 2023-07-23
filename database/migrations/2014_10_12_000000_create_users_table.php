@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('nik')->nullable();
             $table->string('role')->nullable()->default('admin');
             $table->string('name')->nullable();
-            $table->string('gender')->unique();
+            $table->string('gender')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('telp')->default(0)->nullable();
