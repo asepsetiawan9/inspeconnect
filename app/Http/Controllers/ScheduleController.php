@@ -66,7 +66,7 @@ class ScheduleController extends Controller
 
         $attributes['status'] = $status;
         // Assuming you have a 'opd_id' and 'consultant_id' fields in the 'schedules' table
-        $attributes['opd_id'] = Auth::user()->opd_id; // Change 'opd_id' to the actual foreign key column
+        $attributes['opd_id'] = $request->opd_id; // Change 'opd_id' to the actual foreign key column
         $attributes['consultant_id'] = $request->consultant_id; 
 
         try {
@@ -81,32 +81,129 @@ class ScheduleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Schedule $schedule)
+    public function show($id)
     {
-        //
+        $schedule = Schedule::find($id);
+
+        // Check if the schedule is not found
+        if (!$schedule) {
+            return redirect()->route('your-error-route')->with('error', 'Schedule not found.');
+        }
+
+        $consultantId = $schedule->consultant_id;
+        $opdId = $schedule->opd_id;
+
+        // Find the consultant and check if it's not found
+        $consultant = Consultant::find($consultantId);
+        if (!$consultant) {
+            return redirect()->route('your-error-route')->with('error', 'Consultant not found.');
+        }
+
+        // Find all SKPDs
+        $skpd = Skpd::find($opdId);
+
+
+        return view('schedule.show', compact('schedule', 'consultant', 'skpd'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Schedule $schedule)
+
+    public function edit($id)
     {
-        //
+        $schedule = Schedule::find($id);
+
+        // Check if the schedule is not found
+        if (!$schedule) {
+            return redirect()->route('your-error-route')->with('error', 'Schedule not found.');
+        }
+
+        $consultantId = $schedule->consultant_id;
+        $opdId = $schedule->opd_id;
+
+        // Find the consultant and check if it's not found
+        $consultant = Consultant::find($consultantId);
+        if (!$consultant) {
+            return redirect()->route('your-error-route')->with('error', 'Consultant not found.');
+        }
+
+        // Find all SKPDs
+        $skpds = Skpd::all();
+
+        // Find the selected SKPD (if any)
+        $selectedSkpd = Skpd::find($opdId);
+
+        $userRole = auth()->user()->role;
+
+        return view('schedule.edit', compact('consultant', 'schedule', 'skpds', 'selectedSkpd', 'userRole', 'opdId'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Schedule $schedule)
+    public function update(Request $request, $id)
     {
-        //
+        // dd($request);
+        $userRole = Auth::user()->role;
+    
+        $attributes = $request->validate([
+            'name' => 'required|max:255',
+            'phone' => 'required|max:255',
+            'date' => 'required',
+            'time' => 'required',
+            'about' => 'required',
+            'place' => 'required',
+        ]);
+    
+        // Determine the status based on the user's role
+        $status = ($userRole === 'skpd') ? 2 : 1;
+    
+        $attributes['status'] = $status;
+        // Assuming you have a 'opd_id' and 'consultant_id' fields in the 'schedules' table
+        $attributes['opd_id'] = $request->opd_id; // Change 'opd_id' to the actual foreign key column
+        $attributes['consultant_id'] = $request->consultant_id; 
+    
+        try {
+            $schedule = Schedule::findOrFail($id);
+            $schedule->update($attributes);
+            Alert::success('Sukses', 'Jadwal Konsultasi Berhasil Diupdate.')->autoclose(3500);
+        } catch (\Exception $e) {
+            Alert::error('Error', 'Terjadi kesalahan saat menyimpan data.')->autoclose(3500);
+        }
+        return redirect('schedule/create');
+    }
+    
+    // ScheduleController.php
+    public function updateStatus(Request $request, Schedule $schedule)
+    {
+        $request->validate([
+            'status' => 'required|in:1,2,3,4', // Validating the status field
+        ]);
+
+        // Update the status in the database
+        $schedule->update([
+            'status' => $request->status,
+        ]);
+
+        // Redirect back to the show page with a success message
+        return redirect()->route('schedule.show', $schedule->id)->with('success', 'Status updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Schedule $schedule)
+    public function confirmDelete($id)
     {
-        //
+        $schedule = Schedule::findOrFail($id);
+        return view('schedule.confirm-delete', compact('schedule'));
     }
+
+    public function delete($id)
+    {
+        $schedule = Schedule::findOrFail($id);
+
+        if ($schedule->delete()) {
+            Alert::success('Sukses', 'Jadwal berhasil dihapus.')->autoclose(3500);
+        } else {
+            Alert::error('Error', 'Terjadi kesalahan saat menghapus jadwal.')->autoclose(3500);
+        }
+
+        return redirect('schedule');
+    }
+
 }

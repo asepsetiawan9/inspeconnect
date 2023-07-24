@@ -87,6 +87,17 @@ Route::group(['middleware' => 'auth'], function () {
     Route::patch('/schedule/{id}', [ScheduleController::class, 'update'])->name('schedule.update');
     Route::post('/schedule/store', [ScheduleController::class, 'store'])->name('schedule.store');
     Route::get('schedule/createschedule/{consultant_id}', [ScheduleController::class, 'createschedule'])->name('schedule.createschedule');
+    Route::put('schedule/{schedule}/update-status', [ScheduleController::class, 'updateStatus'])->name('schedule.updateStatus');
+     // schedule
+	Route::get('/report', [ReportController::class, 'index'])->name('report');
+	Route::get('/report/create', [ReportController::class, 'create'])->name('report.create');
+    Route::get('/report/edit/{id}', [ReportController::class, 'edit'])->name('report.edit');
+	Route::get('/report/show/{id}', [ReportController::class, 'show'])->name('report.show');
+    Route::get('/report/delete/{id}', [ReportController::class, 'confirmDelete'])->name('report.confirm-delete');
+    Route::delete('/report/{id}', [ReportController::class, 'delete'])->name('report.delete');
+    Route::patch('/report/{id}', [ReportController::class, 'update'])->name('report.update');
+    Route::post('/report/store', [ReportController::class, 'store'])->name('report.store');
+    Route::put('report/{report}/update-status', [ScheduleController::class, 'updateStatus'])->name('report.updateStatus');
 
     // user management filter
     Route::post('/user-management/filter', [UserManagementController::class, 'FilterData'])->name('user-management.filterData');
