@@ -33,6 +33,7 @@ use App\Http\Controllers\DataManagementController;
 use App\Http\Controllers\AssistanceController;
 use App\Http\Controllers\ConsultantController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\ReportController;
 
 
 Route::get('/', function () {return redirect('/dashboard');})->middleware('auth');
@@ -88,7 +89,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/schedule/store', [ScheduleController::class, 'store'])->name('schedule.store');
     Route::get('schedule/createschedule/{consultant_id}', [ScheduleController::class, 'createschedule'])->name('schedule.createschedule');
     Route::put('schedule/{schedule}/update-status', [ScheduleController::class, 'updateStatus'])->name('schedule.updateStatus');
-     // schedule
+     // report
 	Route::get('/report', [ReportController::class, 'index'])->name('report');
 	Route::get('/report/create', [ReportController::class, 'create'])->name('report.create');
     Route::get('/report/edit/{id}', [ReportController::class, 'edit'])->name('report.edit');
@@ -97,8 +98,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('/report/{id}', [ReportController::class, 'delete'])->name('report.delete');
     Route::patch('/report/{id}', [ReportController::class, 'update'])->name('report.update');
     Route::post('/report/store', [ReportController::class, 'store'])->name('report.store');
-    Route::put('report/{report}/update-status', [ScheduleController::class, 'updateStatus'])->name('report.updateStatus');
+    Route::put('/report/updateStatus/{id}', [ReportController::class, 'updateStatus'])->name('report.updateStatus');
 
+    Route::get('/get-users-by-role/{role}', [ReportController::class, 'getUsersByRole']);
     // user management filter
     Route::post('/user-management/filter', [UserManagementController::class, 'FilterData'])->name('user-management.filterData');
     // Route::post('/user-management/filter', [UserManagementController::class, 'filter'])->name('user-management.filter');
