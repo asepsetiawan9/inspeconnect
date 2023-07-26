@@ -8,7 +8,7 @@
     <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-icon.png">
     <link rel="icon" type="image/png" href="/img/favicon.png">
     <title>
-        Dashboard Kemiskinan
+        InspeConnect
     </title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -77,6 +77,22 @@
         margin-right: 8px;
         opacity: 0.7;
     }
+    .footer {
+            background-color: #f8f9fe;
+            padding: 1rem 0;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .footer-text {
+            color: #8898aa;
+            font-size: 14px;
+        }
 </style>
 
     <!--   Core JS Files   -->

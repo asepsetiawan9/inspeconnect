@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kecamatan;
-use App\Models\Population;
-use App\Models\Poverty;
+use App\Models\Report;
+use App\Models\Schedule;
+use App\Models\Consultant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -19,102 +21,48 @@ class HomeController extends Controller
     //     $this->middleware('auth');
     // }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\View\View
-     */
     public function index()
     {
-        
-        $latestPopulation = Population::latest()->first();
-
-        $jml_kk = $latestPopulation ? $latestPopulation->jumlah_kk : 0;
-
-
-        //jumlah rumah tidak layak huni tahun terakhir
-        $latestYear = Poverty::max('tahun_input');
-        $jml_rmh_tdak_layak = Poverty::where('status_rumah', 1)->count();
-        $jml_rmh_layak = Poverty::where('status_rumah', 0)->count();
-        // dd($jml_rmh_layak);
-        //  dd($jml_rmh_tdak_layak);
-
-        //ambil semua tahun
-        $years = Poverty::distinct('tahun_input')->pluck('tahun_input')->toArray();
-        $status_rumah = Poverty::distinct('status_rumah')->pluck('status_rumah')->toArray();
-        
-        //ambil semua nilai pertahun
-        $dataTidakLayakCountByYear = [];
-        $dataLayakCountByYear = [];
-        foreach ($years as $year) {
-            $count = Poverty::where('tahun_input', $year)->where('status_rumah', 1)->count();
-            $count2 = Poverty::where('tahun_input', $year)->where('status_rumah', 0)->count();
-            $dataTidakLayakCountByYear[] = $count;
-            $dataLayakCountByYear[] = $count2;
+        $userRole = Auth::user()->role;
+        $userId = Auth::user()->id;
+        // dd($userId);
+        if ($userRole === 'warga') {
+            // Logic for warga role
+            $data = [
+                "laporanterkirim" => Report::where("status",2)->where('user_id', $userId)->count(),
+                "laporandiproses" => Report::where("status",3)->where('user_id', $userId)->count(),
+                "ditanggapi" => Report::where("status",1)->where('user_id', $userId)->count(),
+            ];
+            return view('pages.dashboardwarga')->with('data', $data);
+        } elseif ($userRole === 'skpd') {
+            // Logic for skpd role
+            $data = [
+                "laporanterkirim" => Report::where("status",2)->where('user_id', $userId)->count(),
+                "laporandiproses" => Report::where("status",3)->where('user_id', $userId)->count(),
+                "ditanggapi" => Report::where("status",1)->where('user_id', $userId)->count(),
+                "konsultasibaru" => Schedule::where("status",2)->where('opd_id', $userId)->count(),
+                "konsultasidiperoses" => Schedule::where("status",3)->where('opd_id', $userId)->take(3)->get(),
+            ];
+            // dd($data['konsultasidiperoses']);
+            return view('pages.dashboardskpd')->with('data', $data);
+        } elseif ($userRole === 'admin') {
+            // Logic for admin role
+            $data = [
+                "laporanbaru" => Report::where("status",2)->count(),
+                "konsultasibaru" => Schedule::where("status",2)->count(),
+                "laporanselesai" => Report::where("status",1)->count(),
+                "laporanproses" => Report::where("status",3)->count(),
+                "konsultan" => Consultant::count(),
+                "permintaankonsul" => Schedule::with('skpd', 'consultant')->where("status",2)->take(3)->get(),
+                "laporanbarulist" => Report::with('user')->where('status', 2)->take(3)->get(),
+            ];
+            return view('pages.dashboard')->with('data', $data);
         }
 
-        //ambil semua tahun
-        $kecId = Poverty::distinct('id_kecamatan')->pluck('id_kecamatan')->toArray();
-        $kecLabels = Poverty::join('kecamatan', 'poverties.id_kecamatan', '=', 'kecamatan.id')
-            ->distinct('kecamatan.name')
-            ->pluck('kecamatan.name')
-            ->toArray();
-
-        //ambil semua nilai pertahun
-        $kecValueTidakLayak = [];
-        foreach ($kecId as $kec) {
-            $count = Poverty::where('id_kecamatan', $kec)->where('status_rumah', 1)->count();
-            $kecValueTidakLayak[] = $count;
-        }
-
-        $kecValueLayak = [];
-        foreach ($kecId as $kec) {
-            $count = Poverty::where('id_kecamatan', $kec)->where('status_rumah', 0)->count();
-            $kecValueLayak[] = $count;
-        }
-        //chart 1
-
-        $nameDes = Poverty::join('kecamatan', 'poverties.id_kecamatan', '=', 'kecamatan.id')
-        ->distinct('kecamatan.name')
-        ->pluck('kecamatan.name')
-        ->toArray();
-
-        //ambil semua nilai pertahun
-        $desValueTidakLayak = [];
-        foreach ($kecId as $kec) {
-            $count = Poverty::where('id_kecamatan', $kec)->where('status_rumah', 1)->count();
-            $desValueTidakLayak[] = $count;
-        }
-        $desValueLayak = [];
-        foreach ($kecId as $kec) {
-            $count = Poverty::where('id_kecamatan', $kec)->where('status_rumah', 0)->count();
-            $desValueLayak[] = $count;
-        }
-        //chart2
-        $get_id_kec = Poverty::distinct('id_kecamatan')->pluck('id_kecamatan')->toArray();
-        $namaKecamatan = Poverty::join('kecamatan', 'poverties.id_kecamatan', '=', 'kecamatan.id')
-        ->distinct('kecamatan.name')
-        ->pluck('kecamatan.name')
-        ->toArray();
-        $kec_value_rm_tidak_layak = [];
-        $kec_value_rm_layak = [];
-            foreach ($get_id_kec as $kec) {
-                $count_tidak_layak = Poverty::where('id_kecamatan', $kec)->where('status_rumah', 1)->count();
-                $count_layak = Poverty::where('id_kecamatan', $kec)->where('status_rumah', 0)->count();
-                $kec_value_rm_tidak_layak[] = $count_tidak_layak;
-                $kec_value_rm_layak[] = $count_layak;
-            }
-        // dd($kec_value_rm_tidak_layak,
-        // $kec_value_rm_layak);
-
-        $message = 'kosong';
-
-        return view('pages.dashboard', compact('latestPopulation', 'jml_rmh_tdak_layak',
-        'jml_rmh_layak', 'years',
-        'dataTidakLayakCountByYear', 'dataLayakCountByYear', 'kecLabels', 'kecId', 'kecValueTidakLayak',
-        'kecValueLayak', 'message', 'namaKecamatan', 'kec_value_rm_tidak_layak', 'kec_value_rm_layak', 'desValueTidakLayak',
-        'desValueLayak', 'status_rumah'));
+        // If the user role doesn't match any of the above, redirect to a default dashboard or show an error message.
+        return redirect()->route('dashboard')->with('error', 'Invalid user role.');
     }
+
 
     public function filterKecamatan(Request $request)
     {

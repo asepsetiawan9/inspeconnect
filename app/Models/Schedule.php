@@ -20,6 +20,7 @@ class Schedule extends Model
             'about',
             'place',
             'status',
+            'consultant_id',
         ];
 
         public function skpd()

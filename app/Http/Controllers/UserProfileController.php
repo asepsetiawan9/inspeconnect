@@ -6,8 +6,13 @@ use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
+
 class UserProfileController extends Controller
 {
+    
+
+    
+
     public function show()
     {
         $user = Auth::user();

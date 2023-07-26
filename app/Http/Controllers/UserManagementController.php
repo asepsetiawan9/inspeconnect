@@ -8,9 +8,11 @@ use App\Models\Skpd;
 use Alert;
 use View;
 use Storage;
+use Illuminate\Support\Facades\Gate;
 
 class UserManagementController extends Controller
-{
+    {
+
     public function index()
     {
         $users = User::paginate(5);

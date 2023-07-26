@@ -12,28 +12,48 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <div for="role">Role</div>
-                                <select class="form-select" id="filter1" name="role">
-                                    <option selected value="">Pilih Sebagai</option>
-                                    <option value="warga">Warga</option>
-                                    <option value="skpd">SKPD</option>
-
+                                <select class="form-select" id="filter1" name="role" @if ($defaultRole === 'warga' || $defaultRole === 'skpd') disabled @endif>
+                                    <option value="">Pilih Sebagai</option>
+                                    <option value="warga" @if ($defaultRole === 'warga') selected @endif>Warga</option>
+                                    <option value="skpd" @if ($defaultRole === 'skpd') selected @endif>SKPD</option>
                                 </select>
                                 @error('role')
-                                    <p class='text-danger text-xs pt-1'> {{ $message }} </p>
+                                    <p class="text-danger text-xs pt-1">{{ $message }}</p>
                                 @enderror
                             </div>
                         </div>
+                        
+                        @php
+                            // If the default role is 'warga' or 'skpd', disable the user select input and select the current logged-in user
+                            $isDisabled = ($defaultRole === 'warga' || $defaultRole === 'skpd') ? 'disabled' : '';
+                        @endphp
+                        
                         <div class="col-md-6">
                             <div class="form-group">
                                 <div for="user_id">Pelapor</div>
-                                <select class="form-select selectName" id="filter2" name="user_id">
-                                    <option selected value="">Pilih Pelapor</option>
+                                <select class="form-select selectName" id="filter2" name="user_id" {{ $isDisabled }}>
+                                    @if ($defaultRole === 'warga' || $defaultRole === 'skpd')
+                                        <option value="{{ Auth::id() }}" selected>{{ Auth::user()->name }}</option>
+                                    @else
+                                        <option value="">Pilih Pelapor</option>
+                                        @foreach ($users as $user)
+                                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                        @endforeach
+                                    @endif
                                 </select>
+                        
+                                <!-- Add a hidden input field for role and user_id when the select elements are disabled -->
+                                @if ($defaultRole === 'warga' || $defaultRole === 'skpd')
+                                    <input type="hidden" name="role" value="{{ $defaultRole }}">
+                                    <input type="hidden" name="user_id" value="{{ Auth::id() }}">
+                                @endif
+                        
                                 @error('user_id')
-                                    <p class='text-danger text-xs pt-1'> {{ $message }} </p>
+                                    <p class="text-danger text-xs pt-1">{{ $message }}</p>
                                 @enderror
                             </div>
                         </div>
+
                         <div class="col-md-12 rounded bg-primary p-1 my-3">
                         </div>
                         <div class="col-md-6">
@@ -90,7 +110,7 @@
             // Jika peran dipilih, lakukan permintaan Ajax untuk mendapatkan daftar pengguna berdasarkan peran
             if (role !== "") {
                 fetch('/get-users-by-role/' + role)
-                    // .then(response => response.json())
+                    .then(response => response.json())
                     .then(data => {
                         data.forEach(user => {
                             var option = document.createElement("option");

@@ -43,12 +43,14 @@
     </td>
     <td class="align-middle text-left">
         <div class="d-flex justify-content-center align-items-center gap-1 action-buttons">
-            <a href="{{ route('report.edit', ['id' => $report->id]) }}" class="text-decoration-none">
-
-                <div class="px-2 py-1 bg-warning rounded">
-                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                </div>
-            </a>
+            
+            @if (in_array(Auth::user()->role, ['admin', 'skpd']))
+                <a href="{{ route('report.edit', ['id' => $report->id]) }}" class="text-decoration-none">
+                    <div class="px-2 py-1 bg-warning rounded">
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    </div>
+                </a>
+            @endif
 
             <a href="{{ route('report.show', ['id' => $report->id]) }}" class="text-decoration-none">
                 <div class="px-2 py-1 bg-primary rounded text-white">

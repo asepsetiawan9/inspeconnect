@@ -52,6 +52,7 @@
                                 @php
                                     $statusLabel = '-';
                                     $statusClass = 'btn-secondary';
+                                    $isAdmin = Auth::user()->role === 'admin';
                                     switch ($report->status) {
                                         case 1:
                                             $statusLabel = 'Selesai';
@@ -69,9 +70,15 @@
                                             // Do nothing
                                     }
                                 @endphp
-                                <button class="btn {{ $statusClass }} text-capitalize" id="updateStatusBtn">{{ $statusLabel }}</button>
+                        
+                                @if ($isAdmin)
+                                    <button class="btn {{ $statusClass }} text-capitalize" id="updateStatusBtn">{{ $statusLabel }}</button>
+                                @else
+                                    <div class="btn {{ $statusClass }} text-capitalize">{{ $statusLabel }}</div>
+                                @endif
                             </div>
                         </div>
+                        
                         
                         <div class="col-md-6">
                             <div class="ktp-photo-container">

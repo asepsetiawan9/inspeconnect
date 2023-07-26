@@ -16,10 +16,21 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        $schedules = Schedule::with('skpd', 'consultant')->paginate(5);
+        // Get the user ID of the logged-in user
+        $userId = auth()->user()->id;
+        $isAdmin = auth()->user()->role === 'admin';
+
+        if($isAdmin){
+            $schedules = Schedule::with('skpd', 'consultant')->paginate(5);
+        }else{
+            $schedules = Schedule::with('skpd', 'consultant')
+                            ->where('opd_id', $userId)
+                            ->paginate(5);
+        }
 
         return view('schedule.index', compact('schedules'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -27,7 +38,7 @@ class ScheduleController extends Controller
     public function create()
     {
         $consultants = Consultant::paginate(8);
-
+        
         return view('schedule.create', compact('consultants'));
     }
     public function createSchedule($consultantId)
@@ -50,6 +61,7 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
+        
         $userRole = Auth::user()->role;
 
         $attributes = $request->validate([
@@ -65,6 +77,7 @@ class ScheduleController extends Controller
         $status = ($userRole === 'skpd') ? 2 : 1;
 
         $attributes['status'] = $status;
+        // dd($status);
         // Assuming you have a 'opd_id' and 'consultant_id' fields in the 'schedules' table
         $attributes['opd_id'] = $request->opd_id; // Change 'opd_id' to the actual foreign key column
         $attributes['consultant_id'] = $request->consultant_id; 

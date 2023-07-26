@@ -6,6 +6,7 @@ use App\Models\Report;
 use Illuminate\Http\Request;
 use Str;
 use Alert;
+
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -17,10 +18,20 @@ class ReportController extends Controller
      */
     public function index()
     {
-        $reports = Report::with('user')->paginate(5);
+        $userId = auth()->user()->id;
+        $isAdmin = auth()->user()->role === 'admin';
 
+        if($isAdmin){
+            $reports = Report::with('user')->paginate(5);
+
+        }else{
+            $reports = Report::with('user')
+                            ->where('user_id', $userId)
+                            ->paginate(5);
+        }
         return view('report.index', compact('reports'));
     }
+    
     public function getUsersByRole($role)
     {
         $users = User::where('role', $role)
@@ -34,7 +45,13 @@ class ReportController extends Controller
      */
     public function create()
     {
-        return view('report.create');
+        $userRole = Auth::user()->role;
+        $defaultRole = in_array($userRole, ['warga', 'skpd']) ? $userRole : '';
+
+        // Fetch users based on the role (adjust this logic based on your database structure)
+        $users = User::where('role', $userRole)->get();
+
+        return view('report.create', compact('defaultRole', 'users'));
     }
 
     /**
@@ -42,7 +59,7 @@ class ReportController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
+
         $userRole = Auth::user()->role;
 
         // Menentukan nilai status berdasarkan peran pengguna
@@ -123,7 +140,7 @@ class ReportController extends Controller
         $allowedRoles = ['admin', 'your_other_allowed_roles'];
         if (!in_array(Auth::user()->role, $allowedRoles)) {
             return redirect()
-                ->route('report.index')
+                ->route('report')
                 ->with('error', 'You are not authorized to edit this report.');
         }
 

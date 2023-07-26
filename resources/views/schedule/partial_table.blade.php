@@ -25,10 +25,51 @@
         <p class="text-sm font-weight-bold mb-0 text-capitalize">
             {{$schedule->place ? $schedule->place : '-'}}</p>
     </td>
-    <td class="align-middle text-sm">
-        <p class="text-sm font-weight-bold mb-0 text-capitalize">
-            {{$schedule->status ? $schedule->status : '-'}}</p>
-    </td>
+    @if (!function_exists('getStatusText'))
+    @php
+        function getStatusText($status) {
+            switch ($status) {
+                case 1:
+                    return 'Perlu Ditanggapi';
+                case 2:
+                    return 'Selesai';
+                case 3:
+                    return 'Akan Dihadiri';
+                case 4:
+                    return 'Dijadwalkan Ulang';
+                default:
+                    return 'Status Tidak Dikenali';
+            }
+        }
+    @endphp
+@endif
+
+<td class="align-middle text-sm">
+    @php
+        $statusClass = '';
+        switch ($schedule->status) {
+            case 1:
+                $statusClass = 'btn-primary';
+                break;
+            case 2:
+                $statusClass = 'btn-success';
+                break;
+            case 3:
+                $statusClass = 'btn-info';
+                break;
+            case 4:
+                $statusClass = 'btn-warning';
+                break;
+            default:
+                $statusClass = 'btn-secondary';
+        }
+    @endphp
+    <p class="text-sm font-weight-bold mb-0 text-capitalize">
+        <span class="btn {{ $statusClass }}">{{ getStatusText($schedule->status) }}</span>
+    </p>
+</td>
+
+
 
     <td class="align-middle text-left">
         <div class="d-flex justify-content-center align-items-center gap-1 action-buttons">

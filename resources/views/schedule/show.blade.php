@@ -14,9 +14,11 @@
         <div class="card-body">
             <div class="d-flex flex-row justify-content-between">
                 <h5 class="card-title">Detail Jadwal Konsultasi</h5>
-                <button type="button" class="btn btn-primary" id="tanggapiBtn">
-                    Tanggapi
-                </button>
+                @can('admin-role')
+                    <button type="button" class="btn btn-primary" id="tanggapiBtn">
+                        Tanggapi
+                    </button>
+                @endcan
                 
             </div>
             <p class="card-text">Berikut adalah detail konsultan:</p>

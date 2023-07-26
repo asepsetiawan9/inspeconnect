@@ -11,7 +11,8 @@
     </td>
     <td class="align-middle text-sm">
         @if($user->status === 0 || $user->status === null)
-            <p class="text-sm font-weight-bold mb-0 text-capitalize bg-primary text-center rounded">
+        <p class="text-sm font-weight-bold mb-0 text-capitalize bg-primary-custom text-center rounded text-white">
+
                 <a href="#" onclick="updateStatus({{ $user->id }})">
                     Belum Di verifikasi
                 </a>
@@ -126,3 +127,11 @@
 @endpush
 
 
+@push('style')
+<style>
+    .bg-primary-custom {
+        background-color: #ff4d4d; /* Replace with your primary color */
+        color: #fff !important;
+    }
+</style>
+@endpush
