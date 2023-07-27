@@ -37,10 +37,10 @@ class HomeController extends Controller
         } elseif ($userRole === 'skpd') {
             // Logic for skpd role
             $data = [
-                "laporanterkirim" => Report::where("status",2)->where('user_id', $userId)->count(),
+                "laporanterkirim" => Report::where("status",1)->where('user_id', $userId)->count(),
                 "laporandiproses" => Report::where("status",3)->where('user_id', $userId)->count(),
                 "ditanggapi" => Report::where("status",1)->where('user_id', $userId)->count(),
-                "konsultasibaru" => Schedule::where("status",2)->where('opd_id', $userId)->count(),
+                "konsultasibaru" => Schedule::where("status",1)->where('opd_id', $userId)->count(),
                 "konsultasidiperoses" => Schedule::where("status",3)->where('opd_id', $userId)->take(3)->get(),
             ];
             // dd($data['konsultasidiperoses']);
@@ -49,11 +49,11 @@ class HomeController extends Controller
             // Logic for admin role
             $data = [
                 "laporanbaru" => Report::where("status",2)->count(),
-                "konsultasibaru" => Schedule::where("status",2)->count(),
+                "konsultasibaru" => Schedule::where("status",1)->count(),
                 "laporanselesai" => Report::where("status",1)->count(),
                 "laporanproses" => Report::where("status",3)->count(),
                 "konsultan" => Consultant::count(),
-                "permintaankonsul" => Schedule::with('skpd', 'consultant')->where("status",2)->take(3)->get(),
+                "permintaankonsul" => Schedule::with('skpd', 'consultant')->where("status",1)->take(3)->get(),
                 "laporanbarulist" => Report::with('user')->where('status', 2)->take(3)->get(),
             ];
             return view('pages.dashboard')->with('data', $data);
