@@ -21,6 +21,9 @@ class Schedule extends Model
             'place',
             'status',
             'consultant_id',
+            'pertemuan',
+            'respon_admin',
+            'user_id',
         ];
 
         public function skpd()

@@ -15,6 +15,10 @@ class Report extends Model
         'user_id',
         'role',
         'status',
+        'pertemuan',
+        'kontak',
+        'datetime',
+        'tempat_bertemu',
     ];
 
     public function user()

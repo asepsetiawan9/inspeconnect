@@ -30,9 +30,9 @@
         function getStatusText($status) {
             switch ($status) {
                 case 1:
-                    return 'Perlu Ditanggapi';
-                case 2:
                     return 'Selesai';
+                case 2:
+                    return 'Perlu Ditanggapi';
                 case 3:
                     return 'Akan Dihadiri';
                 case 4:

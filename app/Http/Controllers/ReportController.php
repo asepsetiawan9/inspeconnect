@@ -74,8 +74,8 @@ class ReportController extends Controller
             'name' => 'required|string|max:255',
             'desc' => 'required|string',
             'role' => 'required|string|in:warga,skpd',
-            'photos' => 'required|array|max:5', // Maksimal 5 foto
-            'photos.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Hanya menerima format gambar
+            'photos' => 'required|array|max:5', // Maksimal 5 file
+            'photos.*' => 'file|mimes:jpeg,png,jpg,gif,pdf,doc,docx|max:2048',
         ]);
 
         // Simpan data laporan ke database
@@ -83,6 +83,10 @@ class ReportController extends Controller
         $report->name = $request->name;
         $report->desc = $request->desc;
         $report->role = $request->role;
+        $report->pertemuan = $request->pertemuan;
+        $report->kontak = $request->kontak;
+        $report->datetime = $request->datetime;
+        $report->tempat_bertemu = $request->tempat_bertemu;
         $report->user_id = $request->user_id;
         $report->status = $status;
 
@@ -183,6 +187,9 @@ class ReportController extends Controller
         $report->name = $request->name;
         $report->desc = $request->desc;
         $report->role = $request->role;
+        $report->pertemuan = $request->pertemuan;
+        $report->kontak = $request->kontak;
+        $report->datetime = $request->datetime;
         $report->user_id = $request->user_id;
 
         if ($request->hasFile('photos')) {
@@ -241,16 +248,19 @@ class ReportController extends Controller
         // Validate the request
         $request->validate([
             'status' => 'required|in:1,2,3',
+            'respon_admin' => 'required', // Add validation for the respon_admin field
         ]);
 
         // Find the report by ID
         $report = Report::findOrFail($id);
 
-        // Update the status
+        // Update the status and respon_admin
         $report->status = $request->status;
+        $report->respon_admin = $request->respon_admin; // Save the respon_admin value
         $report->save();
 
         // Return a success response
-        return response()->json(['message' => 'Status updated successfully'], 200);
+        return response()->json(['message' => 'Status and Respon Admin updated successfully'], 200);
     }
+
 }

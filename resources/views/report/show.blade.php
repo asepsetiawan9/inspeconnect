@@ -59,12 +59,16 @@
                                             $statusClass = 'btn-success';
                                             break;
                                         case 2:
-                                            $statusLabel = 'Belum Dilihat';
+                                            $statusLabel = 'Perlu di Tindak Lanjuti';
                                             $statusClass = 'btn-warning';
                                             break;
                                         case 3:
                                             $statusLabel = 'Diproses';
                                             $statusClass = 'btn-primary';
+                                            break;
+                                        case 4:
+                                            $statusLabel = 'Tidak di Tindak Lanjuti';
+                                            $statusClass = 'btn-danger';
                                             break;
                                         default:
                                             // Do nothing
@@ -78,6 +82,17 @@
                                 @endif
                             </div>
                         </div>
+                        @if ($report->respon_admin)
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div for="user_id text-bold">Respon Admin</div>
+                                    <div>{{ $report->respon_admin ? $report->respon_admin : '-' }}</div>
+                                </div>
+                            </div>
+                        @else
+                            
+                        @endif
+                        
                         
                         
                         <div class="col-md-6">
@@ -123,12 +138,16 @@
                                             $statusClass = 'btn-success';
                                             break;
                                         case 2:
-                                            $statusLabel = 'Belum Dilihat';
+                                            $statusLabel = 'Perlu di Tindak Lanjuti';
                                             $statusClass = 'btn-warning';
                                             break;
                                         case 3:
                                             $statusLabel = 'Diproses';
                                             $statusClass = 'btn-primary';
+                                            break;
+                                        case 4:
+                                            $statusLabel = 'Tidak di Tindak Lanjuti';
+                                            $statusClass = 'btn-danger';
                                             break;
                                         default:
                                             // Do nothing
@@ -137,43 +156,105 @@
                                 <button class="btn {{ $statusClass }} text-capitalize" id="updateStatusBtn">{{ $statusLabel }}</button>
                             </div>
                         </div>
+                        @if ($report->respon_admin)
+                        <div class="col-md-6"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div for="user_id " class="text-bold">Respon Admin</div>
+                                    <div>{{ $report->respon_admin ? $report->respon_admin : '-' }}</div>
+                                </div>
+                            </div>
+                        @else
+                            
+                        @endif
                     @endif
 
                     <div class="col-md-12 bg-primary p-1 my-3">
                     </div>
-                    <div class="text-bold col-md-12">
-                        Data Terlapor
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <div for="nama_bantuan" class="text-bold">Nama / Instansi Terlapor</div>
-                            <div>{{ $report->name ? $report->name : '-' }}</div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 row">
+                            <div class="text-bold col-md-12">
+                                Data Terlapor
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div for="nama_bantuan" class="text-bold">Nama / Instansi Terlapor</div>
+                                    <div>{{ $report->name ? $report->name : '-' }}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div for="desc" class="text-bold">Materi Yang Dilaporkan</div>
+                                    <div>{{ $report->desc ? $report->desc : '-' }}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="uploaded-photos-container">
+                                    <div class="text-bold">Bukti Laporan</div>
+                                    <div class="row">
+                                        @if (!empty($report->photos))
+                                            @php
+                                                $photos = json_decode($report->photos);
+                                            @endphp
+                                            @foreach ($photos as $photo)
+                                                <div class="col-md-3">
+                                                    <div class="thumbnail">
+                                                        <img src="{{ asset('storage/report/' . $photo) }}" alt="Uploaded Photo">
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @endif
+                            
+                                        @if (!empty($report->files))
+                                            @php
+                                                $files = json_decode($report->files);
+                                            @endphp
+                                            @foreach ($files as $file)
+                                                <div class="col-md-3">
+                                                    <div class="thumbnail">
+                                                        @if (in_array(pathinfo($file, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))
+                                                            <img src="{{ asset('storage/report/' . $file) }}" alt="Uploaded Photo">
+                                                        @else
+                                                            <a href="{{ asset('storage/report/' . $file) }}" target="_blank" download>
+                                                                <i class="far fa-file-pdf"></i>
+                                                            </a>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            
                         </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <div for="desc" class="text-bold">Materi Yang Dilaporkan</div>
-                            <div>{{ $report->desc ? $report->desc : '-' }}</div>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="uploaded-photos-container">
-                            <div class="text-bold">Bukti Laporan</div>
-                            <div class="row">
-                                @if (!empty($report->photos))
-                                    @php
-                                        $photos = json_decode($report->photos);
-                                    @endphp
-                                    @foreach ($photos as $photo)
-                                        <div class="col-md-3">
-                                            <div class="thumbnail">
-                                                <img src="{{ asset('storage/report/' . $photo) }}" alt="Uploaded Photo">
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                @else
-                                    <p>No photos available</p>
-                                @endif
+                        <div class="col-md-6 row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div for="pertemuan" class="text-bold">Tipe Lapor</div>
+                                    <div>{{ $report->pertemuan ? $report->pertemuan : '-' }}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div for="kontak" class="text-bold">Kontak Pelapor</div>
+                                    <div>{{ $report->kontak ? $report->kontak : '-' }}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div for="datetime" class="text-bold">Jam dan Tanggal</div>
+                                    <div>{{ $report->datetime ? $report->datetime : '-' }}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div for="tempat_bertemu" class="text-bold">Tempat</div>
+                                    <div>{{ $report->tempat_bertemu ? $report->tempat_bertemu : '-' }}</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -183,18 +264,18 @@
             </div>
         </div>
     </div>
-    <form id="updateStatusForm" method="POST" style="display: none;">
+    {{-- <form id="updateStatusForm" method="POST" style="display: none;">
         @csrf
         @method('PUT')
         <div class="form-group">
             <label for="status">Status</label>
             <select class="form-control" name="status" id="status">
                 <option value="1">Selesai</option>
-                <option value="2">Belum Dilihat</option>
+                <option value="2">Tidak di Tindak Lanjuti</option>
                 <option value="3">Diproses</option>
             </select>
         </div>
-    </form>
+    </form> --}}
 @endsection
 
 @section('scripts')
@@ -244,46 +325,36 @@
     document.getElementById("updateStatusBtn").addEventListener("click", function() {
         Swal.fire({
             title: 'Update Status',
-            input: 'select',
-            inputOptions: {
-                1: 'Selesai',
-                2: 'Belum Dilihat',
-                3: 'Diproses',
-            },
-            inputPlaceholder: 'Pilih status...',
+            html: `
+                <label for="status">Status</label>
+                <select id="status" class="form-control">
+                    <option value="2">Perlu Di Tindak Lanjuti</option>
+                    <option value="1">Selesai</option>
+                    <option value="3">Diproses</option>
+                    <option value="4">Tidak Ditindak Lanjuti</option>
+                </select>
+                <label for="respon_admin">Respon Admin</label>
+                <textarea id="respon_admin" class="form-control" placeholder="Masukkan respon admin" rows="3"></textarea>
+            `,
             showCancelButton: true,
             confirmButtonText: 'Update',
             cancelButtonText: 'Close',
             showLoaderOnConfirm: true,
-            preConfirm: (status) => {
-                if (!status) {
-                    Swal.showValidationMessage(`Status harus dipilih`);
-                }
-                // Submit form here
-                var form = document.createElement('form');
-                form.method = 'POST';
-                form.action = "{{ route('report.updateStatus', $report->id) }}"; // Replace with your route for updating the status
-                var csrfField = document.createElement('input');
-                csrfField.type = 'hidden';
-                csrfField.name = '_token';
-                csrfField.value = "{{ csrf_token() }}";
-                form.appendChild(csrfField);
-                var methodField = document.createElement('input');
-                methodField.type = 'hidden';
-                methodField.name = '_method';
-                methodField.value = 'PUT';
-                form.appendChild(methodField);
-                var statusField = document.createElement('input');
-                statusField.type = 'hidden';
-                statusField.name = 'status';
-                statusField.value = status;
-                form.appendChild(statusField);
-                document.body.appendChild(form);
+            preConfirm: () => {
+                const status = document.getElementById('status').value;
+                const responAdmin = document.getElementById('respon_admin').value;
 
                 // Submit form using fetch API
-                fetch(form.action, {
-                    method: form.method,
-                    body: new FormData(form),
+                fetch("{{ route('report.updateStatus', $report->id) }}", {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    body: JSON.stringify({
+                        status: status,
+                        respon_admin: responAdmin
+                    })
                 })
                 .then(response => {
                     if (response.ok) {
@@ -293,10 +364,12 @@
                             icon: 'success',
                             title: 'Status berhasil diubah!',
                             showConfirmButton: false,
-                            timer: 1500 // Duration of the success alert
+                            timer: 2000 // Duration of the success alert (3 seconds)
                         });
                         // Reload the page to see the updated status
-                        location.reload();
+                        setTimeout(() => {
+                            location.reload();
+                        }, 2000); 
                     } else {
                         // Show error alert if request failed
                         Swal.fire({
@@ -319,4 +392,7 @@
         });
     });
 </script>
+
+
+
 @endpush

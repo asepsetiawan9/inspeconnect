@@ -24,7 +24,7 @@ class ScheduleController extends Controller
             $schedules = Schedule::with('skpd', 'consultant')->paginate(5);
         }else{
             $schedules = Schedule::with('skpd', 'consultant')
-                            ->where('opd_id', $userId)
+                            ->where('user_id', $userId)
                             ->paginate(5);
         }
 
@@ -56,13 +56,17 @@ class ScheduleController extends Controller
         return view('schedule.createschedule', compact('consultant', 'skpds', 'userRole'));
     }
 
+    
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        
-        $userRole = Auth::user()->role;
+        // dd($request);
+
+        $user = Auth::user();
+        $userRole = $user->role;
 
         $attributes = $request->validate([
             'name' => 'required|max:255',
@@ -71,16 +75,18 @@ class ScheduleController extends Controller
             'time' => 'required',
             'about' => 'required',
             'place' => 'required',
+            'pertemuan' => 'required',
         ]);
 
         // Determine the status based on the user's role
         $status = ($userRole === 'skpd') ? 2 : 1;
 
         $attributes['status'] = $status;
-        // dd($status);
+        $attributes['user_id'] = $user->id; // Set user_id based on the logged-in user
+
         // Assuming you have a 'opd_id' and 'consultant_id' fields in the 'schedules' table
         $attributes['opd_id'] = $request->opd_id; // Change 'opd_id' to the actual foreign key column
-        $attributes['consultant_id'] = $request->consultant_id; 
+        $attributes['consultant_id'] = $request->consultant_id;
 
         try {
             Schedule::create($attributes);
@@ -90,6 +96,7 @@ class ScheduleController extends Controller
         }
         return redirect('schedule/create');
     }
+
 
     /**
      * Display the specified resource.
@@ -152,6 +159,8 @@ class ScheduleController extends Controller
     public function update(Request $request, $id)
     {
         // dd($request);
+        $user = Auth::user();
+        $userRole = $user->role;
         $userRole = Auth::user()->role;
     
         $attributes = $request->validate([
@@ -161,10 +170,12 @@ class ScheduleController extends Controller
             'time' => 'required',
             'about' => 'required',
             'place' => 'required',
+            'pertemuan' => 'required',
         ]);
     
         // Determine the status based on the user's role
         $status = ($userRole === 'skpd') ? 2 : 1;
+        $attributes['user_id'] = $user->id;
     
         $attributes['status'] = $status;
         // Assuming you have a 'opd_id' and 'consultant_id' fields in the 'schedules' table
@@ -186,15 +197,16 @@ class ScheduleController extends Controller
     {
         $request->validate([
             'status' => 'required|in:1,2,3,4', // Validating the status field
+            'respon_admin' => 'required', // Validating the respon_admin field
         ]);
-
-        // Update the status in the database
+    
+        // Update the status and respon_admin in the database
         $schedule->update([
             'status' => $request->status,
+            'respon_admin' => $request->respon_admin,
         ]);
 
-        // Redirect back to the show page with a success message
-        return redirect()->route('schedule.show', $schedule->id)->with('success', 'Status updated successfully.');
+        return response()->json(['message' => 'Status and Respon Admin updated successfully'], 200);
     }
 
     /**

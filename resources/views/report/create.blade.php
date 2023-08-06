@@ -54,6 +54,46 @@
                             </div>
                         </div>
 
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div for="role">Tipe Lapor</div>
+                                <select class="form-select" id="lapor" name="pertemuan">
+                                    <option value="">Pilih Tipe Lapor</option>
+                                    <option value="Tatap Muka">Tatap Muka</option>
+                                    <option value="Video Conference">Video Conference</option>
+                                    <option value="Hanya Lapor">Hanya Lapor</option>
+                                </select>
+                                @error('pertemuan')
+                                <p class="text-danger text-xs pt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                        
+                        <div  id="formkontak" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <div for="kontak">Kontak</div>
+                                        <input type="text" name="kontak" class="form-control" placeholder="Kontak Yang Bisa Dihubungi">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                      <label for="datetime">Waktu dan Tanggal</label>
+                                      <input type="text" id="datetime" name="datetime" class="form-control" placeholder="Waktu dan Tanggal">
+                                    </div>
+                                  </div>
+                                  
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <div for="tempat_bertemu">Tempat</div>
+                                        <input type="text" name="tempat_bertemu" class="form-control" placeholder="Masukan Tempat">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+
                         <div class="col-md-12 rounded bg-primary p-1 my-3">
                         </div>
                         <div class="col-md-6">
@@ -123,26 +163,55 @@
         });
     </script>
 
-    <script>
-        document.querySelector('input[name="photos[]"]').addEventListener('change', function(event) {
-            var previewContainer = document.querySelector('.preview');
-            previewContainer.innerHTML = ''; // Hapus pratinjau sebelumnya
+<script>
+    document.querySelector('input[name="photos[]"]').addEventListener('change', function(event) {
+        var previewContainer = document.querySelector('.preview');
+        previewContainer.innerHTML = ''; // Hapus pratinjau sebelumnya
 
-            var files = event.target.files;
-            for (var i = 0; i < files.length; i++) {
-                var file = files[i];
-                var reader = new FileReader();
+        var files = event.target.files;
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            var reader = new FileReader();
 
-                reader.onload = function(e) {
+            reader.onload = function(e) {
+                if (file.type.startsWith('image/')) {
                     var img = document.createElement('img');
                     img.src = e.target.result;
                     img.style.maxWidth = '200px';
                     img.style.margin = '5px';
                     previewContainer.appendChild(img);
+                } else {
+                    var icon = document.createElement('i');
+                    icon.className = 'fa fa-file';
+                    var div = document.createElement('div');
+                    div.innerText = file.name;
+                    div.style.margin = '5px';
+                    div.appendChild(icon);
+                    previewContainer.appendChild(div);
                 }
+            }
 
-                reader.readAsDataURL(file);
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+    <script>
+        document.getElementById("lapor").addEventListener("change", function () {
+            var selectedValue = this.value;
+            var formKontak = document.getElementById("formkontak");
+    
+            if (selectedValue === "Tatap Muka" || selectedValue === "Video Conference") {
+                formKontak.style.display = "block";
+            } else {
+                formKontak.style.display = "none";
             }
         });
     </script>
+    <script>
+        $(document).ready(function() {
+          $("#datetime").datetimepicker({
+            format: "Y-m-d H:i",
+          });
+        });
+      </script>
 @endpush

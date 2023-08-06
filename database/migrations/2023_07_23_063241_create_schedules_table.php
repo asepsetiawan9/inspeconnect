@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('about')->nullable();
             $table->string('place')->nullable();
             $table->integer('status')->nullable();
+            $table->string('pertemuan')->nullable();
+            $table->string('respon_admin')->nullable();
             $table->timestamps();
         });
     }

@@ -15,7 +15,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="opd_id">SKPD/OPD</label>
-                                <select name="opd_id" class="form-control selectOpd">
+                                <select name="opd_id" class="form-control selectOpd" @if ($userRole === 'skpd') disabled @endif>
                                     <option value="" selected disabled>-- Pilih SKPD/OPD --</option>
                                     @foreach ($skpds as $skpd)
                                         <option value="{{ $skpd->id }}" @if ($skpd->id == $opdId) selected @endif>
@@ -26,7 +26,7 @@
                                 @error('opd_id') <p class="text-danger text-xs pt-1">{{ $message }}</p> @enderror
                             </div>
                         </div>
-
+                        
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="name">Nama Klien</label>
@@ -70,6 +70,20 @@
                         
                         <div class="col-md-6">
                             <div class="text-bold py-3">Jadwal Konsultasi</div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div for="konsul">Pilih Konsultasi</div>
+                                    <select class="form-select" id="lapor" name="pertemuan">
+                                        <option value="">Pilih Konsultasi</option>
+                                        <option value="Tatap Muka">Tatap Muka</option>
+                                        <option value="Video Conference">Video Conference</option>
+                                        <option value="Konsultasi Online">Konsultasi Online</option>
+                                    </select>
+                                    @error('pertemuan')
+                                        <p class="text-danger text-xs pt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
                             <div class="col-md-12 form-group">
                                 <label for="date">TANGGAL</label>
                                 <input type="text" name="date" class="form-control datepicker" placeholder="Tanggal Konsultasi" data-date-format="dd-mm-yyyy" aria-label="Name" value="{{ $schedule->date ?? '' }}">

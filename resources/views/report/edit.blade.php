@@ -38,6 +38,37 @@
                             @enderror
                         </div>
                     </div>
+                    <select class="form-select" id="lapor" name="pertemuan">
+                        <option value="">Pilih Tipe Lapor</option>
+                        <option value="Tatap Muka" {{ $report->pertemuan === "Tatap Muka" ? "selected" : "" }}>Tatap Muka</option>
+                        <option value="Video Conference" {{ $report->pertemuan === "Video Conference" ? "selected" : "" }}>Video Conference</option>
+                        <option value="Hanya Lapor" {{ $report->pertemuan === "Hanya Lapor" ? "selected" : "" }}>Hanya Lapor</option>
+                    </select>
+                    
+                    
+                    <div  id="formkontak" style="display: none;">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div for="kontak">Kontak</div>
+                                    <input type="text" name="kontak" class="form-control" placeholder="Kontak Yang Bisa Dihubungi" value="{{ $report->kontak ?? old('kontak') }}">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="datetime">Waktu dan Tanggal</label>
+                                  <input type="text" id="datetime" name="datetime" class="form-control" placeholder="Waktu dan Tanggal" value="{{ $report->datetime ?? old('datetime') }}">
+                                </div>
+                              </div>
+                              
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div for="tempat_bertemu">Tempat</div>
+                                    <input type="text" name="tempat_bertemu" class="form-control" placeholder="Masukan Tempat" value="{{ $report->tempat_bertemu ?? old('tempat_bertemu') }}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-md-12 rounded bg-primary p-1 my-3">
                     </div>
                     <div class="col-md-6">
@@ -133,4 +164,33 @@
         }
     });
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var laporSelect = document.getElementById("lapor");
+        var formKontak = document.getElementById("formkontak");
+
+        function showFormKontak() {
+            var selectedValue = laporSelect.value;
+            if (selectedValue === "Tatap Muka" || selectedValue === "Video Conference") {
+                formKontak.style.display = "block";
+            } else {
+                formKontak.style.display = "none";
+            }
+        }
+
+        // Panggil fungsi showFormKontak saat halaman dimuat
+        showFormKontak();
+
+        // Panggil fungsi showFormKontak saat select berubah
+        laporSelect.addEventListener("change", showFormKontak);
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+      $("#datetime").datetimepicker({
+        format: "Y-m-d H:i",
+      });
+    });
+  </script>
 @endpush

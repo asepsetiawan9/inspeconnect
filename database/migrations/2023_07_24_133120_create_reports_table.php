@@ -19,6 +19,11 @@ return new class extends Migration
             $table->string('user_id')->nullable();
             $table->string('role')->nullable();
             $table->integer('status')->nullable();
+            $table->string('pertemuan')->nullable();
+            $table->string('kontak')->nullable();
+            $table->string('datetime')->nullable();
+            $table->string('tempat_bertemu')->nullable();
+            $table->string('respon_admin')->nullable();
             $table->timestamps();
         });
     }

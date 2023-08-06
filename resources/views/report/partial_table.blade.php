@@ -24,7 +24,7 @@
                 $statusClass = 'btn-success';
                 break;
             case 2:
-                $statusLabel = 'Belum Dilihat';
+                $statusLabel = 'Perlu di Tindak Lanjuti';
                 $statusClass = 'btn-warning';
                 break;
             case 3:

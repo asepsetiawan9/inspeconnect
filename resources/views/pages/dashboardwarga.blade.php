@@ -27,7 +27,7 @@
                     </div>
                         <div class="col-4 text-end">
                             <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
-                                <i class="fa fa-users text-lg opacity-10" aria-hidden="true"></i>
+                                <i class="fa fa-paper-plane text-lg opacity-10" aria-hidden="true"></i>
                             </div>
                         </div>
                     </div>
@@ -53,7 +53,7 @@
                         </div>
                         <div class="col-4 text-end">
                             <div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
-                                <i class="fa fa-usd text-lg opacity-10" aria-hidden="true"></i>
+                                <i class="fa fa-check-circle text-lg opacity-10" aria-hidden="true"></i>
                             </div>
                         </div>
                     </div>
@@ -77,7 +77,7 @@
                         </div>
                         <div class="col-4 text-end">
                             <div class="icon icon-shape bg-gradient-warning shadow-warning text-center rounded-circle">
-                                <i class="fa fa-percent text-lg opacity-10" aria-hidden="true"></i>
+                                <i class="fa fa-spinner text-lg opacity-10" aria-hidden="true"></i>
                             </div>
                         </div>
                     </div>
