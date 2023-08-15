@@ -125,12 +125,12 @@
                                     </div>
                                     <div class="col-md-9 d-flex flex-column justify-content-between">
                                         <div>
-                                            <label class="fs-6">{{ $konsul->created_at }}</label><br />
-                                            Jam {{ $konsul->time ? $konsul->time : '-' }} - {{ $konsul->date ? $konsul->date : '-' }}
+                                            <label class="fs-6">Pengajuan Konsultasi {{ $konsul->created_at }}</label><br />
+                                            Jam {{ $konsul->time ? $konsul->time : '-' }} - {{ $konsul->date ? $konsul->date : '-' }} &nbsp;&nbsp;-&nbsp;&nbsp; {{ $konsul->pertemuan ? $konsul->pertemuan : '-' }} 
                                             <div class="pt-3">{{ $konsul->skpd->name ? $konsul->skpd->name : '-' }}</div class="pt-3">
                                         </div>
                                         <div>
-                                            <span>{{ $konsul->consultant->name ? $konsul->consultant->name : '-' }}</span> <br>
+                                            <span>Konsultan : {{ $konsul->consultant->name ? $konsul->consultant->name : '-' }}</span> <br>
                                         </div>
                                     </div>
                                 </div>
@@ -153,8 +153,9 @@
                             <li class="list-group-item">
                                 <div class="row">
                                     <div class="col-md-12 ">
-                                        <label class="fs-6">{{ $laporan->created_at }}</label><br />
-                                           Pelapor {{ $laporan->user->name ? $laporan->user->name : '-' }} 
+                                        <label class="fs-6">Tanggal Lapor {{ $laporan->created_at }}</label><br>
+                                        {{ $laporan->pertemuan ? $laporan->pertemuan : '-' }}  -  {{ $laporan->datetime ? $laporan->datetime : '-'}}
+                                           <div><span class="fs-6">Pelapor</span> {{ $laporan->user->name ? $laporan->user->name : '-' }} </div>
                                         <div> Terlapor {{ $laporan->name ? $laporan->name : '-' }}</div>
                                     </div>
                                 </div>

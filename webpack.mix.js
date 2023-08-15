@@ -15,3 +15,13 @@ mix.js('resources/js/app.js', 'public/assets/js/argon-dashboard.js')
     .sass('resources/scss/argon-dashboard.scss', 'public/assets/css/argon-dashboard.css', [
         //
     ]);
+
+    
+// module.exports = {
+//     // other configurations...
+  
+//     // Set the devtool option to 'none' for production build
+//     devtool: 'none',
+  
+//     // other configurations...
+//   };

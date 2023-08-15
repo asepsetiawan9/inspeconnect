@@ -124,7 +124,7 @@
                                     </div>
 
                                 </div>
-                                @error('name')
+                                @error('time')
                                     <p class='text-danger text-xs pt-1'> {{ $message }} </p>
                                 @enderror
                             </div>

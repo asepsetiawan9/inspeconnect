@@ -34,14 +34,15 @@ class ConsultantController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request);
         $request->validate([
             'name' => 'required|string|max:255',
             'gender' => 'required|string|max:255',
-            'desc' => 'nullable|string',
-            'telp' => 'nullable',
-            'birth' => 'nullable|string|max:255',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Maksimum ukuran foto: 2MB
-            'jabatan' => 'nullable|string|max:255',
+            'desc' => 'required|string',
+            'telp' => 'required',
+            'birth' => 'required|string|max:255',
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Maksimum ukuran foto: 2MB
+            'jabatan' => 'required|string|max:255',
         ]);
 
         // Proses simpan foto ke folder consultant (storage/app/public/consultant)
@@ -61,6 +62,7 @@ class ConsultantController extends Controller
             'photo' => $photoPath,
             'jabatan' => $request->jabatan,
         ]);
+        
         if ($consultant) {
             Alert::success('Sukses', 'Tambah Konsultan Berhasil.')->autoclose(3500);
         } else {
@@ -69,6 +71,7 @@ class ConsultantController extends Controller
 
         return redirect('consultant');
     }
+
 
     /**
      * Display the specified resource.

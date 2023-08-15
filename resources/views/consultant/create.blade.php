@@ -37,7 +37,7 @@
                     </div>
 
                     <div class="col-md-6 form-group">
-                        <label for="kelurahan">NO HP (Whatsapp)</label>
+                        <label for="telp">NO HP (Whatsapp)</label>
                         <input type="text" name="telp" class="form-control" placeholder="Masukan No Telpon" aria-label="No Hp" >
                                         @error('telp') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
                     </div>

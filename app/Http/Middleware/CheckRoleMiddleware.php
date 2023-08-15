@@ -21,5 +21,5 @@ class CheckRoleMiddleware
 
         // Jika peran adalah 'admin' atau role tidak dikenali, lanjutkan ke route berikutnya
         return $next($request);
-    }
+    } 
 }

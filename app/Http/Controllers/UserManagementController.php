@@ -102,12 +102,15 @@ class UserManagementController extends Controller
     }
     public function storeskpd(Request $request)
     {
-        // dd($request);
+        $request->validate([
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:5',
+        ]);
+
         $skpdData = $request->opd_id;
 
         // Cari SKPD berdasarkan opd_id
         $skpd = Skpd::find($skpdData);
-        // dd($skpd);
 
         if (!$skpd) {
             // Jika SKPD dengan opd_id yang diberikan tidak ditemukan, berikan pesan error
@@ -133,6 +136,7 @@ class UserManagementController extends Controller
 
         return redirect('user-management');
     }
+
 
     public function edit($id)
     {

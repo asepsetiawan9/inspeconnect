@@ -24,6 +24,7 @@ return new class extends Migration
             $table->integer('status')->nullable();
             $table->string('pertemuan')->nullable();
             $table->string('respon_admin')->nullable();
+            $table->string('user_id')->nullable();
             $table->timestamps();
         });
     }
