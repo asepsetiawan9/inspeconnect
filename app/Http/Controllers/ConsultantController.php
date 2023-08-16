@@ -116,7 +116,7 @@ class ConsultantController extends Controller
         $attributes = $request->validate([
             'name' => 'required|max:255',
             'gender' => 'required',
-            'birth' => 'nullable|date_format:d-m-Y',
+            'birth' => 'nullable',
             'telp' => 'required|max:255',
             'jabatan' => 'nullable|max:255',
             'desc' => 'nullable',

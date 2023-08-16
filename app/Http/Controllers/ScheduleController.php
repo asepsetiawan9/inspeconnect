@@ -130,7 +130,7 @@ class ScheduleController extends Controller
     public function edit($id)
     {
         $schedule = Schedule::find($id);
-
+        // dd($schedule);
         // Check if the schedule is not found
         if (!$schedule) {
             return redirect()->route('your-error-route')->with('error', 'Schedule not found.');
@@ -158,11 +158,12 @@ class ScheduleController extends Controller
 
     public function update(Request $request, $id)
     {
-        // dd($request);
+        //    dd($id);
         $user = Auth::user();
         $userRole = $user->role;
         $userRole = Auth::user()->role;
-    
+        
+        // dd($schedule);
         $attributes = $request->validate([
             'name' => 'required|max:255',
             'phone' => 'required|max:255',
@@ -181,13 +182,13 @@ class ScheduleController extends Controller
         // Assuming you have a 'opd_id' and 'consultant_id' fields in the 'schedules' table
         $attributes['opd_id'] = $request->opd_id; // Change 'opd_id' to the actual foreign key column
         $attributes['consultant_id'] = $request->consultant_id; 
-    
+        
         try {
-            $schedule = Schedule::findOrFail($id);
+            $schedule = Schedule::find($id);
             $schedule->update($attributes);
             Alert::success('Sukses', 'Jadwal Konsultasi Berhasil Diupdate.')->autoclose(3500);
         } catch (\Exception $e) {
-            Alert::error('Error', 'Terjadi kesalahan saat menyimpan data.')->autoclose(3500);
+            Alert::error('Error', $e)->autoclose(3500);
         }
         return redirect('schedule/create');
     }

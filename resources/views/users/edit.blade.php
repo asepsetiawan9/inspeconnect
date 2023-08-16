@@ -101,6 +101,15 @@
 
 @push('js')
 <script>
+    $(document).ready(function () {
+        $('.datepicker').datepicker({
+            format: 'dd-mm-yyyy',
+            autoclose: true
+        });
+    });
+
+</script>
+<script>
     var kecamatanSelect = document.getElementById('kecamatan');
     var kelurahanSelect = document.getElementById('kelurahan');
     var kecamatanIdInput = document.getElementById('kecamatan_id');

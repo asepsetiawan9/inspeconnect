@@ -158,7 +158,7 @@ class ReportController extends Controller
     {
         // Fetch the report data based on the given ID
         $report = Report::find($id);
-
+// dd($report);
         // Check if the report is found
         if (!$report) {
             return redirect()

@@ -6,7 +6,7 @@
     <div class="position-relative">
         <h5 class="text-white"> Ubah Jadwal Konsultasi</h5>
         <div class="card px-5 py-3">
-            <form action="{{ route('schedule.update', $consultant->id) }}" method="POST">
+            <form action="{{ route('schedule.update', $schedule->id) }}" method="POST">
                 @method('PATCH')
                 @csrf
                 <div class="row">
@@ -26,6 +26,9 @@
                                 @error('opd_id') <p class="text-danger text-xs pt-1">{{ $message }}</p> @enderror
                             </div>
                         </div>
+                        @if ($userRole === 'skpd') 
+                            <input type="hidden" name="opd_id" value="{{ $schedule->opd_id}}">
+                        @endif
                         
                         <div class="col-md-12">
                             <div class="form-group">
@@ -110,7 +113,7 @@
                                 <div id="selectedTimeDisplay">
                                     Selected Time: <span id="selectedTime">{{ $selectedTime }}</span>
                                 </div>
-                                @error('name') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
+                                @error('time') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
                             </div>
                             
                             
@@ -167,7 +170,7 @@
     });
 
 </script>
-
+@endpush
 @push("style")
 <style>
     .custom-file-input {
