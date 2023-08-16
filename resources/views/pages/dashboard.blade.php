@@ -154,7 +154,7 @@
                                 <div class="row">
                                     <div class="col-md-12 ">
                                         <label class="fs-6">Tanggal Lapor {{ $laporan->created_at }}</label><br>
-                                        {{ $laporan->pertemuan ? $laporan->pertemuan : '-' }}  -  {{ $laporan->datetime ? $laporan->datetime : '-'}}
+                                        {{ $laporan->datetime ? $laporan->datetime : '-'}} - {{ $laporan->pertemuan ? $laporan->pertemuan : '-' }} 
                                            <div><span class="fs-6">Pelapor</span> {{ $laporan->user->name ? $laporan->user->name : '-' }} </div>
                                         <div> Terlapor {{ $laporan->name ? $laporan->name : '-' }}</div>
                                     </div>

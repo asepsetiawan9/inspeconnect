@@ -79,15 +79,15 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                      <label for="datetime">Waktu dan Tanggal</label>
+                                      <div for="datetime">Waktu dan Tanggal</div>
                                       <input type="text" id="datetime" name="datetime" class="form-control" placeholder="Waktu dan Tanggal">
                                     </div>
                                   </div>
                                   
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <div for="tempat_bertemu">Tempat</div>
-                                        <input type="text" name="tempat_bertemu" class="form-control" placeholder="Masukan Tempat">
+                                        <div for="tempat_bertemu">Tempat/Link Video Conference</div>
+                                        <input type="text" name="tempat_bertemu" class="form-control" placeholder="Masukan Tempat/Link Url">
                                     </div>
                                 </div>
                             </div>
@@ -111,7 +111,7 @@
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="photos">Bukti Laporan</label>
+                                <div for="photos">Bukti Laporan</div>
                                 <input type="file" name="photos[]" class="form-control" multiple>
                                 <div class="preview"></div>
                             </div>
@@ -210,7 +210,7 @@
     <script>
         $(document).ready(function() {
           $("#datetime").datetimepicker({
-            format: "Y-m-d H:i",
+            format: "d-m-Y H:i",
           });
         });
       </script>
