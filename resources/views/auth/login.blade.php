@@ -7,7 +7,7 @@
             <div class="page-header min-vh-100 d-flex justify-content-center align-items-center">
                 <div class="container">
                     <div class="d-flex justify-content-center align-center">
-                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh4wVJSIl6zSaIJFqJoUQQrBCEkZWRELZhC7Y0akNfNlGtP7wgtu1P1854LOair3KVjgRSSHvckQhZIJ3AkTvR4Snm7fqi8oERF45iHtcYb69PvCPQls_O1gDRY9W7Zn6JUNR_FAVt64JCCoSk2I7CxQtS8SWEhmgcrJ5FUMxDDcIpNoIWE_tqosSrjjw/s1000/logo-kota-garut.png"  alt="logo" class="w-5 h-5 ">
+                        <img src="{{ asset('img/ekliwas.png') }}"  alt="logo" class="w-20 h-20 ">
                     </div>
                     <div class="row mt-lg-n10 mt-md-n11 mt-n10 justify-content-center pt-4 ">
                         <div class="col-xl-4 col-lg-5 col-md-7 mx-auto border bg-white mt-10">
@@ -41,7 +41,7 @@
                     </div>
                 </div>
             </div>
-            <p class="text-center font-light mt-4">&copy; Inpektorat Kabupaten Garut 2023.</p>
+            <p class="text-center font-light mt-4">&copy; E-Kliwas Inpektorat Kabupaten Garut 2023.</p>
         </section>
     </main>
 @endsection

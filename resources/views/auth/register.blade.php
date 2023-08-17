@@ -10,7 +10,8 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-5 text-center mx-auto">
                         <div class="d-flex justify-content-center align-center mt-5">
-                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh4wVJSIl6zSaIJFqJoUQQrBCEkZWRELZhC7Y0akNfNlGtP7wgtu1P1854LOair3KVjgRSSHvckQhZIJ3AkTvR4Snm7fqi8oERF45iHtcYb69PvCPQls_O1gDRY9W7Zn6JUNR_FAVt64JCCoSk2I7CxQtS8SWEhmgcrJ5FUMxDDcIpNoIWE_tqosSrjjw/s1000/logo-kota-garut.png"  alt="logo" class="w-10 h-10 ">
+                            {{-- <img src="{{ asset('img/favicon.png') }}" alt="Gambar"> --}}
+                            <img src="{{ asset('img/ekliwas.png') }}"   alt="logo" class="w-30 h-30 ">
                         </div>
                     </div>
                 </div>
