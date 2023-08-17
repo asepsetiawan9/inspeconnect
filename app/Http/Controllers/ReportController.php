@@ -6,7 +6,10 @@ use App\Models\Report;
 use Illuminate\Http\Request;
 use Str;
 use Alert;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\LaporanDikirim;
+use App\Mail\NotifLaporanBaru;
+use App\Mail\StatusLaporanBerubah;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -99,8 +102,16 @@ class ReportController extends Controller
             }
             $report->photos = json_encode($photosPaths);
         }
-
         if ($report->save()) {
+            // Mengirim email notifikasi kepada user
+            if ($userRole === 'skpd' || $userRole === 'warga') {
+                    Mail::to($report->user->email)->send(new LaporanDikirim($report));
+        
+                // Mengirim email notifikasi kepada admin
+                $adminEmail = 'atot_tea@yahoo.com';
+                Mail::to($adminEmail)->send(new NotifLaporanBaru($report));
+            }
+    
             Alert::success('Sukses', 'Laporan berhasil dikirim.')->autoclose(3500);
         } else {
             Alert::error('Error', 'Terjadi kesalahan saat menyimpan data.')->autoclose(3500);
@@ -248,7 +259,7 @@ class ReportController extends Controller
         // Validate the request
         $request->validate([
             'status' => 'required|in:1,2,3',
-            'respon_admin' => 'required', // Add validation for the respon_admin field
+            'respon_admin' => 'required',
         ]);
 
         // Find the report by ID
@@ -256,8 +267,24 @@ class ReportController extends Controller
 
         // Update the status and respon_admin
         $report->status = $request->status;
-        $report->respon_admin = $request->respon_admin; // Save the respon_admin value
+        $report->respon_admin = $request->respon_admin;
         $report->save();
+
+        // Get the status label
+        $statusLaporan = '';
+        if ($report->status === '1') {
+            $statusLaporan = 'Selesai';
+        } elseif ($report->status === '2') {
+            $statusLaporan = 'Perlu di Tindak Lanjuti';
+        } elseif ($report->status === '3') {
+            $statusLaporan = 'Diproses';
+        }
+
+        // dd($statusLaporan);
+
+        // Send the email
+        $userEmail = $report->user->email;
+        Mail::to($userEmail)->send(new StatusLaporanBerubah($report, $statusLaporan));
 
         // Return a success response
         return response()->json(['message' => 'Status and Respon Admin updated successfully'], 200);

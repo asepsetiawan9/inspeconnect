@@ -36,15 +36,25 @@ return [
     'mailers' => [
         'smtp' => [
             'transport' => 'smtp',
-            'url' => env('MAIL_URL'),
-            'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
-            'port' => env('MAIL_PORT', 587),
-            'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+            'host' => env('MAIL_HOST', 'smtp.gmail.com'), // Sesuai dengan .env
+            'port' => env('MAIL_PORT', 465),
+            'encryption' => env('MAIL_ENCRYPTION', 'ssl'),
             'username' => env('MAIL_USERNAME'),
             'password' => env('MAIL_PASSWORD'),
             'timeout' => null,
             'local_domain' => env('MAIL_EHLO_DOMAIN'),
+            'from' => [
+                'address' => env('MAIL_FROM_ADDRESS', 'ekliwas@inspektorat.com'),
+                'name' => env('MAIL_FROM_NAME', 'Admin E-Kliwas'),
+            ],
+            // 'status_emails' => [
+            //     '1' => ['subject' => 'Status Konsultasi: Selesai', 'view' => 'emails.status_selesai'],
+            //     '2' => ['subject' => 'Status Konsultasi: Perlu Ditanggapi', 'view' => 'emails.status_perlu_ditanggapi'],
+            //     '3' => ['subject' => 'Status Konsultasi: Akan Dihadiri', 'view' => 'emails.status_akan_dihadiri'],
+            //     '4' => ['subject' => 'Status Konsultasi: Dijadwalkan Ulang', 'view' => 'emails.status_dijadwalkan_ulang'],
+            // ],
         ],
+        
 
         'ses' => [
             'transport' => 'ses',

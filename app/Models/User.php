@@ -70,4 +70,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Report::class, 'user_id');
     }
+
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class);
+    }
 }

@@ -35,4 +35,8 @@ class Schedule extends Model
         {
             return $this->belongsTo(Consultant::class, 'consultant_id');
         }
+        public function user()
+        {
+            return $this->belongsTo(User::class);
+        }
     }

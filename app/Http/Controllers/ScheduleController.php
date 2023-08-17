@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 use App\Models\Skpd;
 use Illuminate\Support\Facades\Auth;
 use Alert;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\KonsultasiBerhasil;
+use App\Mail\KonsultasiBerhasilAdminNotification;
+use App\Mail\StatusUpdateEmail;
 
 class ScheduleController extends Controller
 {
@@ -89,9 +93,17 @@ class ScheduleController extends Controller
         $attributes['consultant_id'] = $request->consultant_id;
 
         try {
-            Schedule::create($attributes);
+            $schedule = Schedule::create($attributes);
+            // Send email to user
+            if ($userRole === 'skpd') {
+                Mail::to($user->email)->send(new KonsultasiBerhasil($schedule, $user));
+                // Send email to admin
+                $adminEmail = 'atot_tea@yahoo.com'; // Ganti dengan alamat email admin yang sesuai
+                Mail::to($adminEmail)->send(new KonsultasiBerhasilAdminNotification($schedule, $user));
+            }
             Alert::success('Sukses', 'Jadwal Konsultasi Berhasil Dibuat.')->autoclose(3500);
         } catch (\Exception $e) {
+            dd($e);
             Alert::error('Error', 'Terjadi kesalahan saat menyimpan data.')->autoclose(3500);
         }
         return redirect('schedule/create');
@@ -200,15 +212,35 @@ class ScheduleController extends Controller
             'status' => 'required|in:1,2,3,4', // Validating the status field
             'respon_admin' => 'required', // Validating the respon_admin field
         ]);
-    
+
+        $newStatus = '';
+        switch ($request->status) {
+            case 1:
+                $newStatus = 'Selesai';
+                break;
+            case 2:
+                $newStatus = 'Perlu Ditanggapi';
+                break;
+            case 3:
+                $newStatus = 'Akan Dihadiri';
+                break;
+            case 4:
+                $newStatus = 'Dijadwalkan Ulang';
+                break;
+        }
+
         // Update the status and respon_admin in the database
         $schedule->update([
             'status' => $request->status,
             'respon_admin' => $request->respon_admin,
         ]);
 
+        // Send email to user
+        Mail::to($schedule->user->email)->send(new StatusUpdateEmail($schedule, $newStatus));
+
         return response()->json(['message' => 'Status and Respon Admin updated successfully'], 200);
     }
+
 
     /**
      * Remove the specified resource from storage.

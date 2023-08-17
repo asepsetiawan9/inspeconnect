@@ -130,9 +130,9 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <div for="konfirm-pass">Tempat Konsultasi</div>
+                                    <div for="konfirm-pass">Tempat Konsultasi/Link Pertemuan</div>
                                     <input type="place" name="place" class="form-control"
-                                        placeholder="Masukan Tempat Konsultasi" aria-div="place">
+                                        placeholder="Masukan Tempat Konsultasi/Link URL" aria-div="place">
                                     @error('place')
                                         <p class='text-danger text-xs pt-1'> {{ $message }} </p>
                                     @enderror

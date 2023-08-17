@@ -200,7 +200,9 @@
                                             @foreach ($photos as $photo)
                                                 <div class="col-md-3">
                                                     <div class="thumbnail">
-                                                        <img src="{{ asset('storage/report/' . $photo) }}" alt="Uploaded Photo">
+                                                        <a href="{{ asset('storage/report/' . $photo) }}" target="_blank">
+                                                            <img src="{{ asset('storage/report/' . $photo) }}" alt="Uploaded Photo">
+                                                        </a>
                                                     </div>
                                                 </div>
                                             @endforeach
@@ -214,7 +216,9 @@
                                                 <div class="col-md-3">
                                                     <div class="thumbnail">
                                                         @if (in_array(pathinfo($file, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))
-                                                            <img src="{{ asset('storage/report/' . $file) }}" alt="Uploaded Photo">
+                                                            <a href="{{ asset('storage/report/' . $file) }}" target="_blank">
+                                                                <img src="{{ asset('storage/report/' . $file) }}" alt="Uploaded Photo">
+                                                            </a>
                                                         @else
                                                             <a href="{{ asset('storage/report/' . $file) }}" target="_blank" download>
                                                                 <i class="far fa-file-pdf"></i>
@@ -227,6 +231,7 @@
                                     </div>
                                 </div>
                             </div>
+                            
                             
                             
                             
