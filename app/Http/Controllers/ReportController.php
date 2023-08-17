@@ -109,6 +109,7 @@ class ReportController extends Controller
         
                 // Mengirim email notifikasi kepada admin
                 $adminEmail = 'atot_tea@yahoo.com';
+                // $adminEmail = 'zep.setiawan09@gmail.com';
                 Mail::to($adminEmail)->send(new NotifLaporanBaru($report));
             }
     

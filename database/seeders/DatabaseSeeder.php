@@ -21,12 +21,13 @@ class DatabaseSeeder extends Seeder
 
         // seeder user
         DB::table('users')->insert([
-            'username' => 'admin',
-            'firstname' => 'Admin',
-            'lastname' => 'Admin',
+            'username' => 'adminekliwas',
+            'firstname' => 'E',
+            'lastname' => 'Kliwas',
             'role' => 'admin',
-            'email' => 'admin@argon.com',
-            'password' => bcrypt('secret')
+            'status' => 1,
+            'email' => 'admin@ekliwas.com',
+            'password' => bcrypt('admin')
         ]);
     }
 
