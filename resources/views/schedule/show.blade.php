@@ -313,10 +313,10 @@
         </script>
         <script>
             $(document).ready(function() {
-
+                var userRole = '{{ Auth::user()->role }}';
                 var surveyStatus = '{{ $schedule->survey_status ?? 0 }}';
 
-                if (surveyStatus === '0') {
+                if ((userRole === 'skpd' || userRole === 'warga') && surveyStatus === '0') {
                     $('#surveyModal').modal('show');
                 }
 

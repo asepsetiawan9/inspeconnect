@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Kecamatan;
 use App\Models\Report;
 use App\Models\Schedule;
+use App\Models\SurveyReport;
+use App\Models\Survey;
 use App\Models\Consultant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -55,7 +57,18 @@ class HomeController extends Controller
                 "konsultan" => Consultant::count(),
                 "permintaankonsul" => Schedule::with('skpd', 'consultant')->where("status",2)->take(3)->get(),
                 "laporanbarulist" => Report::with('user')->where('status', 2)->take(3)->get(),
+
+                "laporsangatpuas" => SurveyReport::where('rating', 1)->count(),
+                "laporpuas" => SurveyReport::where('rating', 2)->count(),
+                "laportidakpuas" => SurveyReport::where('rating', 3)->count(),
+                "laporsangattidakpuas" => SurveyReport::where('rating', 4)->count(),
+
+                "konsulsangatpuas" => Survey::where('rating', 1)->count(),
+                "konsulpuas" => Survey::where('rating', 2)->count(),
+                "konsultidakpuas" => Survey::where('rating', 3)->count(),
+                "konsulsangattidakpuas" => Survey::where('rating', 4)->count(),
             ];
+            
             return view('pages.dashboard')->with('data', $data);
         }
 

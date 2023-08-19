@@ -109,9 +109,68 @@
             </div>
         </div>
     </div>
+    <div class="row pt-3">
+        <div class="col-md-6">
+            <div class="card border shadow-sm">
+                <div class="row">
+                    <div class="text-center py-2">Survey Kepuasan Konsultasi</div>
+                    <div class="col text-center">
+                        <img src="{{ asset('img/sangatpuas.png') }}" alt="Sangat Puas" width="50" height="50">
+                        <div class="mt-2">Sangat Puas</div>
+                        <div class="mt-1 text-bold">{{ $data['laporsangatpuas'] }}</div>
+                    </div>
+                    <div class="col text-center">
+                        <img src="{{ asset('img/puas.png') }}" alt="Puas" width="50" height="50">
+                        <div class="mt-2">Puas</div>
+                        <div class="mt-1 text-bold">{{ $data['laporpuas'] }}</div>
+                    </div>
+                    <div class="col text-center">
+                        <img src="{{ asset('img/tidakpuas.png') }}" alt="Tidak Puas" width="50" height="50">
+                        <div class="mt-2">Tidak Puas</div>
+                        <div class="mt-1 text-bold">{{ $data['laportidakpuas'] }}</div>
+                    </div>
+                    <div class="col text-center">
+                        <img src="{{ asset('img/sangattidakpuas.png') }}" alt="Sangat Tidak Puas" width="50" height="50">
+                        <div class="mt-2">Sangat Tidak Puas</div>
+                        <div class="mt-1 text-bold">{{ $data['laporsangattidakpuas'] }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div class="col-md-6">
+            <div class="card border shadow-sm">
+                <div class="row">
+                    <div class="text-center py-2">Survey Kepuasan Lapor</div>
+                    <div class="col text-center">
+                        <img src="{{ asset('img/sangatpuas.png') }}" alt="Sangat Puas" width="50" height="50">
+                        <div class="mt-2">Sangat Puas</div>
+                        <div class="mt-1 text-bold">{{ $data['konsulsangatpuas'] }}</div>
+                    </div>
+                    <div class="col text-center">
+                        <img src="{{ asset('img/puas.png') }}" alt="Puas" width="50" height="50">
+                        <div class="mt-2">Puas</div>
+                        <div class="mt-1 text-bold">{{ $data['konsulpuas'] }}</div>
+                    </div>
+                    <div class="col text-center">
+                        <img src="{{ asset('img/tidakpuas.png') }}" alt="Tidak Puas" width="50" height="50">
+                        <div class="mt-2">Tidak Puas</div>
+                        <div class="mt-1 text-bold">{{ $data['konsultidakpuas'] }}</div>
+                    </div>
+                    <div class="col text-center">
+                        <img src="{{ asset('img/sangattidakpuas.png') }}" alt="Sangat Tidak Puas" width="50" height="50">
+                        <div class="mt-2">Sangat Tidak Puas</div>
+                        <div class="mt-1 text-bold">{{ $data['konsulsangattidakpuas'] }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
     <div class="row mt-4">
-        <div class="col-lg-7 mb-lg-0 mb-4">
-            <div class="card p-3">
+        <div class="col-lg-7 mb-lg-0 mb-4 ">
+            <div class="card p-3 border shadow-sm">
                 <h5>Permintaan Konsultasi</h5>
                 <div class="row">
                     <div class="col-md-12">
@@ -143,8 +202,8 @@
             </div>
             
         </div>
-        <div class="col-lg-5">
-            <div class="card p-3">
+        <div class="col-lg-5 ">
+            <div class="card p-3 border shadow-sm">
                 <h5>Laporan Baru</h5>
                 <div class="row">
                 <ul class="list-group list-group-flush">

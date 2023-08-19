@@ -464,14 +464,14 @@
             });
         </script>
         <script>
-            $(document).ready(function() {
-
+           $(document).ready(function() {
+                var userRole = '{{ Auth::user()->role }}'; // Ganti dengan cara Anda untuk mengakses peran pengguna
                 var surveyStatus = '{{ $report->survey_status ?? 0 }}';
 
-                if (surveyStatus === '0') {
+                if ((userRole === 'skpd' || userRole === 'warga') && surveyStatus === '0') {
                     $('#surveyModal').modal('show');
                 }
-
             });
+
         </script>
 @endpush
