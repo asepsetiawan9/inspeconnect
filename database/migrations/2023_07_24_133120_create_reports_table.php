@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('datetime')->nullable();
             $table->string('tempat_bertemu')->nullable();
             $table->string('respon_admin')->nullable();
+            $table->string('survey_status')->nullable()->default(0);
             $table->timestamps();
         });
     }

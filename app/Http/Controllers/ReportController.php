@@ -139,9 +139,10 @@ class ReportController extends Controller
 
     public function edit($id)
     {
+        // dd($id);
         // Fetch the report data based on the given ID
         $report = Report::find($id);
-
+        // dd($report);
         // Check if the report is found
         if (!$report) {
             return redirect()
@@ -153,7 +154,7 @@ class ReportController extends Controller
         $users = User::all();
 
         // Assuming you want to restrict editing to certain roles
-        $allowedRoles = ['admin', 'your_other_allowed_roles'];
+        $allowedRoles = ['admin', 'skpd'];
         if (!in_array(Auth::user()->role, $allowedRoles)) {
             return redirect()
                 ->route('report')

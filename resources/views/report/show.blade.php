@@ -269,6 +269,42 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="surveyModal" tabindex="-1" role="dialog" aria-labelledby="surveyModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="surveyModalLabel">Survei Kepuasan</h5>
+            </div>
+            <div class="modal-body text-center">
+               
+                <div class="btn-group" role="group">
+                    <div class="text-center">
+                        <div class="mb-2">Sangat Puas</div>
+                        <img src="{{ asset('img/sangatpuas.png') }}" alt="Sangat Puas" width="100"
+                            height="100" data-report-id="{{ $report->id }}" data-rating="1" class="close" data-dismiss="modal" aria-label="Close"> 
+                    </div>
+                    <div class="text-center">
+                        <div class="mb-2">Puas</div>
+                        <img src="{{ asset('img/puas.png') }}" alt="Puas" width="100" height="100"
+                            data-report-id="{{ $report->id }}" data-rating="2" class="close" data-dismiss="modal" aria-label="Close">
+                    </div>
+                    <div class="text-center">
+                        <div class="mb-2">Tidak Puas</div>
+                        <img src="{{ asset('img/tidakpuas.png') }}" alt="Tidak Puas" width="100"
+                            height="100" data-report-id="{{ $report->id }}" data-rating="3" class="close" data-dismiss="modal" aria-label="Close">
+                    </div>
+                    <div class="text-center">
+                        <div class="mb-2">Sangat Tidak Puas</div>
+                        <img src="{{ asset('img/sangattidakpuas.png') }}" width="100" height="100"
+                            data-report-id="{{ $report->id }}" data-rating="4" class="close" data-dismiss="modal" aria-label="Close">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
     {{-- <form id="updateStatusForm" method="POST" style="display: none;">
         @csrf
         @method('PUT')
@@ -397,7 +433,45 @@
         });
     });
 </script>
+@push('js')
+        <script>
+            $(document).ready(function() {
+                $('#surveyModal img').click(function() {
+                    var reportId = $(this).data('report-id');
+                    var rating = $(this).data('rating');
 
+                    $.ajax({
+                        url: '{{ route('submit.surveyReport') }}',
+                        method: 'POST',
+                        data: {
+                            reportId: reportId,
+                            rating: rating
+                        },
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            // console.log("berhasil");
+                            $('#surveyModal').modal('hide');
+                        },
+                        error: function() {
+                            console.log("tidak");
+                            $('#surveyModal').modal('hide');
+                            // Tampilkan pesan atau lakukan tindakan lain jika terjadi kesalahan
+                        }
+                    });
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function() {
 
+                var surveyStatus = '{{ $report->survey_status ?? 0 }}';
 
+                if (surveyStatus === '0') {
+                    $('#surveyModal').modal('show');
+                }
+
+            });
+        </script>
 @endpush

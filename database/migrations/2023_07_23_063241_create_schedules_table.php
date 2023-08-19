@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('pertemuan')->nullable();
             $table->string('respon_admin')->nullable();
             $table->string('user_id')->nullable();
+            $table->string('survey_status')->nullable()->default(0);
             $table->timestamps();
         });
     }

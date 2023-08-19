@@ -29,6 +29,8 @@ use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\ConsultantController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SurveyController;
+use App\Http\Controllers\SurveyReportController;
 
 
 Route::get('/', function () {return redirect('/dashboard');})->middleware('auth');
@@ -89,6 +91,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::patch('/report/{id}', [ReportController::class, 'update'])->name('report.update');
     Route::post('/report/store', [ReportController::class, 'store'])->name('report.store');
     Route::put('/report/updateStatus/{id}', [ReportController::class, 'updateStatus'])->name('report.updateStatus');
+
+    //survey
+    Route::post('/submit-survey', [SurveyController::class, 'submitSurvey'])->name('submit.survey');;
+    Route::post('/submit-survey-report', [SurveyReportController::class, 'submitSurvey'])->name('submit.surveyReport');;
 
     Route::get('/get-users-by-role/{role}', [ReportController::class, 'getUsersByRole']);
     // user management filter

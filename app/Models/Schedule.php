@@ -24,6 +24,7 @@ class Schedule extends Model
             'pertemuan',
             'respon_admin',
             'user_id',
+            'survey_status',
         ];
 
         public function skpd()
@@ -38,5 +39,9 @@ class Schedule extends Model
         public function user()
         {
             return $this->belongsTo(User::class);
+        }
+        public function survey()
+        {
+            return $this->hasOne(Survey::class);
         }
     }

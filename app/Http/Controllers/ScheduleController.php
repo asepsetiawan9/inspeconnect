@@ -119,7 +119,7 @@ class ScheduleController extends Controller
 
         // Check if the schedule is not found
         if (!$schedule) {
-            return redirect()->route('your-error-route')->with('error', 'Schedule not found.');
+            return redirect()->route('schedule')->with('error', 'Schedule not found.');
         }
 
         $consultantId = $schedule->consultant_id;
@@ -128,7 +128,7 @@ class ScheduleController extends Controller
         // Find the consultant and check if it's not found
         $consultant = Consultant::find($consultantId);
         if (!$consultant) {
-            return redirect()->route('your-error-route')->with('error', 'Consultant not found.');
+            return redirect()->route('schedule')->with('error', 'Consultant not found.');
         }
 
         // Find all SKPDs

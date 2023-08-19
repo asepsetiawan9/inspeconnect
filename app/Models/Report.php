@@ -19,11 +19,16 @@ class Report extends Model
         'kontak',
         'datetime',
         'tempat_bertemu',
+        'survey_status',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+    public function survey()
+    {
+        return $this->hasOne(SurveyReport::class);
     }
 
 }

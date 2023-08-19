@@ -72,7 +72,7 @@
                         </div>
                     </div>
                     @php
-                        function getStatusText($status)
+                        function getStatusLapor($status)
                         {
                             switch ($status) {
                                 case 1:
@@ -91,24 +91,46 @@
                     <div class="col-md-6">
                         <div class="text-bold py-3">Jadwal Konsultasi</div>
                         <div class="col-md-12">
-                            <div class="form-group">
-                                <div for="konfirm-pass">Status</div>
-                                <p class="text-bold btn btn-success">{{ getStatusText($schedule->status) }}</p>
-                            </div>
+                            <div for="status">Status</div>
+                            @php
+                                $status = getStatusLapor($schedule->status);
+                                $badgeClass = '';
+                                
+                                switch ($status) {
+                                    case 'Selesai':
+                                        $badgeClass = 'btn-success';
+                                        break;
+                                    case 'Perlu Ditanggapi':
+                                        $badgeClass = 'btn-warning';
+                                        break;
+                                    case 'Akan Dihadiri':
+                                        $badgeClass = 'btn-info';
+                                        break;
+                                    case 'Dijadwalkan Ulang':
+                                        $badgeClass = 'btn-secondary';
+                                        break;
+                                    default:
+                                        $badgeClass = 'btn-danger';
+                                        break;
+                                }
+                            @endphp
+
+                            <p class="text-bold btn {{ $badgeClass }}">{{ $status }}</p>
                         </div>
+
                         <div class="col-md-12">
                             <div class="form-group">
                                 <div for="konfirm-pass">Tipe Konsultasi</div>
                                 <p class="text-bold">{{ $schedule->pertemuan ?? '-' }}</p>
                             </div>
                         </div>
-                        @if ( $schedule->respon_admin)
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <div for="konfirm-pass">Respon Admin</div>
-                                <p class="text-bold ">{{ $schedule->respon_admin}}</p>
+                        @if ($schedule->respon_admin)
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div for="konfirm-pass">Respon Admin</div>
+                                    <p class="text-bold ">{{ $schedule->respon_admin }}</p>
+                                </div>
                             </div>
-                        </div>
                         @endif
                         <div class="col-md-12 form-group">
                             <div for="date">TANGGAL</div>
@@ -135,13 +157,57 @@
                                     <p class="text-bold">{{ $schedule->about }}</p>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        {{-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#surveyModal">
+            Isi Survey
+        </button> --}}
+
+        <!-- Modal -->
+        <div class="modal fade" id="surveyModal" tabindex="-1" role="dialog" aria-labelledby="surveyModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="surveyModalLabel">Survei Kepuasan</h5>
+                    </div>
+                    <div class="modal-body text-center">
+                       
+                        <div class="btn-group" role="group">
+                            <div class="text-center">
+                                <div class="mb-2">Sangat Puas</div>
+                                <img src="{{ asset('img/sangatpuas.png') }}" alt="Sangat Puas" width="100"
+                                    height="100" data-schedule-id="{{ $schedule->id }}" data-rating="1" class="close" data-dismiss="modal" aria-label="Close"> 
+                            </div>
+                            <div class="text-center">
+                                <div class="mb-2">Puas</div>
+                                <img src="{{ asset('img/puas.png') }}" alt="Puas" width="100" height="100"
+                                    data-schedule-id="{{ $schedule->id }}" data-rating="2" class="close" data-dismiss="modal" aria-label="Close">
+                            </div>
+                            <div class="text-center">
+                                <div class="mb-2">Tidak Puas</div>
+                                <img src="{{ asset('img/tidakpuas.png') }}" alt="Tidak Puas" width="100"
+                                    height="100" data-schedule-id="{{ $schedule->id }}" data-rating="3" class="close" data-dismiss="modal" aria-label="Close">
+                            </div>
+                            <div class="text-center">
+                                <div class="mb-2">Sangat Tidak Puas</div>
+                                <img src="{{ asset('img/sangattidakpuas.png') }}" width="100" height="100"
+                                    data-schedule-id="{{ $schedule->id }}" data-rating="4" class="close" data-dismiss="modal" aria-label="Close">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     @endsection
     @push('js')
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
         <script src="{{ asset('vendor/sweetalert/sweetalert.all.js') }}"></script>
         <script>
             document.getElementById("tanggapiBtn").addEventListener("click", function() {
@@ -212,6 +278,48 @@
                             });
                     },
                 });
+            });
+        </script>
+    @endpush
+    @push('js')
+        <script>
+            $(document).ready(function() {
+                $('#surveyModal img').click(function() {
+                    var scheduleId = $(this).data('schedule-id');
+                    var rating = $(this).data('rating');
+
+                    $.ajax({
+                        url: '{{ route('submit.survey') }}', // Ganti dengan URL yang sesuai
+                        method: 'POST',
+                        data: {
+                            scheduleId: scheduleId,
+                            rating: rating
+                        },
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            // console.log("berhasil");
+                            $('#surveyModal').modal('hide');
+                        },
+                        error: function() {
+                            console.log("tidak");
+                            $('#surveyModal').modal('hide');
+                            // Tampilkan pesan atau lakukan tindakan lain jika terjadi kesalahan
+                        }
+                    });
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function() {
+
+                var surveyStatus = '{{ $schedule->survey_status ?? 0 }}';
+
+                if (surveyStatus === '0') {
+                    $('#surveyModal').modal('show');
+                }
+
             });
         </script>
     @endpush
